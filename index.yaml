@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  metal-control-plane:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2020-11-13T13:26:21.198685365Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: b94a6631ffaa93ef283f601705002f90cb7658bafe360ed391382f577444b976
+    name: metal-control-plane
+    urls:
+    - https://github.com/metal-stack/helm-charts/releases/download/metal-control-plane-0.2.0/metal-control-plane-0.2.0.tgz
+    version: 0.2.0
+generated: "2020-11-13T13:26:21.058994072Z"
