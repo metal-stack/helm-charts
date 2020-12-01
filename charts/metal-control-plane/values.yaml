@@ -6,16 +6,16 @@ zap_level: debug
 
 images:
   metal_api:
-    image: metalstack/metal-api
+    image: ghcr.io/metal-stack/metal-api
     tag: latest
   masterdata_api:
-    image: metalstack/masterdata-api
+    image: ghcr.io/metal-stack/masterdata-api
     tag: latest
   metalctl:
-    image: registry.fi-ts.io/metal/metalctl
+    image: ghcr.io/metal-stack/metalctl
     tag: latest
   metal_console:
-    image: metalstack/metal-console
+    image: ghcr.io/metal-stack/metal-console
     tag: latest
 
 resources:
