@@ -1,0 +1,20 @@
+name: Publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - uses: J12934/helm-gh-pages-action@master
+      with:
+        access-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-branch: gh-pages

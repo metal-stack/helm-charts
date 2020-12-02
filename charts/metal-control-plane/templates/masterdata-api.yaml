@@ -39,7 +39,9 @@ spec:
     metadata:
       labels:
         app: masterdata-api
+{{- if .Values.helm_chart }}
         ansible_config_hash: {{ .Values.helm_chart.config_hash }}
+{{- end }}
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: /metrics
