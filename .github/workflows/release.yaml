@@ -14,7 +14,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: J12934/helm-gh-pages-action@master
+    - name: Publish
+      uses: stefanprodan/helm-gh-pages@master
       with:
-        access-token: ${{ secrets.GITHUB_TOKEN }}
-        deploy-branch: gh-pages
+        token: ${{ secrets.GITHUB_TOKEN }}
+        linting: off
