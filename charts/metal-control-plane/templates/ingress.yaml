@@ -28,7 +28,10 @@ spec:
     http:
       paths:
       - path: {{ .Values.metal_api.base_path }}
+        pathType: Prefix
         backend:
-          serviceName: "metal-api"
-          servicePort: {{ .Values.ports.metal_api }}
+          service:
+            name: "metal-api"
+            port:
+              number: {{ .Values.ports.metal_api }}
 {{- end }}
