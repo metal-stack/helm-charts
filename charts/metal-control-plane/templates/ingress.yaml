@@ -1,6 +1,10 @@
 {{- if .Values.deploy_ingress }}
 ---
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: control-plane-ingress
@@ -28,10 +32,17 @@ spec:
     http:
       paths:
       - path: {{ .Values.metal_api.base_path }}
+        {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
         pathType: Prefix
+        {{- end }}
         backend:
+          {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
           service:
             name: "metal-api"
             port:
               number: {{ .Values.ports.metal_api }}
+          {{- else }}
+          serviceName: "metal-api"
+          servicePort: {{ .Values.ports.metal_api }}
+          {{- end }}
 {{- end }}
