@@ -42,29 +42,6 @@ rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get", "list", "watch"]
-{{- if .Values.snapshots.enabled }}
-  - apiGroups: ["snapshot.storage.k8s.io"]
-    resources: ["volumesnapshotclasses"]
-    verbs: ["get", "list", "watch", "update", "patch"]
-  - apiGroups: ["snapshot.storage.k8s.io"]
-    resources: ["volumesnapshotcontents"]
-    verbs: ["get", "list", "watch", "update", "patch", "create", "delete"]
-  - apiGroups: ["snapshot.storage.k8s.io"]
-    resources: ["volumesnapshots"]
-    verbs: ["get", "list", "watch", "update", "patch"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["list", "watch", "create", "update", "patch"]
-  - apiGroups: ["snapshot.storage.k8s.io"]
-    resources: ["volumesnapshotcontents/status"]
-    verbs: ["update"]
-  - apiGroups: ["snapshot.storage.k8s.io"]
-    resources: ["volumesnapshots/status"]
-    verbs: ["update"]
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "list"]
-{{- end }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -188,11 +165,6 @@ spec:
             - -v=5
             - --csi-address=/csi/csi.sock
             - --feature-gates=Topology=true
-{{- if .Values.snapshots.enabled }}
-            - --timeout={{ .Values.snapshots.snapshotTimeout }}s
-{{- else }}
-            - --timeout={{ .Values.lvm.lvmTimeout }}s
-{{- end }}
           securityContext:
             privileged: true
           volumeMounts:
@@ -209,29 +181,6 @@ spec:
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
-{{- if .Values.snapshots.enabled }}
-        - name: snapshot-controller
-          image: {{ .Values.externalImages.csiSnapshotController }}
-          imagePullPolicy: IfNotPresent
-          args:
-            - "--v=5"
-            - "--leader-election=false"
-        - name: csi-snapshotter
-          image: {{ .Values.externalImages.csiSnapshotter }}
-          imagePullPolicy: IfNotPresent
-          args:
-            - --v=5
-            - --csi-address=/csi/csi.sock
-            - --snapshot-name-prefix=snapcontent
-          securityContext:
-            # This is necessary only for systems with SELinux, where
-            # non-privileged sidecar containers cannot access unix domain socket
-            # created by privileged CSI driver container.
-            privileged: true
-          volumeMounts:
-          - mountPath: /csi
-            name: socket-dir
-{{- end }}
       volumes:
         - hostPath:
             path: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}

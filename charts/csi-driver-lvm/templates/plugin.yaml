@@ -172,11 +172,6 @@ spec:
         - --namespace={{ .Release.Namespace }}
         - --provisionerimage={{ .Values.provisionerImage.repository }}:{{ .Values.provisionerImage.tag }}
         - --pullpolicy={{ .Values.provisionerImage.pullPolicy }}
-        - --lvm-timeout={{ .Values.lvm.lvmTimeout }}
-{{- if .Values.snapshots.enabled }}
-        - --snapshot-timeout={{ .Values.snapshots.snapshotTimeout }}
-        - --lvm-snapshot-buffer-percentage={{ .Values.snapshots.lvmSnapshotBufferPercentage }}
-{{- end }}
         env:
         - name: KUBE_NODE_NAME
           valueFrom:
