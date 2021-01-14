@@ -32,7 +32,8 @@ spec:
       restartPolicy: Always
       enableServiceLinks: False
       containers:
-      - env:
+      - name: metal-console
+        env:
         - name: METAL_CONSOLE_PORT
           value: "10001"
         - name: METAL_CONSOLE_METAL_API_URL
@@ -47,7 +48,7 @@ spec:
         - name: ZAP_LEVEL
           value: {{ .Values.zap_level }}
         image: {{ .Values.images.metal_console.image }}:{{ .Values.images.metal_console.tag }}
-        name: metal-console
+        imagePullPolicy: {{ .Values.images.metal_console.imagePullPolicy }}
         volumeMounts:
           - name: bmc-proxy-certs
             mountPath: /certs

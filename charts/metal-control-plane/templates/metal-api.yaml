@@ -53,8 +53,9 @@ spec:
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
       enableServiceLinks: False
       containers:
-      - image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
-        name: metal-api
+      - name: metal-api
+        image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+        imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
         ports:
         - containerPort: 8080
         - containerPort: 50051
@@ -227,8 +228,9 @@ spec:
       restartPolicy: Never
       enableServiceLinks: False
       containers:
-      - image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
-        name: metal-api-initdb
+      - name: metal-api-initdb
+        image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+        imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
         command: ["/metal-api"]
         args: ["initdb"]
         env:
@@ -282,8 +284,9 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-      - image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
-        name: metal-api-createmasterdata
+      - name: metal-api-createmasterdata
+        image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
+        imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
         - name: METALCTL_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
@@ -340,8 +343,9 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-      - image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
-        name: metal-api-createmasterdata
+      - name: metal-api-createmasterdata
+        image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
+        imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
         - name: METALCTL_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
@@ -411,6 +415,7 @@ spec:
           containers:
           - name: trigger-machine-liveliness
             image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
             command:
             - /metal-api
             - machine-liveliness
@@ -447,6 +452,7 @@ spec:
           containers:
           - name: trigger-machine-resurrection
             image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
             command:
             - /metal-api
             - resurrect-machines

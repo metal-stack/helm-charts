@@ -7,15 +7,19 @@ zap_level: debug
 images:
   metal_api:
     image: ghcr.io/metal-stack/metal-api
+    imagePullPolicy: IfNotPresent
     tag: latest
   masterdata_api:
     image: ghcr.io/metal-stack/masterdata-api
+    imagePullPolicy: IfNotPresent
     tag: latest
   metalctl:
     image: ghcr.io/metal-stack/metalctl
+    imagePullPolicy: IfNotPresent
     tag: latest
   metal_console:
     image: ghcr.io/metal-stack/metal-console
+    imagePullPolicy: IfNotPresent
     tag: latest
 
 resources:
