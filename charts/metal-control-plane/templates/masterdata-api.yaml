@@ -50,6 +50,7 @@ spec:
       containers:
       - name: masterdata-api
         image: {{ .Values.images.masterdata_api.image }}:{{ .Values.images.masterdata_api.tag }}
+        imagePullPolicy: {{ .Values.images.masterdata_api.imagePullPolicy }}
         env:
           - name: MASTERDATA_API_CA
             value: /certs/ca.pem
