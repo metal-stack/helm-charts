@@ -215,9 +215,9 @@ metadata:
   labels:
     app: metal-api
   annotations:
-    "helm.sh/hook": pre-install,pre-update
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
     metadata:
@@ -228,7 +228,7 @@ spec:
       restartPolicy: Never
       enableServiceLinks: False
       containers:
-      - name: metal-api-initdb
+      - name: initdb
         image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
         imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
         command: ["/metal-api"]
