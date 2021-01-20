@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.4.0
-    created: "2021-01-20T14:00:16.286533915Z"
+    created: "2021-01-20T14:07:46.008615302Z"
     description: local persistend storage for lvm
-    digest: ae39632b332fc782ee2da2bfb7637f712ebda3b1085c82c09b962cedf246fe42
+    digest: 2472a91890520c7a7f42d472ace12c1cfe7584f5f2cfb870c4793adb29e0501b
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-01-20T14:00:16.288063016Z"
+    created: "2021-01-20T14:07:46.010377656Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: c54ee556fef9a10d376b5a031eb0e7dfe2854aae32900428cca3c739485d7589
+    digest: dcbb4cd2386035ea85f57bbee1bba621594dd7198b649ba6a21b3ebfd14c6026
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/metal-control-plane-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-01-20T14:00:16.287303216Z"
+    created: "2021-01-20T14:07:46.00952933Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: c254ac650b5ed40cf456dbf00d7e31bfd7c5daedc5abf78b2f335f75933255d7
     name: metal-control-plane
@@ -45,4 +45,4 @@ entries:
     urls:
     - https://github.com/metal-stack/helm-charts/releases/download/metal-control-plane-0.2.0/metal-control-plane-0.2.0.tgz
     version: 0.2.0
-generated: "2021-01-20T14:00:16.285653215Z"
+generated: "2021-01-20T14:07:46.007955482Z"
