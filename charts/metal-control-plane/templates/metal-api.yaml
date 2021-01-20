@@ -215,9 +215,9 @@ metadata:
   labels:
     app: metal-api
   annotations:
-    "helm.sh/hook": pre-install
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
     metadata:
@@ -228,7 +228,7 @@ spec:
       restartPolicy: Never
       enableServiceLinks: False
       containers:
-      - name: metal-api-initdb
+      - name: initdb
         image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
         imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
         command: ["/metal-api"]
@@ -268,82 +268,23 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: metal-api-createmasterdata-update
+  name: metal-api-create-masterdata
   labels:
     app: metal-api
   annotations:
-    "helm.sh/hook": post-upgrade
-    "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
     metadata:
-      name: metal-api-createmasterdata-update
+      name: metal-api-create-masterdata
       labels:
         app: metal-api
     spec:
       restartPolicy: Never
       containers:
-      - name: metal-api-createmasterdata
-        image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
-        imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
-        env:
-        - name: METALCTL_URL
-          value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
-        - name: METALCTL_HMAC
-          valueFrom:
-            secretKeyRef:
-              name: metal-api
-              key: admin_key
-        command:
-          - sh
-          - -c
-          - |
-              set -exu
-              /metalctl image apply -f /masterdata/image.yaml
-              /metalctl partition apply -f /masterdata/partition.yaml
-              /metalctl size apply -f /masterdata/size.yaml
-              /metalctl network apply -f /masterdata/network.yaml
-              /metalctl network ip apply -f /masterdata/ip.yaml
-        volumeMounts:
-        - name: masterdata
-          mountPath: /masterdata
-      volumes:
-        - name: masterdata
-          configMap:
-            name: metal-api-masterdata
-            items:
-            - key: image.yaml
-              path: image.yaml
-            - key: size.yaml
-              path: size.yaml
-            - key: partition.yaml
-              path: partition.yaml
-            - key: network.yaml
-              path: network.yaml
-            - key: ip.yaml
-              path: ip.yaml
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: metal-api-createmasterdata-initial
-  labels:
-    app: metal-api
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": hook-succeeded
-spec:
-  template:
-    metadata:
-      name: metal-api-createmasterdata-initial
-      labels:
-        app: metal-api
-    spec:
-      restartPolicy: Never
-      containers:
-      - name: metal-api-createmasterdata
+      - name: metalctl
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
@@ -379,7 +320,6 @@ spec:
           - |
               set -eu
               until curl --output /dev/null --fail -s $API_BASE_URL/v1/health; do echo waiting for $API_BASE_URL; sleep 2; done
-        volumeMounts:
       volumes:
         - name: masterdata
           configMap:
@@ -395,6 +335,45 @@ spec:
               path: network.yaml
             - key: ip.yaml
               path: ip.yaml
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metal-api-migrate-db
+  labels:
+    app: metal-api
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      name: metal-api-migrate-db
+      labels:
+        app: metal-api
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: migration
+        image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+        imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+        command:
+        - /metal-api
+        - migrate
+        env:
+{{- if eq .Values.zap_level "debug" }}
+        - name: DEBUG
+          value: "1"
+{{- end }}
+        - name: ZAP_ENCODING
+          value: {{ .Values.zap_encoding }}
+        - name: ZAP_LEVEL
+          value: {{ .Values.zap_level }}
+        - name: METAL_API_DB_ADDR
+          value: {{ .Values.metal_api.db_address }}
+        - name: METAL_API_DB_PASSWORD
+          value: {{ .Values.metal_api.db_password }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
