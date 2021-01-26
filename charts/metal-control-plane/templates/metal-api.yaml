@@ -74,6 +74,8 @@ spec:
           value: {{ .Values.zap_encoding }}
         - name: ZAP_LEVEL
           value: {{ .Values.zap_level }}
+        - name: METAL_API_INIT_DATA_STORE
+          value: "false"
         - name: METAL_API_DB_ADDR
           value: {{ .Values.metal_api.db_address }}
         - name: METAL_API_DB_PASSWORD
