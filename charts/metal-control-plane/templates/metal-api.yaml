@@ -312,16 +312,22 @@ spec:
           mountPath: /masterdata
       initContainers:
       - name: wait-for-api
-        image: gempesaw/curl-jq
+        image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
+        imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
-        - name: API_BASE_URL
-          value: metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
+        - name: METALCTL_URL
+          value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
+        - name: METALCTL_HMAC
+          valueFrom:
+            secretKeyRef:
+              name: metal-api
+              key: admin_key
         command:
           - sh
           - -c
           - |
-              set -eu
-              until curl --output /dev/null --fail -s $API_BASE_URL/v1/health; do echo waiting for $API_BASE_URL; sleep 2; done
+              set -exu
+              until /metalctl partition ls; do echo "." && sleep 2; done
       volumes:
         - name: masterdata
           configMap:
