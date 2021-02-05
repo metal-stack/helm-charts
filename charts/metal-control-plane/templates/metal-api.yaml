@@ -327,7 +327,7 @@ spec:
           - -c
           - |
               set -exu
-              until /metalctl partition ls; do echo "." && sleep 2; done
+              until /metalctl health; do echo "." && sleep 2; done
       volumes:
         - name: masterdata
           configMap:
