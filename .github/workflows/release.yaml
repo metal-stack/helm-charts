@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 0
 
     - name: Publish
-      uses: stefanprodan/helm-gh-pages@master
+      uses: Gerrit91/helm-gh-pages@override-releases
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         linting: off
