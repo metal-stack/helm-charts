@@ -26,8 +26,8 @@ provisionerImage:
   pullPolicy: IfNotPresent
 
 externalImages:
-  csiAttacher: quay.io/k8scsi/csi-attacher:v2.2.0
-  csiResizer: quay.io/k8scsi/csi-resizer:v0.5.0
-  csiNodeDriverRegistrar: quay.io/k8scsi/csi-node-driver-registrar:v1.3.0
-  csiProvisioner: quay.io/k8scsi/csi-provisioner:v1.6.0
-  csiLivenessprobe: quay.io/k8scsi/livenessprobe:v1.1.0
+  csiAttacher: k8s.gcr.io/sig-storage/csi-attacher:v2.2.1
+  csiResizer: k8s.gcr.io/sig-storage/csi-resizer:v0.5.0
+  csiNodeDriverRegistrar: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v1.3.0
+  csiProvisioner: k8s.gcr.io/sig-storage/csi-provisioner:v1.6.1
+  csiLivenessprobe: k8s.gcr.io/sig-storage/livenessprobe:v2.2.0
