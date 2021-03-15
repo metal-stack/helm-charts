@@ -33,6 +33,18 @@ data:
   superuser.pwd: {{ .Values.metal_api.bmc.superuser.pwd_enc }}
 {{- end }}
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-s3
+  name: metal-api-s3
+type: Opaque
+stringData:
+  s3_address: {{ .Values.metal_api.s3_address }}
+  s3_key: {{ .Values.metal_api.s3_key }}
+  s3_secret: {{ .Values.metal_api.s3_secret }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -135,6 +147,21 @@ spec:
         - name: METAL_API_BMC_SUPERUSER_PWD_FILE
           value: /bmc/superuser.pwd
 {{- end }}
+        - name: METAL_API_S3_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-s3
+              key: s3_address
+        - name: METAL_API_S3_KEY
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-s3
+              key: s3_key
+        - name: METAL_API_S3_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-s3
+              key: s3_secret
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"
         - name: METAL_API_MASTERDATA_HOSTNAME
@@ -186,6 +213,9 @@ spec:
         secret:
           secretName: metal-api-bmc
 {{- end }}
+      - name: metal-api-s3
+        secret:
+          secretName: metal-api-s3
       - name: masterdata-api-tls
         secret:
           secretName: masterdata-api-tls
