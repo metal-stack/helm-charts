@@ -90,9 +90,10 @@ metal_api:
   networks: "[]"
   ips: "[]"
   projects: "[]"
-  s3_address: ""
-  s3_key: ""
-  s3_secret: ""
+  s3:
+    address: ""
+    key: ""
+    secret: ""
 
 masterdata_api:
   provider_tenant: ""
