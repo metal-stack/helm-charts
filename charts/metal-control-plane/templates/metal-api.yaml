@@ -213,9 +213,6 @@ spec:
         secret:
           secretName: metal-api-bmc
 {{- end }}
-      - name: metal-api-s3
-        secret:
-          secretName: metal-api-s3
       - name: masterdata-api-tls
         secret:
           secretName: masterdata-api-tls
