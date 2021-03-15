@@ -32,7 +32,7 @@ metadata:
 data:
   superuser.pwd: {{ .Values.metal_api.bmc.superuser.pwd_enc }}
 {{- end }}
-{{- if .Values.metal_api.s3 }}
+{{- if .Values.metal_api.s3.enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -149,28 +149,22 @@ spec:
         - name: METAL_API_BMC_SUPERUSER_PWD_FILE
           value: /bmc/superuser.pwd
 {{- end }}
-{{- if .Values.metal_api.s3 }}
-{{- if .Values.metal_api.s3.address }}
+{{- if .Values.metal_api.s3.enabled }}
         - name: METAL_API_S3_ADDRESS
           valueFrom:
             secretKeyRef:
               name: metal-api-s3
               key: s3_address
-{{- end }}
-{{- if .Values.metal_api.s3.key }}
         - name: METAL_API_S3_KEY
           valueFrom:
             secretKeyRef:
               name: metal-api-s3
               key: s3_key
-{{- end }}
-{{- if .Values.metal_api.s3.secret }}
         - name: METAL_API_S3_SECRET
           valueFrom:
             secretKeyRef:
               name: metal-api-s3
               key: s3_secret
-{{- end }}
 {{- end }}
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"

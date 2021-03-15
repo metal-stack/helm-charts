@@ -91,6 +91,7 @@ metal_api:
   ips: "[]"
   projects: "[]"
   s3:
+    enabled: false
     address: ""
     key: ""
     secret: ""
