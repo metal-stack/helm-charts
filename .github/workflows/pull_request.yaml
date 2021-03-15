@@ -22,3 +22,11 @@ jobs:
     - name: Helm Lint
       run: |
         for c in $(ls charts); do helm lint charts/${c}; done
+
+    - name: Publish PR
+      uses: Gerrit91/helm-gh-pages@override-releases
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        linting: off
+        target_dir: ./pull_requests
+        override_releases: yes
