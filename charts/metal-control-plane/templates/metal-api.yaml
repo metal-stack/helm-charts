@@ -45,6 +45,7 @@ stringData:
   s3_address: {{ .Values.metal_api.s3.address }}
   s3_key: {{ .Values.metal_api.s3.key }}
   s3_secret: {{ .Values.metal_api.s3.secret }}
+  s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
 {{- end }}
 ---
 apiVersion: apps/v1
@@ -165,6 +166,11 @@ spec:
             secretKeyRef:
               name: metal-api-s3
               key: s3_secret
+        - name: METAL_API_S3_FIRMWARE_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-s3
+              key: s3_firmware_bucket
 {{- end }}
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"

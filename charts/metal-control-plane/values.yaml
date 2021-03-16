@@ -95,6 +95,7 @@ metal_api:
     address: ""
     key: ""
     secret: ""
+    firmware_bucket: ""
 
 masterdata_api:
   provider_tenant: ""
