@@ -14,19 +14,38 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Figure out branch name
+      id: branch
+      run: 'echo "::set-output name=branch_name::${GITHUB_HEAD_REF##*/}"'
+
     - name: Set up Helm
       uses: azure/setup-helm@v1
       with:
         version: v3.4.0
 
-    - name: Helm Lint
+    - name: Tests
       run: |
         for c in $(ls charts); do helm lint charts/${c}; done
+
+        # please see README.md for why this is here
+        function check_version_bump {
+          for changed_file in $(git diff-files --name-only charts); do
+            chart_folder=${changed_file%/*/*}
+            if ! ls ${chart_folder}/Chart.yaml &> /dev/null; then
+              continue
+            elif ! git diff ${changed_file%/*/*}/Chart.yaml | grep "version:" > /dev/null; then
+              echo "missing version bump in Chart.yaml"
+              return 1
+            fi
+          done
+        }
+
+        check_version_bump
 
     - name: Publish PR
       uses: Gerrit91/helm-gh-pages@override-releases
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         linting: off
-        target_dir: ./pull_requests
+        target_dir: ./pull_requests/${{ steps.branch.outputs.branch_name }}
         override_releases: yes
