@@ -3,7 +3,7 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.4.0
-    created: "2021-02-05T11:07:53.434807378Z"
+    created: "2021-03-22T10:45:27.595786523Z"
     description: local persistend storage for lvm
     digest: 8cb2a5250d6744475084a9d61a1b309853f103dca861fe616c4fd8f57b49ca55
     home: https://metal-stack.io
@@ -20,7 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-02-05T11:07:53.437120808Z"
+    created: "2021-03-22T10:45:27.601311185Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 1ca6cc9ad7fb3cbf7fcf81c8a1530efd22131accbe5c33acf3c4d222f5265f3c
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/metal-control-plane-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-03-22T10:45:27.599349956Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 51455fb154d3d5482a931d8a15a279a720a38e1cfb25e64c19a9d1257450a0f7
     name: metal-control-plane
@@ -29,7 +38,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-02-05T11:07:53.436299233Z"
+    created: "2021-03-22T10:45:27.598062072Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: dcbb4cd2386035ea85f57bbee1bba621594dd7198b649ba6a21b3ebfd14c6026
     name: metal-control-plane
@@ -38,7 +47,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-02-05T11:07:53.435539856Z"
+    created: "2021-03-22T10:45:27.596645379Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 242b3d892a88208849190d427edc71340d314f58952c35236ce5abc02c8e3bbb
     name: metal-control-plane
@@ -54,4 +63,4 @@ entries:
     urls:
     - https://github.com/metal-stack/helm-charts/releases/download/metal-control-plane-0.2.0/metal-control-plane-0.2.0.tgz
     version: 0.2.0
-generated: "2021-02-05T11:07:53.434161397Z"
+generated: "2021-03-22T10:45:27.595104378Z"
