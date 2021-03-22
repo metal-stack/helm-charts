@@ -90,6 +90,12 @@ metal_api:
   networks: "[]"
   ips: "[]"
   projects: "[]"
+  s3:
+    enabled: false
+    address: ""
+    key: ""
+    secret: ""
+    firmware_bucket: ""
 
 masterdata_api:
   provider_tenant: ""

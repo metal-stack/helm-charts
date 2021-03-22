@@ -10,6 +10,9 @@ metadata:
   name: control-plane-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
+{{- if .Values.metal_api.s3.enabled }}
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+{{ end }}
 {{- if .Values.ingress.tls.enabled }}
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
