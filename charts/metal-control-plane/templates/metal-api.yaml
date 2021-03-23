@@ -97,6 +97,8 @@ spec:
           value: {{ .Values.metal_api.db_password }}
         - name: METAL_API_DEX_ADDR
           value: {{ .Values.metal_api.dex_address }}
+        - name: METAL_API_DEX_CLIENTID
+          value: {{ .Values.metal_api.dex_clientid }}
         - name: METAL_API_HMAC_VIEW_KEY
           valueFrom:
             secretKeyRef:
