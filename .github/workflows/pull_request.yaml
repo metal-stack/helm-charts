@@ -29,11 +29,11 @@ jobs:
 
         # please see README.md for why this is here
         function check_version_bump {
-          for changed_file in $(git diff --name-only master...$(git branch --show-current) charts); do
+          for changed_file in $(git diff --name-only master...${GITHUB_HEAD_REF##*/} charts); do
             chart_folder=${changed_file%/*/*}
             if ! ls ${chart_folder}/Chart.yaml &> /dev/null; then
               continue
-            elif ! git diff master...$(git branch --show-current) ${changed_file%/*/*}/Chart.yaml | grep "version:" > /dev/null; then
+            elif ! git diff master...${GITHUB_HEAD_REF##*/} ${changed_file%/*/*}/Chart.yaml | grep "version:" > /dev/null; then
               echo "missing version bump in Chart.yaml"
               return 1
             fi
