@@ -64,6 +64,7 @@ metal_api:
   ipam_db_user: ""
   ipam_db_password: ""
   dex_address: ""
+  dex_clientid: ""
   view_key: ""
   edit_key: ""
   admin_key: ""
