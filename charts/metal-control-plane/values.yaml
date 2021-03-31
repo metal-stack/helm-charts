@@ -45,6 +45,13 @@ resources:
       memory: "128Mi"
       cpu: "60m"
 
+hpa:
+  metal_api:
+    enabled: false
+    max: 5
+    min: 2
+    cpu_percentage: 70
+
 ports:
   metal_api: 8080
   metal_api_grpc: 50051
