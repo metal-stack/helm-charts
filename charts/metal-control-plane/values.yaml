@@ -49,7 +49,7 @@ hpa:
   metal_api:
     enabled: false
     max: 5
-    min: 2
+    min: 3
     cpu_percentage: 70
 
 ports:
