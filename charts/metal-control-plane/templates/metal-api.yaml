@@ -254,7 +254,7 @@ kind: Job
 metadata:
   name: metal-api-initdb
   labels:
-    app: metal-api
+    job: metal-api-initdb
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "0"
@@ -264,7 +264,7 @@ spec:
     metadata:
       name: metal-api-initdb
       labels:
-        app: metal-api
+        job: metal-api-initdb
     spec:
       restartPolicy: Never
       enableServiceLinks: False
@@ -311,7 +311,7 @@ kind: Job
 metadata:
   name: metal-api-create-masterdata
   labels:
-    app: metal-api
+    job: metal-api-create-masterdata
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "1"
@@ -321,7 +321,7 @@ spec:
     metadata:
       name: metal-api-create-masterdata
       labels:
-        app: metal-api
+        job: metal-api-create-masterdata
     spec:
       restartPolicy: Never
       containers:
@@ -388,7 +388,7 @@ kind: Job
 metadata:
   name: metal-api-migrate-db
   labels:
-    app: metal-api
+    job: metal-api-migrate-db
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "0"
@@ -398,7 +398,7 @@ spec:
     metadata:
       name: metal-api-migrate-db
       labels:
-        app: metal-api
+        job: metal-api-migrate-db
     spec:
       restartPolicy: Never
       containers:
@@ -427,7 +427,7 @@ kind: CronJob
 metadata:
   name: metal-api-liveliness
   labels:
-    app: metal-api
+    job: metal-api-liveliness
 spec:
   schedule: "*/1 * * * *"
   failedJobsHistoryLimit: 1
@@ -465,7 +465,7 @@ kind: CronJob
 metadata:
   name: metal-api-resurrection
   labels:
-    app: metal-api
+    job: metal-api-resurrection
 spec:
   schedule: "0 * * * *"
   successfulJobsHistoryLimit: 1
@@ -530,4 +530,21 @@ spec:
           - name: {{ .Values.metal_api.nsq.tls.secret_name }}
             secret:
               secretName: {{ .Values.metal_api.nsq.tls.secret_name }}
+{{- end }}
+
+{{- if .Values.hpa.metal_api.enabled }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  name: metal-api
+spec:
+  maxReplicas: {{ .Values.hpa.metal_api.max }}
+  minReplicas: {{ .Values.hpa.metal_api.min }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: metal-api
+  targetCPUUtilizationPercentage: {{ .Values.hpa.metal_api.cpu_percentage }}
 {{- end }}
