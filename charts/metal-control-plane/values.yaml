@@ -98,6 +98,7 @@ metal_api:
   networks: "[]"
   ips: "[]"
   projects: "[]"
+  filesystemlayouts: "[]"
   s3:
     enabled: false
     address: ""

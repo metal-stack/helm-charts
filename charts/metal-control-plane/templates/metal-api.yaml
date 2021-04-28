@@ -305,6 +305,8 @@ data:
     {{ .Values.metal_api.networks | nindent 4 }}
   ip.yaml: |
     {{ .Values.metal_api.ips | nindent 4 }}
+  filesystemlayouts.yaml: |
+    {{ .Values.metal_api.filesystemlayouts | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
