@@ -3,7 +3,7 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.4.0
-    created: "2021-04-07T06:56:45.038131848Z"
+    created: "2021-06-11T11:42:26.433573362Z"
     description: local persistend storage for lvm
     digest: 8cb2a5250d6744475084a9d61a1b309853f103dca861fe616c4fd8f57b49ca55
     home: https://metal-stack.io
@@ -20,7 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.044805389Z"
+    created: "2021-06-11T11:42:26.440768843Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 8e00c34794faec3d0bbeefc23ac792ed49c4fa4e364e4f7c972e8050c916d868
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/metal-control-plane-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-06-11T11:42:26.439799292Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 43f5312c7db321f70d64594a59676ef0e59b3c80734e305b37eb8117274a3b95
     name: metal-control-plane
@@ -29,7 +38,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.043103278Z"
+    created: "2021-06-11T11:42:26.438801039Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 04e7d20a6f584460b70f98429886a2e7545c1e63c3da4e9fe91e563b24bf5c62
     name: metal-control-plane
@@ -38,7 +47,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.042133572Z"
+    created: "2021-06-11T11:42:26.437913092Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 1ca6cc9ad7fb3cbf7fcf81c8a1530efd22131accbe5c33acf3c4d222f5265f3c
     name: metal-control-plane
@@ -47,7 +56,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.041100066Z"
+    created: "2021-06-11T11:42:26.436817734Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 51455fb154d3d5482a931d8a15a279a720a38e1cfb25e64c19a9d1257450a0f7
     name: metal-control-plane
@@ -56,7 +65,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.040195361Z"
+    created: "2021-06-11T11:42:26.435974989Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: dcbb4cd2386035ea85f57bbee1bba621594dd7198b649ba6a21b3ebfd14c6026
     name: metal-control-plane
@@ -65,7 +74,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-04-07T06:56:45.039092754Z"
+    created: "2021-06-11T11:42:26.43505784Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 242b3d892a88208849190d427edc71340d314f58952c35236ce5abc02c8e3bbb
     name: metal-control-plane
@@ -81,4 +90,4 @@ entries:
     urls:
     - https://github.com/metal-stack/helm-charts/releases/download/metal-control-plane-0.2.0/metal-control-plane-0.2.0.tgz
     version: 0.2.0
-generated: "2021-04-07T06:56:45.037256243Z"
+generated: "2021-06-11T11:42:26.432499505Z"
