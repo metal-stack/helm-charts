@@ -75,6 +75,7 @@ metal_api:
   view_key: ""
   edit_key: ""
   admin_key: ""
+  password_reason_minlength: 0
   nsq:
     lookupd_address: ""
     tcp_address: ""
