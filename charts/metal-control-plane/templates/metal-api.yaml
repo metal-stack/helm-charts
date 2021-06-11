@@ -305,6 +305,8 @@ data:
     {{ .Values.metal_api.networks | nindent 4 }}
   ip.yaml: |
     {{ .Values.metal_api.ips | nindent 4 }}
+  filesystemlayouts.yaml: |
+    {{ .Values.metal_api.filesystemlayouts | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -346,6 +348,7 @@ spec:
               /metalctl size apply -f /masterdata/size.yaml
               /metalctl network apply -f /masterdata/network.yaml
               /metalctl network ip apply -f /masterdata/ip.yaml
+              /metalctl filesystemlayout apply -f /masterdata/filesystemlayouts.yaml
         volumeMounts:
         - name: masterdata
           mountPath: /masterdata
@@ -382,6 +385,8 @@ spec:
               path: network.yaml
             - key: ip.yaml
               path: ip.yaml
+            - key: filesystemlayouts.yaml
+              path: filesystemlayouts.yaml
 ---
 apiVersion: batch/v1
 kind: Job
