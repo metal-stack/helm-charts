@@ -20,4 +20,4 @@ The charts can be consumed as follows:
 
 If you want to add modifications to a chart, make sure to also bump your chart version in the chart's `Chart.yaml` file. This is necessary because a release of this repository does not overwrite existing chart releases (as this would potentially break already released deployments).
 
-For PRs, your changes will be released to a special pull requests URL `helm.metal-stack.io/pull_requests/<branch-name>`. You can use this repository instead in order to test your changes.
+For PRs, your changes will be released to a special pull requests URL `https://helm.metal-stack.io/pull_requests/<branch-name>`. You can use this repository instead in order to test your changes.
