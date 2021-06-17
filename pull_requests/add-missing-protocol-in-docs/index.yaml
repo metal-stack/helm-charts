@@ -1,0 +1,30 @@
+apiVersion: v1
+entries:
+  csi-driver-lvm:
+  - apiVersion: v1
+    appVersion: v0.4.0
+    created: "2021-06-17T07:36:42.33315657Z"
+    description: local persistend storage for lvm
+    digest: f74ef205a7e21e21368a172a132c5bf79d8b115c5e4817fb95c1e3a2c86db5ff
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/add-missing-protocol-in-docs/csi-driver-lvm-0.4.0.tgz
+    version: 0.4.0
+  metal-control-plane:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-06-17T07:36:42.334089769Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 373c5c4ef63959d5e9eb0720ef8cbcee55c35f9f960adaf045e03b7fecc70001
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/add-missing-protocol-in-docs/metal-control-plane-0.3.6.tgz
+    version: 0.3.6
+generated: "2021-06-17T07:36:42.33249017Z"
