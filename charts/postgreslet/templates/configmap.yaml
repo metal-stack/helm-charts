@@ -8,7 +8,7 @@ data:
   LOAD_BALANCER_IP: {{ .Values.postgreslet.loadBalancerIP | quote }}
   PORT_RANGE_START: {{ .Values.postgreslet.portRangeStart | quote }}
   PORT_RANGE_SIZE: {{ .Values.postgreslet.portRangeSize | quote }}
-  CUSTOM_PSP_NAME: {{ .Values.postgreslet.pspName | quote  }}
+  CUSTOM_PSP_NAME: {{ .Values.postgreslet.customPspName | quote  }}
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   DOCKER_IMAGE: {{ .Values.postgreslet.dockerImage | quote  }}
   ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
