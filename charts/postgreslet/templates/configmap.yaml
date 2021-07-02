@@ -12,6 +12,7 @@ data:
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   DOCKER_IMAGE: {{ .Values.postgreslet.dockerImage | quote  }}
   ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
+  ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}

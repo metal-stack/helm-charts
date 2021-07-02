@@ -82,6 +82,8 @@ postgreslet:
   dockerImage: ""
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
+  # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
+  enableCrdValidation: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
