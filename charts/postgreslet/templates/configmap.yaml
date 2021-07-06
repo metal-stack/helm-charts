@@ -10,7 +10,8 @@ data:
   PORT_RANGE_SIZE: {{ .Values.postgreslet.portRangeSize | quote }}
   CUSTOM_PSP_NAME: {{ .Values.postgreslet.customPspName | quote  }}
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
-  DOCKER_IMAGE: {{ .Values.postgreslet.dockerImage | quote  }}
+  OPERATOR_IMAGE: {{ .Values.postgreslet.operatorImage | quote  }}
+  POSTGRES_IMAGE: {{ .Values.postgreslet.postgresImage | quote  }}
   ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
   ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
 kind: ConfigMap
