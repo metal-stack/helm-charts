@@ -41,17 +41,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /manager
-          args:
-            - --metrics-addr-svc-mgr=$(METRICS_ADDR_SVC_MGR)
-            - --metrics-addr-ctrl-mgr=$(METRICS_ADDR_CTRL_MGR)
-            - --enable-leader-election=$(ENABLE_LEADER_ELECTION)
-            - --partition-id=$(PARTITION_ID)
-            - --tenant=$(TENANT)
-            - --load-balancer-ip=$(LOAD_BALANCER_IP)
-            - --port-range-start=$(PORT_RANGE_START)
-            - --port-range-size=$(PORT_RANGE_SIZE)
-            - --custom-psp-name=$(CUSTOM_PSP_NAME)
-            - --storage-class=$(STORAGE_CLASS)
           envFrom:
             - configMapRef:
                 name: {{ include "postgreslet.fullname" . }}
