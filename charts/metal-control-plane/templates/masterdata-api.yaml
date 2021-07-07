@@ -1,32 +1,4 @@
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: default-tenant
-data:
-  tenant.yaml: |
-    {{ .Values.masterdata_api.tenants | nindent 4 }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: default-project
-data:
-  project.yaml: |
-    {{ .Values.masterdata_api.projects | nindent 4 }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: masterdata-api-tls
-type: Opaque
-data:
-  ca.pem: {{ .Values.masterdata_api.ca }}
-  client.pem: {{ .Values.masterdata_api.client_cert }}
-  client-key.pem: {{ .Values.masterdata_api.client_key }}
-  server-key.pem: {{ .Values.masterdata_api.cert_key }}
-  server.pem: {{ .Values.masterdata_api.cert }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,10 +11,8 @@ spec:
     metadata:
       labels:
         app: masterdata-api
-{{- if .Values.helm_chart }}
-        ansible_config_hash: {{ .Values.helm_chart.config_hash }}
-{{- end }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/masterdata-api-config.yaml") . | sha256sum }}
         prometheus.io/scrape: 'true'
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
