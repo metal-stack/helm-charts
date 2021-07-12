@@ -7,8 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v0.2.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -78,6 +77,14 @@ postgreslet:
   customPspName: ""
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
+  # postgresImage The operator image to use. Leave empty to use the default.
+  operatorImage: ""
+  # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
+  postgresImage: ""
+  # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
+  etcdHost: ""
+  # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
+  enableCrdValidation: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
