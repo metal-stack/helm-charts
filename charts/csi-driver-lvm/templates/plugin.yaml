@@ -50,7 +50,7 @@ roleRef:
   name: csi-driver-lvm-plugin
   apiGroup: rbac.authorization.k8s.io
 ---
-{{- if .Values.rbac.pspEnabled }}
+{{- if and .Values.rbac.pspEnabled (.Capabilities.APIVersions.Has "policy/v1beta1") }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -149,7 +149,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.nodeName
-        image: {{ .Values.externalImages.csiNodeDriverRegistrar }}
+        image: {{ template "externalImages.csiNodeDriverRegistrar" . }}
         imagePullPolicy: IfNotPresent
         name: node-driver-registrar
         resources: {}
@@ -226,7 +226,7 @@ spec:
         args:
         - --csi-address=/csi/csi.sock
         - --health-port=9898
-        image: {{ .Values.externalImages.csiLivenessprobe }}
+        image: {{ template "externalImages.csiLivenessprobe" . }}
         imagePullPolicy: IfNotPresent
         resources: {}
         terminationMessagePath: /dev/termination-log
