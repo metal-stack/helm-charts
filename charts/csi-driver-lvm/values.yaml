@@ -17,17 +17,10 @@ compat03x: false
 
 pluginImage:
   repository: metalstack/lvmplugin
-  tag: v0.4.0
+  tag: v0.4.1
   pullPolicy: IfNotPresent
 
 provisionerImage:
   repository: metalstack/csi-lvmplugin-provisioner
-  tag: v0.4.0
+  tag: v0.4.1
   pullPolicy: IfNotPresent
-
-externalImages:
-  csiAttacher: quay.io/k8scsi/csi-attacher:v2.2.0
-  csiResizer: quay.io/k8scsi/csi-resizer:v0.5.0
-  csiNodeDriverRegistrar: quay.io/k8scsi/csi-node-driver-registrar:v1.3.0
-  csiProvisioner: quay.io/k8scsi/csi-provisioner:v1.6.0
-  csiLivenessprobe: quay.io/k8scsi/livenessprobe:v1.1.0

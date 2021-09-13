@@ -42,6 +42,12 @@ rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["volumeattachments/status"]
+    verbs: ["patch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -59,7 +65,7 @@ roleRef:
   name: csi-driver-lvm-controller
   apiGroup: rbac.authorization.k8s.io
 ---
-{{- if .Values.rbac.pspEnabled }}
+{{- if and .Values.rbac.pspEnabled (.Capabilities.APIVersions.Has "policy/v1beta1") }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -148,7 +154,7 @@ spec:
       serviceAccountName: csi-driver-lvm-controller
       containers:
         - name: csi-attacher
-          image: {{ .Values.externalImages.csiAttacher }}
+          image: {{ template "externalImages.csiAttacher" . }}
           imagePullPolicy: IfNotPresent
           args:
             - --v=5
@@ -159,7 +165,7 @@ spec:
           - mountPath: /csi
             name: socket-dir
         - name: csi-provisioner
-          image: {{ .Values.externalImages.csiProvisioner }}
+          image: {{ template "externalImages.csiProvisioner" . }}
           imagePullPolicy: IfNotPresent
           args:
             - -v=5
@@ -171,7 +177,7 @@ spec:
             - mountPath: /csi
               name: socket-dir
         - name: csi-resizer
-          image: {{ .Values.externalImages.csiResizer }}
+          image: {{ template "externalImages.csiResizer" . }}
           imagePullPolicy: IfNotPresent
           args:
             - -v=5
