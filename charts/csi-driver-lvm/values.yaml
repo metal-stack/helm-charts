@@ -24,3 +24,6 @@ provisionerImage:
   repository: metalstack/csi-lvmplugin-provisioner
   tag: v0.4.1
   pullPolicy: IfNotPresent
+
+kubernetes:
+  kubeletPath: /var/lib/kubelet
