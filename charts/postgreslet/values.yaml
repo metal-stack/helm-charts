@@ -85,6 +85,12 @@ postgreslet:
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
   enableCrdValidation: true
+  # postgresParamBlockList space-separated list of postgres params to ignore (see https://postgres-operator.readthedocs.io/en/latest/reference/cluster_manifest/#postgres-parameters)
+  postgresParamBlockList: ""
+  # majorVersionUpgradeMode defines how the operator will handle in-place version upgrades (see https://postgres-operator.readthedocs.io/en/latest/reference/operator_parameters/#major-version-upgrades)
+  majorVersionUpgradeMode: "manual"
+  # standbyClustersSourceRanges space-separated list of CIDRs
+  standbyClustersSourceRanges: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
