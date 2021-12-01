@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.4.1
-    created: "2021-11-25T11:13:22.280924772Z"
+    created: "2021-12-01T20:14:50.572932898Z"
     description: local persistend storage for lvm
-    digest: a6a9f83e72226b976cbd239c914978cc102e5147e927f2a9cc440b65cbd9046c
+    digest: 6523036d2b61a427f4cc9e423449c4dbdbd2ed8d45d5a5eaa4d4f132ba2776c5
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,25 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-11-25T11:13:22.282544743Z"
+    created: "2021-12-01T20:14:50.573898371Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 9cf82b4d79a525821c39e5331ee43eee8ab4dae311fceb3a2dd2863d7457fdca
+    digest: 5ddb8c60381ecd8dfcd567dffe371b60c56ca9438070d9d1b4a8d489371a2b55
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/custom-operator-image/metal-control-plane-0.3.7.tgz
     version: 0.3.7
   postgreslet:
   - apiVersion: v2
-    created: "2021-11-25T11:13:22.288000518Z"
+    created: "2021-12-01T20:14:50.581337631Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: 8e771c1d9dc025d9292289f0520b313413f584ac2f7178e3957a1b0c576b1f73
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/custom-operator-image/postgreslet-0.3.3.tgz
+    version: 0.3.3
+  - apiVersion: v2
+    created: "2021-12-01T20:14:50.579844018Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 233c205cc06d34c4c203f70a0256420ba49cb75b8fcf8264d49584bf88c160c4
     name: postgreslet
@@ -38,7 +47,7 @@ entries:
     - https://metal-stack.github.io/helm-charts/pull_requests/custom-operator-image/postgreslet-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v2
-    created: "2021-11-25T11:13:22.286291438Z"
+    created: "2021-12-01T20:14:50.578424812Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 5b747c5f3563d0bb8d6691e2e498a9fca576d757e9f734240556b7d34e5bcc74
     name: postgreslet
@@ -47,7 +56,7 @@ entries:
     - https://metal-stack.github.io/helm-charts/pull_requests/custom-operator-image/postgreslet-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v2
-    created: "2021-11-25T11:13:22.284493648Z"
+    created: "2021-12-01T20:14:50.576915798Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 2effd3cf862e4da116f623ff098d2842858e341a042a030ea132895e30bc6c40
     name: postgreslet
@@ -55,4 +64,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/custom-operator-image/postgreslet-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-25T11:13:22.279930067Z"
+generated: "2021-12-01T20:14:50.5716318Z"
