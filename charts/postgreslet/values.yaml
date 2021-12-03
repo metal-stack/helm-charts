@@ -78,13 +78,19 @@ postgreslet:
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
   # postgresImage The operator image to use. Leave empty to use the default.
-  operatorImage: ""
+  operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
   # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
-  postgresImage: ""
+  postgresImage: "cybertecpostgresql/spilo:2.1-p1_de-sync-standby-cluster_0.3.1"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
   enableCrdValidation: true
+  # postgresParamBlockList space-separated list of postgres params to ignore (see https://postgres-operator.readthedocs.io/en/latest/reference/cluster_manifest/#postgres-parameters)
+  postgresParamBlockList: ""
+  # majorVersionUpgradeMode defines how the operator will handle in-place version upgrades (see https://postgres-operator.readthedocs.io/en/latest/reference/operator_parameters/#major-version-upgrades)
+  majorVersionUpgradeMode: "manual"
+  # standbyClustersSourceRanges space-separated list of CIDRs
+  standbyClustersSourceRanges: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -92,7 +98,7 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    image: "fluent/fluent-bit:1.7.2"
+    image: "fluent/fluent-bit:1.8.7"
     resources:
       requests:
         cpu: "100m"
@@ -119,7 +125,7 @@ sidecars:
             Match **
 
   exporter:
-    image: "prometheuscommunity/postgres-exporter:v0.9.0"
+    image: "prometheuscommunity/postgres-exporter:v0.10.0"
     containerPort: 9187
     servicePort: 9187
     resources:

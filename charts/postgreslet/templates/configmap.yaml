@@ -14,6 +14,9 @@ data:
   POSTGRES_IMAGE: {{ .Values.postgreslet.postgresImage | quote  }}
   ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
   ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
+  POSTGRES_PARAM_BLOCKLIST: {{ .Values.postgreslet.postgresParamBlockList | quote  }}
+  MAJOR_VERSION_UPGRADE_MODE: {{ .Values.postgreslet.majorVersionUpgradeMode | quote  }}
+  STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
