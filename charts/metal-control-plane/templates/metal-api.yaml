@@ -309,6 +309,8 @@ data:
     {{ .Values.metal_api.ips | nindent 4 }}
   filesystemlayouts.yaml: |
     {{ .Values.metal_api.filesystemlayouts | nindent 4 }}
+  sizeimageconstraints.yaml: |
+    {{ .Values.metal_api.sizeimageconstraints | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -351,6 +353,7 @@ spec:
               /metalctl network apply -f /masterdata/network.yaml
               /metalctl network ip apply -f /masterdata/ip.yaml
               /metalctl filesystemlayout apply -f /masterdata/filesystemlayouts.yaml
+              /metalctl size imageconstraint apply -f /masterdata/sizeimageconstraints.yaml
         volumeMounts:
         - name: masterdata
           mountPath: /masterdata
@@ -389,6 +392,8 @@ spec:
               path: ip.yaml
             - key: filesystemlayouts.yaml
               path: filesystemlayouts.yaml
+            - key: sizeimageconstraints.yaml
+              path: sizeimageconstraints.yaml
 ---
 apiVersion: batch/v1
 kind: Job
