@@ -20,7 +20,7 @@ data:
   RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
   ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
   POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
-	SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
+  SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
