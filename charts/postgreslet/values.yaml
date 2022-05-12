@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.5.0"
+  tag: "v0.6.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -102,7 +102,7 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    image: "fluent/fluent-bit:1.8.11"
+    image: "fluent/fluent-bit:1.9.3"
     resources:
       requests:
         cpu: "100m"
