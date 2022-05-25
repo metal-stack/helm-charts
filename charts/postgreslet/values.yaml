@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.5.0"
+  tag: "v0.7.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,6 +91,10 @@ postgreslet:
   majorVersionUpgradeMode: "manual"
   # standbyClustersSourceRanges space-separated list of CIDRs
   standbyClustersSourceRanges: ""
+  # runAsNonRoot run the operator and spilo images without root permissions
+  runAsNonRoot: false
+  # enableNetPol enable the use of NetworkPolicies to restrict the outgoing connections of the postgres pod
+  enableNetPol: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -98,7 +102,7 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    image: "fluent/fluent-bit:1.8.11"
+    image: "fluent/fluent-bit:1.9.3"
     resources:
       requests:
         cpu: "100m"
@@ -449,4 +453,65 @@ sidecars:
           - size:
               usage: "GAUGE"
               description: "Disk space used by the database"
+      pg_stat_statements:
+        query: "SELECT
+                    pg_get_userbyid(userid) as user,
+                    pg_database.datname,
+                    pg_stat_statements.queryid,
+                    pg_stat_statements.query,
+                    pg_stat_statements.calls,
+                    pg_stat_statements.total_time as time_milliseconds,
+                    pg_stat_statements.rows,
+                    pg_stat_statements.shared_blks_hit,
+                    pg_stat_statements.shared_blks_read,
+                    pg_stat_statements.shared_blks_dirtied,
+                    pg_stat_statements.shared_blks_written,
+                    pg_stat_statements.local_blks_hit,
+                    pg_stat_statements.local_blks_read,
+                    pg_stat_statements.local_blks_dirtied,
+                    pg_stat_statements.local_blks_written,
+                    pg_stat_statements.temp_blks_read,
+                    pg_stat_statements.temp_blks_written,
+                    pg_stat_statements.blk_read_time,
+                    pg_stat_statements.blk_write_time
+                FROM pg_stat_statements
+                JOIN pg_database
+                ON pg_database.oid = pg_stat_statements.dbid"
+        metrics:
+            - user:
+                usage: "LABEL"
+                description: "The user who executed the statement"
+            - datname:
+                usage: "LABEL"
+                description: "The database in which the statement was executed"
+            - queryid:
+                usage: "LABEL"
+                description: "Internal hash code, computed from the statement's parse tree"
+            - query:
+                usage: "LABEL"
+                description: "Processed query"
+            - calls:
+                usage: "COUNTER"
+                description: "Number of times executed"
+            - time_milliseconds:
+                usage: "COUNTER"
+                description: "Total time spent in the statement, in milliseconds"
+            - rows:
+                usage: "COUNTER"
+                description: "Total number of rows retrieved or affected by the statement"
+            - shared_blks_hit:
+                usage: "COUNTER"
+                description: "Total number of shared block cache hits by the statement"
+            - shared_blks_read:
+                usage: "COUNTER"
+                description: "Total number of shared blocks read by the statement"
+            - shared_blks_dirtied:
+                usage: "COUNTER"
+                description: "Total number of shared blocks dirtied by the statement"
+            - shared_blks_written:
+                usage: "COUNTER"
+                description: "Total number of shared blocks written by the statement"
+            - local_blks_hit:
+                usage: "COUNTER"
+                description: "Total number of local block cache hits by the statement"
 

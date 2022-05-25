@@ -17,6 +17,10 @@ data:
   POSTGRES_PARAM_BLOCKLIST: {{ .Values.postgreslet.postgresParamBlockList | quote  }}
   MAJOR_VERSION_UPGRADE_MODE: {{ .Values.postgreslet.majorVersionUpgradeMode | quote  }}
   STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
+  RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
+  ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
+  POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
+  SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
