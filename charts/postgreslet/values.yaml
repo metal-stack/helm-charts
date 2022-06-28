@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.7.0"
+  tag: "v0.8.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -95,6 +95,8 @@ postgreslet:
   runAsNonRoot: false
   # enableNetPol enable the use of NetworkPolicies to restrict the outgoing connections of the postgres pod
   enableNetPol: false
+  # enablePodAntiaffinity enable anti-affinity of pods of the same postgres cluster, to prevent them running on the same worker node
+  enablePodAntiaffinity: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
