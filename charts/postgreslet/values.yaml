@@ -97,6 +97,8 @@ postgreslet:
   enableNetPol: false
   # enablePodAntiaffinity enable anti-affinity of pods of the same postgres cluster, to prevent them running on the same worker node
   enablePodAntiaffinity: false
+  # patroniRetryTimeout sets the patroni retry timeout, which will also result in an updated patroni ttl ( ttl=(2*retry_timeout)+10 )
+  patroniRetryTimeout: 90
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.

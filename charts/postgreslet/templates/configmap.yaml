@@ -22,6 +22,7 @@ data:
   POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
   SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
   ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
+  PATRONI_RETRY_TIMEOUT: {{ .Values.postgreslet.patroniRetryTimeout | quote }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
