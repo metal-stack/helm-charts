@@ -80,7 +80,7 @@ postgreslet:
   # postgresImage The operator image to use. Leave empty to use the default.
   operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
   # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
-  postgresImage: "cybertecpostgresql/spilo:2.1-p1_de-sync-standby-cluster_0.3.2_8c82e1e"
+  postgresImage: "cybertecpostgresql/spilo:2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
