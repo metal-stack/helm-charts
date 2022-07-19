@@ -63,6 +63,7 @@ ports:
 metal_api:
   replicas: 3
   base_path: "/"
+  log_level: info
   db_address: ""
   db_password: ""
   ipam_db_address: ""
