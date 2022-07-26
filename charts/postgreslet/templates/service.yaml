@@ -12,12 +12,11 @@ metadata:
     {{- include "postgreslet.labels" . | nindent 4 }}
 spec:
   ports:
-  ports:
     - name: metrics
       port: 8080
       protocol: TCP
       targetPort: 8080
   selector:
     control-plane: controller-manager
-    {{- include "postgreslet.selectorLabels" . | nindent 6 }}
+    {{- include "postgreslet.selectorLabels" . | nindent 4 }}
   type: ClusterIP
