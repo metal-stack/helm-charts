@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+{{- with .Values.podAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+  labels:
+    control-plane: controller-manager
+    {{- include "postgreslet.labels" . | nindent 4 }}
+  name: {{ include "postgreslet.fullname" . }}-servicemonitor
+  namespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+  - port: 8080
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+      {{- include "postgreslet.selectorLabels" . | nindent 6 }}
