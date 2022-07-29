@@ -479,8 +479,8 @@ spec:
               value: {{ .Values.metal_api.db_address }}
             - name: METAL_API_DB_PASSWORD
               value: {{ .Values.metal_api.db_password }}
-            - name: METAL_API_IPAM_DB_ADDR
-              value: {{ .Values.metal_api.ipam_db_address }}
+            - name: METAL_API_IPAM_GRPC_SERVER_ENDPOINT
+              value: {{ .Values.metal_api.ipam_grpc_server_endpoint }}
             - name: METAL_API_IPAM_DB_PORT
               value: "{{ .Values.metal_api.ipam_db_port }}"
             - name: METAL_API_IPAM_DB_NAME
