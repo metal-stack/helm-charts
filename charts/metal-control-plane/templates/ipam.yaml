@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
       - name: ipam
-        command: postgres
+        command: 
+          - postgres
         image: {{ .Values.images.ipam.image }}:{{ .Values.images.ipam.tag }}
         imagePullPolicy: {{ .Values.images.ipam.imagePullPolicy }}
         env:
