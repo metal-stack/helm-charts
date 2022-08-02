@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.8.0"
+  tag: "v0.9.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -80,7 +80,7 @@ postgreslet:
   # postgresImage The operator image to use. Leave empty to use the default.
   operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
   # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
-  postgresImage: "cybertecpostgresql/spilo:2.1-p1_de-sync-standby-cluster_0.3.2_8c82e1e"
+  postgresImage: "cybertecpostgresql/spilo:2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -97,6 +97,10 @@ postgreslet:
   enableNetPol: false
   # enablePodAntiaffinity enable anti-affinity of pods of the same postgres cluster, to prevent them running on the same worker node
   enablePodAntiaffinity: false
+  # patroniRetryTimeout sets the patroni retry timeout, which will also result in an updated patroni ttl ( ttl=(2*retry_timeout)+10 )
+  patroniRetryTimeout: 90
+  # enableStandbyLeaderSelector enables the use of a new, updated selector for use with newer Spilo images. The postgreslet will use spilo-role=standby_leader in the selectors of standby DBs then.
+  enableStandbyLeaderSelector: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
