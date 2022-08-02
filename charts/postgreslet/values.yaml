@@ -149,6 +149,9 @@ sidecars:
         memory: "256M"
     securityContext:                                                                                                                                                                                                                                                                                                                                                        
       privileged: false
+      runAsNonRoot: true
+      runAsUser: 65534
+      allowPrivilegeEscalation: false
     queries: |+
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
