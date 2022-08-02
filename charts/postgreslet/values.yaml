@@ -118,6 +118,13 @@ sidecars:
         memory: "256M"
     securityContext:                                                                                                                                                                                                                                                                                                                                                        
       privileged: false
+      runAsNonRoot: true
+      runAsUser: 101
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+        - ALL
     conf: |
         [SERVICE]
             Daemon          off
