@@ -18,6 +18,15 @@ data:
         limits:
           cpu: {{ .Values.sidecars.exporter.resources.limits.cpu }}
           memory: {{ .Values.sidecars.exporter.resources.limits.memory }}
+      securityContext:                                                                                                                                                                                                                                                                                                                                                        
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65534
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+          - ALL
       env:
         - name: DATA_SOURCE_URI
           value: 127.0.0.1:5432/postgres?sslmode=disable
@@ -38,6 +47,15 @@ data:
         limits:
           cpu: {{ .Values.sidecars.fluentbit.resources.limits.cpu }}
           memory: {{ .Values.sidecars.fluentbit.resources.limits.memory }}
+      securityContext:                                                                                                                                                                                                                                                                                                                                                        
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 101
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+          - ALL
   additional-volumes: |
     - name: empty
       mountPath: /opt/empty

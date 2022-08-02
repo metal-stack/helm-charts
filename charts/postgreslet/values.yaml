@@ -116,15 +116,6 @@ sidecars:
       limits:
         cpu: "500m"
         memory: "256M"
-    securityContext:                                                                                                                                                                                                                                                                                                                                                        
-      privileged: false
-      runAsNonRoot: true
-      runAsUser: 101
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-        - ALL
     conf: |
         [SERVICE]
             Daemon          off
@@ -154,15 +145,6 @@ sidecars:
       limits:
         cpu: "500m"
         memory: "256M"
-    securityContext:                                                                                                                                                                                                                                                                                                                                                        
-      privileged: false
-      runAsNonRoot: true
-      runAsUser: 65534
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-        - ALL
     queries: |+
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
