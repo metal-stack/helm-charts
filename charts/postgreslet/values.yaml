@@ -116,6 +116,8 @@ sidecars:
       limits:
         cpu: "500m"
         memory: "256M"
+    securityContext:                                                                                                                                                                                                                                                                                                                                                        
+      privileged: false
     conf: |
         [SERVICE]
             Daemon          off
@@ -145,6 +147,8 @@ sidecars:
       limits:
         cpu: "500m"
         memory: "256M"
+    securityContext:                                                                                                                                                                                                                                                                                                                                                        
+      privileged: false
     queries: |+
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
