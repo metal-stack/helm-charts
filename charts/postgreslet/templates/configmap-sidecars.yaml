@@ -39,7 +39,7 @@ data:
         - name: PG_EXPORTER_EXTEND_QUERY_PATH
           value: /metrics/queries.yaml
         - name: PG_EXPORTER_CONSTANT_LABELS
-          value: "postgres_partition={{ .Values.postgreslet.partitionId | quote }}"
+          value: "postgres_partition={{ .Values.postgreslet.partitionId }}"
     - name: postgres-fluentbit
       image: {{ .Values.sidecars.fluentbit.image }}
       resources:
