@@ -38,7 +38,6 @@ data:
         limits:
           cpu: {{ .Values.sidecars.fluentbit.resources.limits.cpu }}
           memory: {{ .Values.sidecars.fluentbit.resources.limits.memory }}
-  
   additional-volumes: |
     - name: empty
       mountPath: /opt/empty
@@ -66,7 +65,6 @@ data:
           items:
             - key: fluent-bit.conf
               path: fluent-bit.conf
-
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}-postgres-sidecars
