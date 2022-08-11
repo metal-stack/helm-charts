@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.9.1"
+  tag: "v0.9.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -100,7 +100,7 @@ postgreslet:
   # patroniRetryTimeout sets the patroni retry timeout, which will also result in an updated patroni ttl ( ttl=(2*retry_timeout)+10 )
   patroniRetryTimeout: 90
   # enableStandbyLeaderSelector enables the use of a new, updated selector for use with newer Spilo images. The postgreslet will use spilo-role=standby_leader in the selectors of standby DBs then.
-  enableStandbyLeaderSelector: true
+  enableStandbyLeaderSelector: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
