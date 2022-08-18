@@ -323,7 +323,7 @@ spec:
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
-        - name: METALCTL_URL
+        - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
         - name: METALCTL_HMAC
           valueFrom:
@@ -350,7 +350,7 @@ spec:
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
-        - name: METALCTL_URL
+        - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
         - name: METALCTL_HMAC
           valueFrom:
