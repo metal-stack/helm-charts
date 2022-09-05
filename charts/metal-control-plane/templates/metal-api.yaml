@@ -47,6 +47,20 @@ stringData:
   s3_secret: {{ .Values.metal_api.s3.secret }}
   s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
 {{- end }}
+{{- if .Values.metal_api.headscale.enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-headscale
+  name: metal-api-headscale
+type: Opaque
+stringData:
+  api_key: {{ .Values.metal_api.headscale.api_key }}
+  internal_api_address: {{ .Values.metal_api.headscale.internal_api_address }}
+  control_plane_address: {{ .Values.metal_api.headscale.control_plane_address }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -167,6 +181,23 @@ spec:
             secretKeyRef:
               name: metal-api-s3
               key: s3_firmware_bucket
+{{- end }}
+{{- if .Values.metal_api.headscale.enabled }}
+        - name: METAL_API_HEADSCALE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-headscale
+              key: api_key
+        - name: METAL_API_HEADSCALE_ADDR
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-headscale
+              key: internal_api_address
+        - name: METAL_API_HEADSCALE_CP_ADDR
+          valueFrom:
+            secretKeyRef:
+              name: metal-api-headscale
+              key: control_plane_address
 {{- end }}
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"
