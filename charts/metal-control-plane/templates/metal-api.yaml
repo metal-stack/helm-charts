@@ -424,7 +424,7 @@ spec:
         - name: METAL_API_DB_PASSWORD
           value: {{ .Values.metal_api.db_password }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: metal-api-liveliness
@@ -456,7 +456,7 @@ spec:
             - name: METAL_API_DB_PASSWORD
               value: {{ .Values.metal_api.db_password }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: metal-api-resurrection
