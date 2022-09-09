@@ -108,6 +108,11 @@ metal_api:
     key: ""
     secret: ""
     firmware_bucket: ""
+  headscale:
+    enabled: false
+    api_key: ""
+    internal_api_address: ""
+    control_plane_address: ""
 
 masterdata_api:
   provider_tenant: ""

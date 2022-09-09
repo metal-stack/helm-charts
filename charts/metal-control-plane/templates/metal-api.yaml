@@ -168,6 +168,14 @@ spec:
               name: metal-api-s3
               key: s3_firmware_bucket
 {{- end }}
+{{- if .Values.metal_api.headscale.enabled }}
+        - name: METAL_API_HEADSCALE_API_KEY
+          value: "{{ .Values.metal_api.headscale.api_key }}"
+        - name: METAL_API_HEADSCALE_ADDR
+          value: {{ .Values.metal_api.headscale.internal_api_address }}
+        - name: METAL_API_HEADSCALE_CP_ADDR
+          value: {{ .Values.metal_api.headscale.control_plane_address }}
+{{- end }}
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"
         - name: METAL_API_MASTERDATA_HOSTNAME
