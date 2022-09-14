@@ -149,7 +149,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.nodeName
-        image: {{ template "externalImages.csiNodeDriverRegistrar" . }}
+        image: {{ .Values.externalImages.registrar.repository }}:{{ template "externalImages.csiNodeDriverRegistrar.Version" . }}
         imagePullPolicy: IfNotPresent
         name: node-driver-registrar
         resources: {}
@@ -226,7 +226,7 @@ spec:
         args:
         - --csi-address=/csi/csi.sock
         - --health-port=9898
-        image: {{ template "externalImages.csiLivenessprobe" . }}
+        image: {{ .Values.externalImages.livenessprobe.repository }}:{{ template "externalImages.csiLivenessprobe.Version" . }}
         imagePullPolicy: IfNotPresent
         resources: {}
         terminationMessagePath: /dev/termination-log

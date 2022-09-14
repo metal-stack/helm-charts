@@ -154,7 +154,7 @@ spec:
       serviceAccountName: csi-driver-lvm-controller
       containers:
         - name: csi-attacher
-          image: {{ template "externalImages.csiAttacher" . }}
+          image: {{ .Values.externalImages.attacher.repository }}:{{ template "externalImages.csiAttacher.Version" . }}
           imagePullPolicy: IfNotPresent
           args:
             - --v=5
@@ -165,7 +165,7 @@ spec:
           - mountPath: /csi
             name: socket-dir
         - name: csi-provisioner
-          image: {{ template "externalImages.csiProvisioner" . }}
+          image: {{ .Values.externalImages.provisioner.repository }}:{{ template "externalImages.csiProvisioner.Version" . }}
           imagePullPolicy: IfNotPresent
           args:
             - -v=5
@@ -177,7 +177,7 @@ spec:
             - mountPath: /csi
               name: socket-dir
         - name: csi-resizer
-          image: {{ template "externalImages.csiResizer" . }}
+          image: {{ .Values.externalImages.resizer.repository }}:{{ template "externalImages.csiResizer.Version" . }}
           imagePullPolicy: IfNotPresent
           args:
             - -v=5
