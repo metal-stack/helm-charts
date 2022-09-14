@@ -24,3 +24,30 @@ provisionerImage:
   repository: metalstack/csi-lvmplugin-provisioner
   tag: v0.4.1
   pullPolicy: IfNotPresent
+
+kubernetes:
+  kubeletPath: /var/lib/kubelet
+
+storageClasses:
+  linear:
+    enabled: true
+    additionalAnnotations: []
+    # this might be used to mark one of the StorageClasses as default:
+    # storageclass.kubernetes.io/is-default-class: "true"
+  striped:
+    enabled: true
+    additionalAnnotations: []
+  mirror:
+    enabled: true
+    additionalAnnotations: []
+
+customCSISidecars:
+  enabled: false
+
+  ## uncomment and set these if enabled=true
+
+  # attacher: k8s.gcr.io/sig-storage/csi-attacher:v3.5.0
+  # livenessprobe: k8s.gcr.io/sig-storage/livenessprobe:v2.7.0
+  # provisioner: k8s.gcr.io/sig-storage/csi-provisioner:v3.2.1
+  # registrar: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.5.1
+  # resizer: k8s.gcr.io/sig-storage/csi-resizer:v1.6.0

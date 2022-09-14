@@ -62,13 +62,13 @@ spec:
   allowedHostPaths:
   - pathPrefix: /lib/modules
   - pathPrefix: /etc/lvm/cache
-  - pathPrefix: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
   - pathPrefix: /etc/lvm/backup
   - pathPrefix: /run/lock/lvm
-  - pathPrefix: /var/lib/kubelet/plugins
-  - pathPrefix: /var/lib/kubelet/plugins_registry
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins_registry
   - pathPrefix: /dev
-  - pathPrefix: /var/lib/kubelet/pods
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/pods
   fsGroup:
     rule: RunAsAny
   hostPorts:
@@ -142,7 +142,7 @@ spec:
         args:
         - --v=5
         - --csi-address=/csi/csi.sock
-        - --kubelet-registration-path=/var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}/csi.sock
+        - --kubelet-registration-path={{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}/csi.sock
         env:
         - name: KUBE_NODE_NAME
           valueFrom:
@@ -202,10 +202,10 @@ spec:
         volumeMounts:
         - mountPath: /csi
           name: socket-dir
-        - mountPath: /var/lib/kubelet/pods
+        - mountPath: {{ .Values.kubernetes.kubeletPath }}/pods
           mountPropagation: Bidirectional
           name: mountpoint-dir
-        - mountPath: /var/lib/kubelet/plugins
+        - mountPath: {{ .Values.kubernetes.kubeletPath }}/plugins
           mountPropagation: Bidirectional
           name: plugins-dir
         - mountPath: /dev
@@ -241,19 +241,19 @@ spec:
       terminationGracePeriodSeconds: 30
       volumes:
       - hostPath:
-          path: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+          path: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
           type: DirectoryOrCreate
         name: socket-dir
       - hostPath:
-          path: /var/lib/kubelet/pods
+          path: {{ .Values.kubernetes.kubeletPath }}/pods
           type: DirectoryOrCreate
         name: mountpoint-dir
       - hostPath:
-          path: /var/lib/kubelet/plugins_registry
+          path: {{ .Values.kubernetes.kubeletPath }}/plugins_registry
           type: Directory
         name: registration-dir
       - hostPath:
-          path: /var/lib/kubelet/plugins
+          path: {{ .Values.kubernetes.kubeletPath }}/plugins
           type: Directory
         name: plugins-dir
       - hostPath:
@@ -262,7 +262,6 @@ spec:
         name: dev-dir
       - hostPath:
           path: /lib/modules
-          type: Directory
         name: mod-dir
       - hostPath:
           path: /etc/lvm/backup

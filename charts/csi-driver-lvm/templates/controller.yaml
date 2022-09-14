@@ -75,7 +75,7 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   allowedHostPaths:
-  - pathPrefix: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
   fsGroup:
     rule: RunAsAny
   privileged: true
@@ -189,7 +189,7 @@ spec:
               name: socket-dir
       volumes:
         - hostPath:
-            path: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+            path: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
             type: DirectoryOrCreate
           name: socket-dir
 ---
