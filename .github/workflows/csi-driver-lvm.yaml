@@ -2,6 +2,8 @@ on:
   pull_request:
     paths:
       - charts/csi-driver-lvm
+    branches:
+      - master
 
 env:
   REGISTRY: ghcr.io
