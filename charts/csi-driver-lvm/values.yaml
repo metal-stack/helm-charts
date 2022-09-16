@@ -59,23 +59,23 @@ nodeSelector:
   # The provisioner has an affinity for nodes with a plugin pod,
   # but since that's a daemonset, we allow more fine-grained node selection
 
-  #provisioner:
-    #node-role.kubernetes.io/master: ""
-    ## Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
-    ## in the future
+  provisioner:
+    # node-role.kubernetes.io/master: ""
+    # Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
+    # in the future
 
 tolerations:
-  #plugin:
-  #- key: node-role.kubernetes.io/master
-  #  operator: Exists
-  #  effect: NoSchedule
-  #- key: node-role.kubernetes.io/control-plane
-  #  operator: Exists
-  #  effect: NoSchedule
-  #provisioner:
-  #- key: node-role.kubernetes.io/master
-  #  operator: Exists
-  #  effect: NoSchedule
-  #- key: node-role.kubernetes.io/control-plane
-  #  operator: Exists
-  #  effect: NoSchedule
+  plugin:
+  # - key: node-role.kubernetes.io/master
+  #   operator: Exists
+  #   effect: NoSchedule
+  # - key: node-role.kubernetes.io/control-plane
+  #   operator: Exists
+  #   effect: NoSchedule
+  provisioner:
+  # - key: node-role.kubernetes.io/master
+  #   operator: Exists
+  #   effect: NoSchedule
+  # - key: node-role.kubernetes.io/control-plane
+  #   operator: Exists
+  #   effect: NoSchedule
