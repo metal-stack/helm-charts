@@ -51,3 +51,31 @@ customCSISidecars:
   # provisioner: k8s.gcr.io/sig-storage/csi-provisioner:v3.2.1
   # registrar: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.5.1
   # resizer: k8s.gcr.io/sig-storage/csi-resizer:v1.6.0
+
+nodeSelector:
+  # The plugin daemonset will run on all nodes if it has a toleration,
+  # so it is not necessary to set a nodeSelector for it
+
+  # The provisioner has an affinity for nodes with a plugin pod,
+  # but since that's a daemonset, we allow more fine-grained node selection
+
+  #provisioner:
+    #node-role.kubernetes.io/master: ""
+    ## Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
+    ## in the future
+
+tolerations:
+  #plugin:
+  #- key: node-role.kubernetes.io/master
+  #  operator: Exists
+  #  effect: NoSchedule
+  #- key: node-role.kubernetes.io/control-plane
+  #  operator: Exists
+  #  effect: NoSchedule
+  #provisioner:
+  #- key: node-role.kubernetes.io/master
+  #  operator: Exists
+  #  effect: NoSchedule
+  #- key: node-role.kubernetes.io/control-plane
+  #  operator: Exists
+  #  effect: NoSchedule
