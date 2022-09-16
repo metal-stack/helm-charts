@@ -1,0 +1,17 @@
+---
+lvm:
+  devicePattern: /dev/loop100,/dev/loop101
+
+nodeSelector:
+  provisioner:
+    kubernetes.io/os: linux
+
+tolerations:
+  plugin:
+  - key: kubernetes.io/os
+    operator: Exists
+    effect: PreferNoSchedule
+  provisioner:
+  - key: kubernetes.io/os
+    operator: Exists
+    effect: PreferNoSchedule
