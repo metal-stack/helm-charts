@@ -1,7 +1,7 @@
 on:
   pull_request:
     paths:
-      - charts/csi-driver-lvm
+      - charts/csi-driver-lvm/**
     branches:
       - master
 
