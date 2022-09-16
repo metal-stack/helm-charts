@@ -12,7 +12,7 @@ test-csi-driver-lvm:
 	@if ! kind get clusters | grep csi-driver-lvm > /dev/null; then \
 		kind create cluster \
 		  --name csi-driver-lvm \
-			--config tests/kind.yaml \
+			--config tests/csi-driver-lvm/kind.yaml \
 			--kubeconfig $(KUBECONFIG); fi
 	@cd tests/csi-driver-lvm && docker build -t csi-bats . && cd -
 	docker run -i$(DOCKER_TTY_ARG) \
