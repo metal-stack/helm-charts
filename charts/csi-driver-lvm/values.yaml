@@ -16,13 +16,13 @@ rbac:
 compat03x: false
 
 pluginImage:
-  repository: metalstack/lvmplugin
-  tag: v0.4.1
+  repository: ghcr.io/metal-stack/csi-driver-lvm
+  tag: v0.5.0
   pullPolicy: IfNotPresent
 
 provisionerImage:
-  repository: metalstack/csi-lvmplugin-provisioner
-  tag: v0.4.1
+  repository: ghcr.io/metal-stack/csi-driver-lvm-provisioner
+  tag: v0.5.0
   pullPolicy: IfNotPresent
 
 kubernetes:
