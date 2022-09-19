@@ -2,7 +2,7 @@
 
 This is the helm chart for the deployment of https://github.com/metal-stack/csi-driver-lvm.
 
-**The chart requires that you have at least Kubernetes 1.19.**
+**The chart requires that you have at least Kubernetes 1.16.**
 
 ## TL;DR
 
