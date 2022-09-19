@@ -151,6 +151,14 @@ spec:
                 values:
                 - csi-driver-lvm-plugin
             topologyKey: kubernetes.io/hostname
+{{- if .Values.nodeSelector.provisioner }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector.provisioner | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations.provisioner }}
+      tolerations:
+{{ toYaml .Values.tolerations.provisioner | indent 8 }}
+{{- end }}
       serviceAccountName: csi-driver-lvm-controller
       containers:
         - name: csi-attacher
