@@ -22,3 +22,7 @@ test-csi-driver-lvm:
 		--network host \
 		csi-bats \
 		--verbose-run --trace --timing bats/test.bats
+
+.PHONY: cleanup-csi-driver-lvm
+cleanup-csi-driver-lvm:
+	kind delete cluster --name csi-driver-lvm
