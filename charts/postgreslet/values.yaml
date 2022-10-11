@@ -101,8 +101,8 @@ postgreslet:
   patroniRetryTimeout: 90
   # enableStandbyLeaderSelector enables the use of a new, updated selector for use with newer Spilo images. The postgreslet will use spilo-role=standby_leader in the selectors of standby DBs then.
   enableStandbyLeaderSelector: false
-  # enablePEtcd enables the deployment of a dedicated etcd for this postgreslet instance
-  enablePEtcd: true
+  # deployEtcd enables the deployment of a dedicated etcd for this postgreslet instance
+  deployEtcd: true
   # etcdImage The etcd image to use
   etcdImage: "quay.io/coreos/etcd:v3.5.4"
   # etcdBackupSidecarImage The sidecar image to use

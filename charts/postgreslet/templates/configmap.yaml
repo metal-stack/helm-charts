@@ -1,8 +1,8 @@
 apiVersion: v1
 data:
   CUSTOM_PSP_NAME: {{ include "postgreslet.pspName" . | quote  }}
+  DEPLOY_ETCD: {{ .Values.postgreslet.deployEtcd | quote }}
   ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
-  ENABLE_ETCD: {{ .Values.postgreslet.enablePEtcd | quote }}
   ENABLE_LEADER_ELECTION: {{ .Values.postgreslet.enableLeaderElection | quote }}
   ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
   ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
