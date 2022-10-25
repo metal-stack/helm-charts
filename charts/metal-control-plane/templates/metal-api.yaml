@@ -455,6 +455,46 @@ spec:
               value: {{ .Values.metal_api.db_address }}
             - name: METAL_API_DB_PASSWORD
               value: {{ .Values.metal_api.db_password }}
+{{- if .Values.metal_api.headscale.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-api-machines-vpn-connected
+  labels:
+    job: metal-api-machines-vpn-connected
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: metal-api
+            image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            command:
+            - /metal-api
+            - machines-vpn-connected
+            env:
+            - name: METAL_API_LOG_LEVEL
+              value: {{ .Values.metal_api.log_level }}
+            - name: METAL_API_DB_ADDR
+              value: {{ .Values.metal_api.db_address }}
+            - name: METAL_API_DB_PASSWORD
+              value: {{ .Values.metal_api.db_password }}
+            - name: METAL_API_HEADSCALE_API_KEY
+              value: "{{ .Values.metal_api.headscale.api_key }}"
+            - name: METAL_API_HEADSCALE_ADDR
+              value: {{ .Values.metal_api.headscale.internal_api_address }}
+            - name: METAL_API_HEADSCALE_CP_ADDR
+              value: {{ .Values.metal_api.headscale.control_plane_address }}
+{{- end }}
 ---
 apiVersion: batch/v1
 kind: CronJob
