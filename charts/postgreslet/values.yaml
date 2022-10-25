@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.9.2"
+  tag: "v0.10.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -101,6 +101,18 @@ postgreslet:
   patroniRetryTimeout: 90
   # enableStandbyLeaderSelector enables the use of a new, updated selector for use with newer Spilo images. The postgreslet will use spilo-role=standby_leader in the selectors of standby DBs then.
   enableStandbyLeaderSelector: false
+  # enableLegacyStandbySelector enables the old default selector. The postgreslet will use spilo-role=master in the selectors of standby DBs then.
+  enableLegacyStandbySelector: false
+  # deployEtcd enables the deployment of a dedicated etcd for this postgreslet instance
+  deployEtcd: true
+  # etcdImage The etcd image to use
+  etcdImage: "quay.io/coreos/etcd:v3.5.5"
+  # etcdBackupSidecarImage The sidecar image to use
+  etcdBackupSidecarImage: "ghcr.io/metal-stack/backup-restore-sidecar:v0.6.4"
+  # etcdBackupSecretName The name of the K8s secret containing the s3 credentials used for backup and restore
+  etcdBackupSecretName: pgaas-etcd-s3-credentials
+  # etcdPspName The name of a custom PSP to use for etcd
+  etcdPspName: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.

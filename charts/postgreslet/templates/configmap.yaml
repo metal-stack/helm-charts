@@ -1,29 +1,36 @@
 apiVersion: v1
 data:
+  CUSTOM_PSP_NAME: {{ include "postgreslet.pspName" . | quote  }}
+  DEPLOY_ETCD: {{ .Values.postgreslet.deployEtcd | quote }}
+  ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
   ENABLE_LEADER_ELECTION: {{ .Values.postgreslet.enableLeaderElection | quote }}
+  ENABLE_LEGACY_STANDBY_SELECTOR: {{ .Values.postgreslet.enableLegacyStandbySelector | quote }}
+  ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
+  ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
+  ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
+  ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
+  ETCD_BACKUP_SIDECAR_IMAGE: {{ .Values.postgreslet.etcdBackupSidecarImage | quote  }}
+  ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
+  ETCD_IMAGE: {{ .Values.postgreslet.etcdImage | quote  }}
+  ETCD_PSP_NAME: {{ .Values.postgreslet.etcdPspName | quote  }}
+  LOAD_BALANCER_IP: {{ .Values.postgreslet.loadBalancerIP | quote }}
+  MAJOR_VERSION_UPGRADE_MODE: {{ .Values.postgreslet.majorVersionUpgradeMode | quote  }}
   METRICS_ADDR_CTRL_MGR: "0"
   METRICS_ADDR_SVC_MGR: {{ .Values.postgreslet.metricsAddr | quote }}
-  PARTITION_ID: {{ .Values.postgreslet.partitionId | quote }}
-  TENANT: {{ .Values.postgreslet.tenant | quote }}
-  LOAD_BALANCER_IP: {{ .Values.postgreslet.loadBalancerIP | quote }}
-  PORT_RANGE_START: {{ .Values.postgreslet.portRangeStart | quote }}
-  PORT_RANGE_SIZE: {{ .Values.postgreslet.portRangeSize | quote }}
-  CUSTOM_PSP_NAME: {{ include "postgreslet.pspName" . | quote  }}
-  STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   OPERATOR_IMAGE: {{ .Values.postgreslet.operatorImage | quote  }}
-  POSTGRES_IMAGE: {{ .Values.postgreslet.postgresImage | quote  }}
-  ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
-  ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
-  POSTGRES_PARAM_BLOCKLIST: {{ .Values.postgreslet.postgresParamBlockList | quote  }}
-  MAJOR_VERSION_UPGRADE_MODE: {{ .Values.postgreslet.majorVersionUpgradeMode | quote  }}
-  STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
-  RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
-  ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
-  POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
-  SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
-  ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
+  PARTITION_ID: {{ .Values.postgreslet.partitionId | quote }}
   PATRONI_RETRY_TIMEOUT: {{ .Values.postgreslet.patroniRetryTimeout | quote }}
-  ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
+  PORT_RANGE_SIZE: {{ .Values.postgreslet.portRangeSize | quote }}
+  PORT_RANGE_START: {{ .Values.postgreslet.portRangeStart | quote }}
+  POSTGRES_IMAGE: {{ .Values.postgreslet.postgresImage | quote  }}
+  POSTGRES_PARAM_BLOCKLIST: {{ .Values.postgreslet.postgresParamBlockList | quote  }}
+  POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
+  POSTGRESLET_FULLNAME: {{ include "postgreslet.fullname" . }}
+  RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
+  SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
+  STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
+  STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
+  TENANT: {{ .Values.postgreslet.tenant | quote }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
