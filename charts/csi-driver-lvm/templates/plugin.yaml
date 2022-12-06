@@ -155,7 +155,6 @@ spec:
               fieldPath: spec.nodeName
         image: {{ template "externalImages.csiNodeDriverRegistrar" . }}
         imagePullPolicy: IfNotPresent
-        name: node-driver-registrar
         resources: {}
         securityContext:
           privileged: true
