@@ -47,6 +47,18 @@ stringData:
   s3_secret: {{ .Values.metal_api.s3.secret }}
   s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
 {{- end }}
+{{- if .Values.auditing.enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-auditing
+  name: {{ .Values.meilisearch.auth.existingMasterKeySecret }}
+type: Opaque
+stringData:
+  MEILI_MASTER_KEY: {{ .Values.auditing.auditing_secret }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -190,6 +202,21 @@ spec:
           value: /certs/masterdata-api/client-key.pem
         - name: METAL_API_PASSWORD_REASON_MINLENGTH
           value: "{{ .Values.metal_api.password_reason_minlength }}"
+{{- if .Values.auditing.enabled }}
+        - name: METAL_API_AUDITING_ENABLED
+          value: "true"
+        - name: METAL_API_AUDITING_URL
+          value: "{{ .Values.auditing.url }}"
+        - name: METAL_API_AUDITING_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.meilisearch.auth.existingMasterKeySecret }}"
+              key: MEILI_MASTER_KEY
+        - name: METAL_API_AUDITING_INDEX_PREFIX
+          value: "{{ .Values.auditing.index_prefix }}"
+        - name: METAL_API_AUDITING_INDEX_INTERVAL
+          value: "{{ .Values.auditing.index_interval }}"
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_api | indent 10 }}
