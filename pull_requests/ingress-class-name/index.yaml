@@ -3,7 +3,23 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.5.0
-    created: "2022-11-22T15:42:23.830666366Z"
+    created: "2023-01-10T15:11:40.72198275Z"
+    description: local persistend storage for lvm
+    digest: db040789cfe8e3f9970cfb39ffe132b78f1809556392cd19b019072127641c7f
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/ingress-class-name/csi-driver-lvm-0.5.2.tgz
+    version: 0.5.2
+  - apiVersion: v1
+    appVersion: v0.5.0
+    created: "2023-01-10T15:11:40.721427842Z"
     description: local persistend storage for lvm
     digest: 5e8b09256b453e72bf790800bd6b23a229cd4ff2f8a7d14bb509a817660cff98
     home: https://metal-stack.io
@@ -20,21 +36,21 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2022-11-22T15:42:23.831621876Z"
+    created: "2023-01-10T15:11:40.722940564Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 205ecf026bdbfc61acdf0891788c4a5590c557a7804bfe45a676ea0751bdece7
+    digest: ccb056c07fe50f78485027d78ed8b9fec6acaf602e02eddb5d01b8ba82d89565
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/ingress-class-name/metal-control-plane-0.3.18.tgz
     version: 0.3.18
   postgreslet:
   - apiVersion: v2
-    created: "2022-11-22T15:42:23.833103491Z"
+    created: "2023-01-10T15:11:40.724836592Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 373b5a63b08e95e3f3dc1ee61f014349fb54d60a778906da8fc2dce77edeabb2
+    digest: 6fc2f96a0c70943d11cda4e5f31536fb1d2e576fddf1e378fc4f45414bb282ee
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/ingress-class-name/postgreslet-0.8.0.tgz
     version: 0.8.0
-generated: "2022-11-22T15:42:23.829756657Z"
+generated: "2023-01-10T15:11:40.720656331Z"
