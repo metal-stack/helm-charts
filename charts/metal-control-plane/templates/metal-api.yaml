@@ -47,18 +47,6 @@ stringData:
   s3_secret: {{ .Values.metal_api.s3.secret }}
   s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
 {{- end }}
-{{- if .Values.auditing.enabled }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    app: metal-api-auditing
-  name: {{ .Values.meilisearch.auth.existingMasterKeySecret }}
-type: Opaque
-stringData:
-  MEILI_MASTER_KEY: {{ .Values.auditing.auditing_secret }}
-{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -210,7 +198,7 @@ spec:
         - name: METAL_API_AUDITING_API_KEY
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.meilisearch.auth.existingMasterKeySecret }}"
+              name: "{{ .Values.auditing.existingMasterKeySecret }}"
               key: MEILI_MASTER_KEY
         - name: METAL_API_AUDITING_INDEX_PREFIX
           value: "{{ .Values.auditing.index_prefix }}"

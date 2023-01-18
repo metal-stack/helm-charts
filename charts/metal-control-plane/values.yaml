@@ -162,18 +162,7 @@ ingress:
 
 auditing:
   enabled: false
-  url: "http://metal-control-plane-meilisearch.metal-control-plane.svc.cluster.local:7700"
+  url: ""
   index_prefix: "auditing"
   index_interval: "@daily"
-  auditing_secret: ""
-
-meilisearch:
-  ingress:
-    enabled: false
-  persistence:
-    enabled: true
-  environment:
-    MEILI_NO_ANALYTICS: true
-    MEILI_ENV: development
-  auth:
-    existingMasterKeySecret: "metal-auditing-master-key"
+  existingMasterKeySecret: "metal-auditing-master-key"
