@@ -77,7 +77,7 @@ postgreslet:
   customPspName: ""
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
-  # postgresImage The operator image to use. Leave empty to use the default.
+  # operatorImage The operator image to use. Leave empty to use the default.
   operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
   # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
   postgresImage: "cybertecpostgresql/spilo:2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
