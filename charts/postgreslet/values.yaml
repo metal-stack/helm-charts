@@ -166,7 +166,7 @@ sidecars:
         memory: "200M"
       limits:
         cpu: "500m"
-        memory: "256M"
+        memory: "400M"
     queries: |+
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
