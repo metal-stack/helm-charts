@@ -165,7 +165,7 @@ sidecars:
         cpu: "100m"
         memory: "200M"
       limits:
-        cpu: "500m"
+        cpu: "1"
         memory: "400M"
     queries: |+
       pg_postmaster:
