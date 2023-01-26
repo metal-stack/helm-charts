@@ -77,10 +77,14 @@ postgreslet:
   customPspName: ""
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
-  # operatorImage The operator image to use. Leave empty to use the default.
-  operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
-  # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
-  postgresImage: "cybertecpostgresql/spilo:2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
+  # operatorImageRepository 
+  operatorImageRepository: "ermajn/postgres-operator"
+  # operatorImageTag 
+  operatorImageTag: "v1.7.0-1-g711648b-dirty"
+  # postgresImageRepository 
+  postgresImageRepository: "cybertecpostgresql/spilo"
+  # postgresImageTag 
+  postgresImageTag: "2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -105,10 +109,14 @@ postgreslet:
   enableLegacyStandbySelector: false
   # deployEtcd enables the deployment of a dedicated etcd for this postgreslet instance
   deployEtcd: true
-  # etcdImage The etcd image to use
-  etcdImage: "quay.io/coreos/etcd:v3.5.5"
-  # etcdBackupSidecarImage The sidecar image to use
-  etcdBackupSidecarImage: "ghcr.io/metal-stack/backup-restore-sidecar:v0.6.4"
+  # etcdImageRepository The etcd image repository to use
+  etcdImageRepository: "quay.io/coreos/etcd"
+  # etcdImageTag The etcd image tag to use
+  etcdImageTag: "v3.5.5"
+  # etcdBackupSidecarImageRepository The sidecar image repository to use
+  etcdBackupSidecarImageRepository: "ghcr.io/metal-stack/backup-restore-sidecar"
+  # etcdBackupSidecarImageTag The sidecar image tag to use
+  etcdBackupSidecarImageTag: "v0.6.4"
   # etcdBackupSecretName The name of the K8s secret containing the s3 credentials used for backup and restore
   etcdBackupSecretName: pgaas-etcd-s3-credentials
   # etcdPspName The name of a custom PSP to use for etcd
@@ -120,7 +128,8 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    image: "fluent/fluent-bit:1.9.3"
+    imageRepository: "fluent/fluent-bit"
+    imageTag: "1.9.3"
     resources:
       requests:
         cpu: "100m"
@@ -147,7 +156,8 @@ sidecars:
             Match **
 
   exporter:
-    image: "prometheuscommunity/postgres-exporter:v0.10.1"
+    imageRepository: "prometheuscommunity/postgres-exporter"
+    imageTag: "v0.10.1"
     containerPort: 9187
     servicePort: 9187
     resources:

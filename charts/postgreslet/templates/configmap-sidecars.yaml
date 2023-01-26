@@ -6,7 +6,11 @@ data:
   fluent-bit.conf: {{ b64enc .Values.sidecars.fluentbit.conf }}
   sidecars: |
     - name: postgres-exporter
+{{- if .Values.sidecars.exporter.image }}
       image: {{ .Values.sidecars.exporter.image }}
+{{- else }}
+      image: "{{ .Values.sidecars.exporter.imageRepository }}/{{ .Values.sidecars.exporter.imageVersion }}"
+{{- end }}
       ports:
         - name: exporter
           containerPort: {{ .Values.sidecars.exporter.containerPort }}
@@ -30,7 +34,11 @@ data:
         - name: PG_EXPORTER_CONSTANT_LABELS
           value: "postgres_partition={{ .Values.postgreslet.partitionId }},server=$(POD_NAME)"
     - name: postgres-fluentbit
+{{- if .Values.sidecars.fluentbit.image }}
       image: {{ .Values.sidecars.fluentbit.image }}
+{{- else }}
+      image: "{{ .Values.sidecars.fluentbit.imageRepository }}/{{ .Values.sidecars.fluentbit.imageTag }}"
+{{- end }}
       resources:
         requests:
           cpu: {{ .Values.sidecars.fluentbit.resources.requests.cpu }}
