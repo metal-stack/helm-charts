@@ -159,3 +159,10 @@ ingress:
   tls:
     enabled: false
     annotations: {}
+
+auditing:
+  enabled: false
+  url: ""
+  index_prefix: "auditing"
+  index_interval: "@daily"
+  existingMasterKeySecret: "metal-auditing-master-key"

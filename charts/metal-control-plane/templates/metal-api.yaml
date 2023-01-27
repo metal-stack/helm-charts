@@ -190,6 +190,21 @@ spec:
           value: /certs/masterdata-api/client-key.pem
         - name: METAL_API_PASSWORD_REASON_MINLENGTH
           value: "{{ .Values.metal_api.password_reason_minlength }}"
+{{- if .Values.auditing.enabled }}
+        - name: METAL_API_AUDITING_ENABLED
+          value: "true"
+        - name: METAL_API_AUDITING_URL
+          value: "{{ .Values.auditing.url }}"
+        - name: METAL_API_AUDITING_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.auditing.existingMasterKeySecret }}"
+              key: MEILI_MASTER_KEY
+        - name: METAL_API_AUDITING_INDEX_PREFIX
+          value: "{{ .Values.auditing.index_prefix }}"
+        - name: METAL_API_AUDITING_INDEX_INTERVAL
+          value: "{{ .Values.auditing.index_interval }}"
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_api | indent 10 }}
