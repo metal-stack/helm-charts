@@ -2,8 +2,24 @@ apiVersion: v1
 entries:
   csi-driver-lvm:
   - apiVersion: v1
+    appVersion: v0.5.1
+    created: "2023-01-27T15:08:32.025880066Z"
+    description: local persistend storage for lvm
+    digest: fbb1452f9680a061a943c23286243e2d22d9a4f6b40d3b32885951023ced6002
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/auditing/csi-driver-lvm-0.5.3.tgz
+    version: 0.5.3
+  - apiVersion: v1
     appVersion: v0.5.0
-    created: "2023-01-19T15:19:09.500904511Z"
+    created: "2023-01-27T15:08:32.02522236Z"
     description: local persistend storage for lvm
     digest: 8e73b7e4706b746f15f0c9ed01f2198abd0da281d18ffea098e991ad62203386
     home: https://metal-stack.io
@@ -18,23 +34,23 @@ entries:
     - https://metal-stack.github.io/helm-charts/pull_requests/auditing/csi-driver-lvm-0.5.2.tgz
     version: 0.5.2
   metal-control-plane:
-  - apiVersion: v2
+  - apiVersion: v1
     appVersion: "1.0"
-    created: "2023-01-19T15:19:09.501823513Z"
+    created: "2023-01-27T15:08:32.028468491Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 72904b03c37fdb54909594a43f978cd14ffa8cdb72650a3cc92739a93a5cd347
+    digest: c4fce829fe31925a6ae1eb50f9fe0c7b6c210244d49604f12197de0570ab2f1f
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/auditing/metal-control-plane-0.3.18.tgz
     version: 0.3.18
   postgreslet:
   - apiVersion: v2
-    created: "2023-01-19T15:19:09.503527417Z"
+    created: "2023-01-27T15:08:32.030640111Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: d1dbe5e147ff1c7937cdd1eac4419b37505281d01179a62bf5cf4f62832fd1a6
+    digest: 7a558acca3f6d1e90c653e9e634e52cd858d161ccb3dd17b349757267c39a679
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/auditing/postgreslet-0.8.0.tgz
     version: 0.8.0
-generated: "2023-01-19T15:19:09.500175009Z"
+generated: "2023-01-27T15:08:32.024503054Z"
