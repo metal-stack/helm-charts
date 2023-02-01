@@ -532,4 +532,21 @@ sidecars:
             - local_blks_hit:
                 usage: "COUNTER"
                 description: "Total number of local block cache hits by the statement"
-
+      pg_stat_slow_queries:
+        query: "SELECT
+                    count(*) as slow_queries_count,
+                    avg(EXTRACT(EPOCH FROM(NOW() - query_start)) * 1000) as avg_query_time
+                FROM pg_stat_activity
+                WHERE
+                    state = 'active'
+                AND
+                    NOW() - query_start > (500 || ' milliseconds')::interval
+                AND
+                    usename != 'standby'"
+        metrics:
+            - queries_count:
+                usage: "GAUGE"
+                description: "Total number of queries running more than 500ms currently"
+            - query_time_avg:
+                usage: "GAUGE"
+                description: "Total execution time of all currently running queries"
