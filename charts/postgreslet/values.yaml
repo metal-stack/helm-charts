@@ -128,8 +128,8 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    imageRepository: "fluent/fluent-bit"
-    imageTag: "1.9.3"
+    imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
+    imageTag: "2.0.8"
     resources:
       requests:
         cpu: "100m"
@@ -157,7 +157,7 @@ sidecars:
 
   exporter:
     imageRepository: "prometheuscommunity/postgres-exporter"
-    imageTag: "v0.10.1"
+    imageTag: "v0.11.1"
     containerPort: 9187
     servicePort: 9187
     resources:
