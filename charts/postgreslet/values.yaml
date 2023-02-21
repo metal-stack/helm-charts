@@ -158,7 +158,7 @@ sidecars:
             Match **
 
   exporter:
-    imageRepository: "prometheuscommunity/postgres-exporter"
+    imageRepository: "docker.io/prometheuscommunity/postgres-exporter"
     imageTag: "v0.11.1"
     containerPort: 9187
     servicePort: 9187
