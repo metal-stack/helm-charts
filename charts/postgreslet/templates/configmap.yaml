@@ -13,13 +13,13 @@ data:
 {{- if .Values.postgreslet.etcdBackupSidecarImage }}
   ETCD_BACKUP_SIDECAR_IMAGE: {{ .Values.postgreslet.etcdBackupSidecarImage | quote  }}
 {{- else }}
-  ETCD_BACKUP_SIDECAR_IMAGE: "{{ .Values.postgreslet.etcdBackupSidecarImageRepository}}/{{ .Values.postgreslet.etcdBackupSidecarImageTag}}"
+  ETCD_BACKUP_SIDECAR_IMAGE: "{{ .Values.postgreslet.etcdBackupSidecarImageRepository}}:{{ .Values.postgreslet.etcdBackupSidecarImageTag}}"
 {{- end }}
   ETCD_HOST: {{ .Values.postgreslet.etcdHost | quote  }}
 {{- if .Values.postgreslet.etcdImage }}
   ETCD_IMAGE: {{ .Values.postgreslet.etcdImage | quote  }}
 {{- else }}
-  ETCD_IMAGE: "{{ .Values.postgreslet.etcdImageRepository}}/{{ .Values.postgreslet.etcdImageTag}}"
+  ETCD_IMAGE: "{{ .Values.postgreslet.etcdImageRepository}}:{{ .Values.postgreslet.etcdImageTag}}"
 {{- end }}
   ETCD_PSP_NAME: {{ .Values.postgreslet.etcdPspName | quote  }}
   LOAD_BALANCER_IP: {{ .Values.postgreslet.loadBalancerIP | quote }}
@@ -29,7 +29,7 @@ data:
 {{- if .Values.postgreslet.operatorImage }}
   OPERATOR_IMAGE: {{ .Values.postgreslet.operatorImage | quote  }}
 {{- else }}
-  OPERATOR_IMAGE: "{{ .Values.postgreslet.operatorImageRepository}}/{{ .Values.postgreslet.operatorImageTag}}"
+  OPERATOR_IMAGE: "{{ .Values.postgreslet.operatorImageRepository}}:{{ .Values.postgreslet.operatorImageTag}}"
 {{- end }}
   PARTITION_ID: {{ .Values.postgreslet.partitionId | quote }}
   PATRONI_RETRY_TIMEOUT: {{ .Values.postgreslet.patroniRetryTimeout | quote }}
@@ -38,7 +38,7 @@ data:
 {{- if .Values.postgreslet.postgresImage }}
   POSTGRES_IMAGE: {{ .Values.postgreslet.postgresImage | quote  }}
 {{- else }}
-  POSTGRES_IMAGE: "{{ .Values.postgreslet.postgresImageRepository}}/{{ .Values.postgreslet.postgresImageTag}}"
+  POSTGRES_IMAGE: "{{ .Values.postgreslet.postgresImageRepository}}:{{ .Values.postgreslet.postgresImageTag}}"
 {{- end }}
   POSTGRES_PARAM_BLOCKLIST: {{ .Values.postgreslet.postgresParamBlockList | quote  }}
   POSTGRESLET_NAMESPACE: {{ .Release.Namespace }}
