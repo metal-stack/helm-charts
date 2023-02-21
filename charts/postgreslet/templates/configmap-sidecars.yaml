@@ -9,7 +9,7 @@ data:
 {{- if .Values.sidecars.exporter.image }}
       image: {{ .Values.sidecars.exporter.image }}
 {{- else }}
-      image: "{{ .Values.sidecars.exporter.imageRepository }}/{{ .Values.sidecars.exporter.imageVersion }}"
+      image: "{{ .Values.sidecars.exporter.imageRepository }}:{{ .Values.sidecars.exporter.imageVersion }}"
 {{- end }}
       ports:
         - name: exporter
@@ -37,7 +37,7 @@ data:
 {{- if .Values.sidecars.fluentbit.image }}
       image: {{ .Values.sidecars.fluentbit.image }}
 {{- else }}
-      image: "{{ .Values.sidecars.fluentbit.imageRepository }}/{{ .Values.sidecars.fluentbit.imageTag }}"
+      image: "{{ .Values.sidecars.fluentbit.imageRepository }}:{{ .Values.sidecars.fluentbit.imageTag }}"
 {{- end }}
       resources:
         requests:
