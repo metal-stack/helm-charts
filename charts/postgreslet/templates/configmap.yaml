@@ -8,6 +8,7 @@ data:
   ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
   ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
   ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
+  ENABLE_WALG_ENCRYPTION: {{ .Values.postgreslet.enableWalGEncryption | quote }}
   ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
 {{- if .Values.postgreslet.etcdBackupSidecarImage }}
   ETCD_BACKUP_SIDECAR_IMAGE: {{ .Values.postgreslet.etcdBackupSidecarImage | quote  }}

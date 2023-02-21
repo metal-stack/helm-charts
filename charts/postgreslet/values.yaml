@@ -107,6 +107,8 @@ postgreslet:
   enableStandbyLeaderSelector: false
   # enableLegacyStandbySelector enables the old default selector. The postgreslet will use spilo-role=master in the selectors of standby DBs then.
   enableLegacyStandbySelector: false
+  # enableWalGEncryption enables the client side encryption in wal_g
+  enableWalGEncryption: false
   # deployEtcd enables the deployment of a dedicated etcd for this postgreslet instance
   deployEtcd: true
   # etcdImageRepository The etcd image repository to use
