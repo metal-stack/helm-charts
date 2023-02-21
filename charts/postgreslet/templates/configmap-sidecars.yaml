@@ -9,7 +9,7 @@ data:
 {{- if .Values.sidecars.exporter.image }}
       image: {{ .Values.sidecars.exporter.image }}
 {{- else }}
-      image: "{{ .Values.sidecars.exporter.imageRepository }}:{{ .Values.sidecars.exporter.imageVersion }}"
+      image: "{{ .Values.sidecars.exporter.imageRepository }}:{{ .Values.sidecars.exporter.imageTag }}"
 {{- end }}
       ports:
         - name: exporter
