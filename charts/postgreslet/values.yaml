@@ -78,11 +78,11 @@ postgreslet:
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
   # operatorImageRepository 
-  operatorImageRepository: "ermajn/postgres-operator"
+  operatorImageRepository: "docker.io/ermajn/postgres-operator"
   # operatorImageTag 
   operatorImageTag: "v1.7.0-1-g711648b-dirty"
   # postgresImageRepository 
-  postgresImageRepository: "cybertecpostgresql/spilo"
+  postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
   postgresImageTag: "2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
