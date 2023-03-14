@@ -3,6 +3,7 @@ data:
   CUSTOM_PSP_NAME: {{ include "postgreslet.pspName" . | quote  }}
   DEPLOY_ETCD: {{ .Values.postgreslet.deployEtcd | quote }}
   ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
+  ENABLE_LB_SOURCE_RANGES: {{ .Values.postgreslet.enableLBSourceRanges | quote }}
   ENABLE_LEADER_ELECTION: {{ .Values.postgreslet.enableLeaderElection | quote }}
   ENABLE_LEGACY_STANDBY_SELECTOR: {{ .Values.postgreslet.enableLegacyStandbySelector | quote }}
   ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}

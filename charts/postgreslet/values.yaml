@@ -123,6 +123,8 @@ postgreslet:
   etcdBackupSecretName: pgaas-etcd-s3-credentials
   # etcdPspName The name of a custom PSP to use for etcd
   etcdPspName: ""
+  # enableLBSourceRanges Toggles the use of loadBalancerSourceRanges on the postgres' external service
+  enableLBSourceRanges: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
