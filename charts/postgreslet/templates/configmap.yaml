@@ -8,6 +8,7 @@ data:
   ENABLE_LEGACY_STANDBY_SELECTOR: {{ .Values.postgreslet.enableLegacyStandbySelector | quote }}
   ENABLE_NETPOL: {{ .Values.postgreslet.enableNetPol | quote  }}
   ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
+  ENABLE_RANDOM_STORAGE_ENCRYPTION_SECRET: {{ .Values.postgreslet.enableRandomStorageEncrytionSecret | quote }}
   ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
   ENABLE_WALG_ENCRYPTION: {{ .Values.postgreslet.enableWalGEncryption | quote }}
   ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
