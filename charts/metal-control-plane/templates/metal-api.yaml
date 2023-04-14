@@ -78,7 +78,7 @@ spec:
         - containerPort: 2112
         readinessProbe:
           httpGet:
-            path: /metal/v1/health
+            path: {{ .Values.metal_api.base_path }}v1/health
             port: 8080
           initialDelaySeconds: 15
           successThreshold: 1
