@@ -15,6 +15,9 @@ rbac:
 ## enable, if you want to install storage classes with v0.3.x backward-compatible `csi-lvm-sc-*` names
 compat03x: false
 
+# GRPC operation timeouts. Controller default is 15s, needs to be higher for get capacity requests.
+grpcTimeout: 60s
+
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
   tag: v0.5.1
@@ -40,6 +43,12 @@ storageClasses:
   mirror:
     enabled: true
     additionalAnnotations: []
+
+# If enabled, will track the capacity size of the node devices for more intelligent scheduling based on available
+# disk space. If disabled, scheduling could try to assign PVCs to nodes that don't have enough space.
+capacityTracking:
+  enabled: true
+  pollInterval: 5m
 
 customCSISidecars:
   enabled: false
