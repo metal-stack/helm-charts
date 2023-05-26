@@ -114,7 +114,7 @@ postgreslet:
   # etcdImageRepository The etcd image repository to use
   etcdImageRepository: "quay.io/coreos/etcd"
   # etcdImageTag The etcd image tag to use
-  etcdImageTag: "v3.5.9"
+  etcdImageTag: "v3.5.5"
   # etcdBackupSidecarImageRepository The sidecar image repository to use
   etcdBackupSidecarImageRepository: "ghcr.io/metal-stack/backup-restore-sidecar"
   # etcdBackupSidecarImageTag The sidecar image tag to use
