@@ -84,7 +84,7 @@ postgreslet:
   # postgresImageRepository 
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
-  postgresImageTag: "2.1-p9_de-sync-standby-cluster_0.3.2_266530e"
+  postgresImageTag: "2.1-p6_de-sync-standby-cluster_0.3.2_24eb43c"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
