@@ -152,11 +152,15 @@ sidecars:
             Path /home/postgres/pgdata/pgroot/pg_log/*.csv
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.csv.pos
             Tag  psqlcsv
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
         [INPUT]
             Name tail
             Path /home/postgres/pgdata/pgroot/pg_log/*.log
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.log.pos
             Tag  psqllog
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
         [OUTPUT]
             Name  stdout
             Match **
