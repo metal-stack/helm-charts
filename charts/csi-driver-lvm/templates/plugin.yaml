@@ -61,10 +61,10 @@ metadata:
 spec:
   allowedHostPaths:
   - pathPrefix: /lib/modules
-  - pathPrefix: /etc/lvm/cache
+  - pathPrefix: {{ .Values.lvm.hostWritePath }}/cache
   - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
-  - pathPrefix: /etc/lvm/backup
-  - pathPrefix: /run/lock/lvm
+  - pathPrefix: {{ .Values.lvm.hostWritePath }}/backup
+  - pathPrefix: {{ .Values.lvm.hostWritePath }}/lock
   - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins
   - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins_registry
   - pathPrefix: /dev
@@ -170,6 +170,7 @@ spec:
         args:
         - --drivername={{ .Values.lvm.driverName }}
         - --endpoint=unix:///csi/csi.sock
+        - --hostwritepath={{ .Values.lvm.hostWritePath }}
         - --devices={{ .Values.lvm.devicePattern }}
         - --nodeid=$(KUBE_NODE_NAME)
         - --vgname={{ .Values.lvm.vgName }}
@@ -271,15 +272,15 @@ spec:
           path: /lib/modules
         name: mod-dir
       - hostPath:
-          path: /etc/lvm/backup
+          path: {{ .Values.lvm.hostWritePath }}/backup
           type: DirectoryOrCreate
         name: lvmbackup
       - hostPath:
-          path: /etc/lvm/cache
+          path: {{ .Values.lvm.hostWritePath }}/cache
           type: DirectoryOrCreate
         name: lvmcache
       - hostPath:
-          path: /run/lock/lvm
+          path: {{ .Values.lvm.hostWritePath }}/lock
           type: DirectoryOrCreate
         name: lvmlock
 ---
