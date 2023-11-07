@@ -38,12 +38,15 @@ storageClasses:
     additionalAnnotations: []
     # this might be used to mark one of the StorageClasses as default:
     # storageclass.kubernetes.io/is-default-class: "true"
+    reclaimPolicy: Delete
   striped:
     enabled: true
     additionalAnnotations: []
+    reclaimPolicy: Delete
   mirror:
     enabled: true
     additionalAnnotations: []
+    reclaimPolicy: Delete
 
 customCSISidecars:
   enabled: false
