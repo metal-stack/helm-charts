@@ -141,6 +141,10 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations.plugin | indent 8 }}
 {{- end }}
+{{- if .Values.nodeSelector.plugin }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector.plugin | indent 8 }}
+{{- end }}
       containers:
       - name: node-driver-registrar
         args:
