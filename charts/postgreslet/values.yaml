@@ -438,6 +438,7 @@ sidecars:
           - size:
               usage: "GAUGE"
               description: "Disk space used by the database"
+    queriesStatements: |+
       pg_stat_statements:
         query: "SELECT
                     pg_get_userbyid(userid) as user,
@@ -499,4 +500,5 @@ sidecars:
             - local_blks_hit:
                 usage: "COUNTER"
                 description: "Total number of local block cache hits by the statement"
+    enableStatementsQuery: false
 
