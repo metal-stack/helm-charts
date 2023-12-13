@@ -14,7 +14,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 provisioner: {{ .Values.lvm.driverName }}
-reclaimPolicy: Delete
+reclaimPolicy: {{ $storageClass.reclaimPolicy }}
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 parameters:
@@ -35,7 +35,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 provisioner: {{ .Values.lvm.driverName }}
-reclaimPolicy: Delete
+reclaimPolicy: {{ $storageClass.reclaimPolicy }}
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 parameters:
@@ -56,7 +56,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 provisioner: {{ .Values.lvm.driverName }}
-reclaimPolicy: Delete
+reclaimPolicy: {{ $storageClass.reclaimPolicy }}
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 parameters:
