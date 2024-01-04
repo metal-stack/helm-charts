@@ -15,7 +15,7 @@
 {{- print .Values.customCSISidecars.provisioner -}}
 {{- else -}}
 {{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.Version -}}
-{{- print "k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0" -}}
+{{- print "registry.k8s.io/sig-storage/csi-provisioner:v3.5.0" -}}
 {{- else if semverCompare ">=1.17-0" .Capabilities.KubeVersion.Version -}}
 {{- print "k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2" -}}
 {{- else -}}

@@ -33,6 +33,9 @@ rules:
   - apiGroups: ["storage.k8s.io"]
     resources: ["storageclasses"]
     verbs: ["get", "list", "watch"]
+  - apiGroups: [ "storage.k8s.io" ]
+    resources: [ "csistoragecapacities" ]
+    verbs: [ "get", "list", "watch", "update", "patch", "create", "delete" ]
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["list", "watch", "create", "update", "patch"]
@@ -179,11 +182,27 @@ spec:
             - -v=5
             - --csi-address=/csi/csi.sock
             - --feature-gates=Topology=true
+            - --timeout={{ .Values.grpcTimeout }}
+            {{- if .Values.capacityTracking.enabled }}
+            - --enable-capacity
+            - --capacity-poll-interval={{ .Values.capacityTracking.pollInterval }}
+            {{- end }}
           securityContext:
             privileged: true
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
         - name: csi-resizer
           image: {{ template "externalImages.csiResizer" . }}
           imagePullPolicy: IfNotPresent
