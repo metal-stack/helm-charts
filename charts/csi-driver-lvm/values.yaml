@@ -38,12 +38,15 @@ storageClasses:
     additionalAnnotations: []
     # this might be used to mark one of the StorageClasses as default:
     # storageclass.kubernetes.io/is-default-class: "true"
+    reclaimPolicy: Delete
   striped:
     enabled: true
     additionalAnnotations: []
+    reclaimPolicy: Delete
   mirror:
     enabled: true
     additionalAnnotations: []
+    reclaimPolicy: Delete
 
 customCSISidecars:
   enabled: false
@@ -59,6 +62,11 @@ customCSISidecars:
 nodeSelector:
   # The plugin daemonset will run on all nodes if it has a toleration,
   # so it is not necessary to set a nodeSelector for it
+
+  # plugin:
+    # node-role.kubernetes.io/master: ""
+    # Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
+    # in the future
 
   # The provisioner has an affinity for nodes with a plugin pod,
   # but since that's a daemonset, we allow more fine-grained node selection
