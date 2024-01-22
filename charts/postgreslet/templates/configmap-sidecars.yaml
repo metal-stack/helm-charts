@@ -2,7 +2,11 @@ apiVersion: v1
 data:
   postgres-exporter-service-port: {{ .Values.sidecars.exporter.servicePort | quote }}
   postgres-exporter-service-target-port: {{ .Values.sidecars.exporter.containerPort | quote }}
+{{- if .Values.sidecars.exporter.enableStatementsQuery }}
+  queries.yaml: {{ printf "%s\n%s" .Values.sidecars.exporter.queries .Values.sidecars.exporter.queriesStatements | b64enc  }}
+{{- else }}
   queries.yaml: {{ b64enc .Values.sidecars.exporter.queries }}
+{{- end }}
   fluent-bit.conf: {{ b64enc .Values.sidecars.fluentbit.conf }}
   sidecars: |
     - name: postgres-exporter

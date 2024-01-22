@@ -113,6 +113,7 @@ metal_api:
     api_key: ""
     internal_api_address: ""
     control_plane_address: ""
+  minimum_client_version: ""
 
 masterdata_api:
   provider_tenant: ""
