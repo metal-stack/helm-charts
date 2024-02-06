@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.12.0"
+  tag: "v0.12.1"
 
 imagePullSecrets: []
 nameOverride: ""
