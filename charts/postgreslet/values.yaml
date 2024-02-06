@@ -127,6 +127,8 @@ postgreslet:
   enableLBSourceRanges: false
   # enableRandomStorageEncrytionSecret enables the generation of a random storage-encryption-secret per postgres instance
   enableRandomStorageEncrytionSecret: false
+  # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
+  enableBootsrtapStandbyFromS3: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
