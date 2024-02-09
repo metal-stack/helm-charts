@@ -157,9 +157,9 @@ metal_console:
 ingress_public_dns:
 deploy_ingress: true
 ingress:
+  annotations: {}
   tls:
     enabled: false
-    annotations: {}
 
 auditing:
   enabled: false
