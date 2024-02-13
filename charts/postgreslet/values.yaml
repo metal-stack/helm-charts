@@ -464,7 +464,8 @@ sidecars:
                     pg_stat_statements.blk_write_time
                 FROM pg_stat_statements
                 JOIN pg_database
-                ON pg_database.oid = pg_stat_statements.dbid"
+                ON pg_database.oid = pg_stat_statements.dbid
+                LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
             - user:
                 usage: "LABEL"
