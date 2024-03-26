@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.12.0"
+  tag: "v0.12.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,8 +40,8 @@ securityContext: {}
 
 resources:
   limits:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 500m
+    memory: 384Mi
   requests:
     cpu: 100m
     memory: 128Mi
@@ -84,7 +84,7 @@ postgreslet:
   # postgresImageRepository 
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
-  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.2_c52da81"
+  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.3_c52da81"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -127,6 +127,8 @@ postgreslet:
   enableLBSourceRanges: false
   # enableRandomStorageEncrytionSecret enables the generation of a random storage-encryption-secret per postgres instance
   enableRandomStorageEncrytionSecret: false
+  # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
+  enableBootsrtapStandbyFromS3: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -446,7 +448,7 @@ sidecars:
                     pg_stat_statements.queryid,
                     pg_stat_statements.query,
                     pg_stat_statements.calls,
-                    pg_stat_statements.total_time as time_milliseconds,
+                    pg_stat_statements.total_exec_time as time_milliseconds,
                     pg_stat_statements.rows,
                     pg_stat_statements.shared_blks_hit,
                     pg_stat_statements.shared_blks_read,
@@ -462,7 +464,8 @@ sidecars:
                     pg_stat_statements.blk_write_time
                 FROM pg_stat_statements
                 JOIN pg_database
-                ON pg_database.oid = pg_stat_statements.dbid"
+                ON pg_database.oid = pg_stat_statements.dbid
+                LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
             - user:
                 usage: "LABEL"
@@ -501,4 +504,5 @@ sidecars:
                 usage: "COUNTER"
                 description: "Total number of local block cache hits by the statement"
     enableStatementsQuery: false
-
+  initJob: |
+    GRANT pg_monitor to monitoring;
