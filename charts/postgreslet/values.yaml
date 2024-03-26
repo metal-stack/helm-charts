@@ -505,4 +505,4 @@ sidecars:
                 description: "Total number of local block cache hits by the statement"
     enableStatementsQuery: false
   initJob: |
-    SELECT 'NOOP';
+    GRANT pg_monitor to monitoring;
