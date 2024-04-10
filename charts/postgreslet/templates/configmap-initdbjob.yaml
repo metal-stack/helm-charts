@@ -1,10 +1,10 @@
 apiVersion: v1
 data:
   "initdb.sql": |
-{{- .Values.sidecars.initJob  | nindent 4 }}
+{{- .Values.sidecars.initDBJob  | nindent 4 }}
 kind: ConfigMap
 metadata:
-  name: {{ include "postgreslet.fullname" . }}-postgres-initjob
+  name: {{ include "postgreslet.fullname" . }}-postgres-initdbjob
   namespace: {{ .Release.Namespace }}
 {{- with .Values.podAnnotations }}
   annotations:

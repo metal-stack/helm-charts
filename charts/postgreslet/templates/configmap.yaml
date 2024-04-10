@@ -48,7 +48,7 @@ data:
   POSTGRESLET_FULLNAME: {{ include "postgreslet.fullname" . }}
   RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
   SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
-  INITJOB_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-initjob
+  INITDB_JOB_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-initdbjob
   STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   TENANT: {{ .Values.postgreslet.tenant | quote }}

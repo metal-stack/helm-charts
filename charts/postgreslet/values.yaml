@@ -504,5 +504,5 @@ sidecars:
                 usage: "COUNTER"
                 description: "Total number of local block cache hits by the statement"
     enableStatementsQuery: false
-  initJob: |
+  initDBJob: |
     GRANT pg_monitor to monitoring;
