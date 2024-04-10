@@ -506,7 +506,7 @@ sidecars:
     enableStatementsQuery: false
   initDBJob: |
     do $$ 
-	declare 
+    declare 
       monitoring_role_exists bool := false;
     begin 
       while monitoring_role_exists != true loop 
