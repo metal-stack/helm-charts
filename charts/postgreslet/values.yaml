@@ -505,4 +505,21 @@ sidecars:
                 description: "Total number of local block cache hits by the statement"
     enableStatementsQuery: false
   initDBJob: |
-    GRANT pg_monitor to monitoring;
+	do $$ 
+	declare 
+	  monitoring_role_exists bool := false;
+	begin 
+	  while monitoring_role_exists != true loop 
+	    raise notice 'Waiting for monitoring user to be created by the operator first...';
+	    PERFORM pg_sleep(5);
+	    IF EXISTS (
+	      SELECT                       -- SELECT list can stay empty for this
+	      FROM   pg_catalog.pg_user
+	      WHERE  usename = 'monitoring') THEN
+	    monitoring_role_exists := true;
+	    END IF;
+	  end loop;
+	  raise notice 'monitoring user found, continuing with init script';
+	end;
+	$$;
+	GRANT pg_monitor to monitoring;
