@@ -461,9 +461,6 @@ sidecars:
             - datname:
                 usage: "LABEL"
                 description: "The database in which the statement was executed"
-            - queryid:
-                usage: "LABEL"
-                description: "Internal hash code, computed from the statement's parse tree"
             - query:
                 usage: "LABEL"
                 description: "Processed query"
