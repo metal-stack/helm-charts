@@ -449,7 +449,7 @@ sidecars:
                     pg_stat_statements.query,
                     pg_stat_statements.calls,
                     pg_stat_statements.total_exec_time as time_milliseconds,
-                    pg_stat_statements.rows,
+                    pg_stat_statements.rows
                 FROM pg_stat_statements
                 JOIN pg_database
                 ON pg_database.oid = pg_stat_statements.dbid
