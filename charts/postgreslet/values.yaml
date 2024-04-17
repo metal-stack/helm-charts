@@ -288,18 +288,6 @@ sidecars:
               usage: "GAUGE"
               description: "The amount of WAL (in bytes) being retained for this slot"
 
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
-
       pg_archive_command_status:
         query: "SELECT CASE
           WHEN EXTRACT(epoch from (last_failed_time - last_archived_time)) IS NULL THEN 0
@@ -418,18 +406,6 @@ sidecars:
           - tidx_blks_hit:
               usage: "COUNTER"
               description: "Number of buffer hits in this table's TOAST table indexes (if any)"
-
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
 
       pg_database:
         query: "SELECT pg_database.datname, pg_database_size(pg_database.datname) as size FROM pg_database"
