@@ -435,6 +435,7 @@ sidecars:
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
         query: "SELECT
+                    distinct
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
                     pg_stat_statements.queryid,
@@ -453,6 +454,9 @@ sidecars:
             - datname:
                 usage: "LABEL"
                 description: "The database in which the statement was executed"
+            - queryid:
+                usage: "LABEL"
+                description: "Query ID"    
             - query:
                 usage: "LABEL"
                 description: "Processed query"
