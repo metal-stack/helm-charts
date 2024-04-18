@@ -27,6 +27,10 @@ serviceAccount:
 
 podAnnotations: {}
 
+rbac:
+  # pspEnabled If true, a PSP for postgreslet will be created
+  pspEnabled: false
+
 podSecurityContext: {}
   # fsGroup: 2000
 
