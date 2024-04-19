@@ -41,7 +41,7 @@ securityContext:
     - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 65534 # nobody
+  runAsUser: 65532 # nonroot
   seccompProfile:                                                                                                                                                                                                        
     type: RuntimeDefault
 
