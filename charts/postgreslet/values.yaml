@@ -87,7 +87,7 @@ postgreslet:
   # operatorImageRepository 
   operatorImageRepository: "docker.io/ermajn/postgres-operator"
   # operatorImageTag 
-  operatorImageTag: "v1.7.0-1-g711648b-dirty"
+  operatorImageTag: "v1.11.0"
   # postgresImageRepository 
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
