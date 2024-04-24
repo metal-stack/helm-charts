@@ -121,11 +121,11 @@ postgreslet:
   # etcdImageRepository The etcd image repository to use
   etcdImageRepository: "quay.io/coreos/etcd"
   # etcdImageTag The etcd image tag to use
-  etcdImageTag: "v3.5.6"
+  etcdImageTag: "v3.5.13"
   # etcdBackupSidecarImageRepository The sidecar image repository to use
   etcdBackupSidecarImageRepository: "ghcr.io/metal-stack/backup-restore-sidecar"
   # etcdBackupSidecarImageTag The sidecar image tag to use
-  etcdBackupSidecarImageTag: "v0.6.4"
+  etcdBackupSidecarImageTag: "v0.10.2"
   # etcdBackupSecretName The name of the K8s secret containing the s3 credentials used for backup and restore
   etcdBackupSecretName: pgaas-etcd-s3-credentials
   # etcdPspName The name of a custom PSP to use for etcd
