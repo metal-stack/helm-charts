@@ -76,6 +76,13 @@ spec:
         - containerPort: 50051
           protocol: TCP
         - containerPort: 2112
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.metal_api.base_path }}v1/health
+            port: 8080
+          initialDelaySeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 10
         env:
         - name: METAL_API_BIND_ADDR
           value: 0.0.0.0
@@ -168,6 +175,14 @@ spec:
               name: metal-api-s3
               key: s3_firmware_bucket
 {{- end }}
+{{- if .Values.metal_api.headscale.enabled }}
+        - name: METAL_API_HEADSCALE_API_KEY
+          value: "{{ .Values.metal_api.headscale.api_key }}"
+        - name: METAL_API_HEADSCALE_ADDR
+          value: {{ .Values.metal_api.headscale.internal_api_address }}
+        - name: METAL_API_HEADSCALE_CP_ADDR
+          value: {{ .Values.metal_api.headscale.control_plane_address }}
+{{- end }}
         - name: METAL_API_MASTERDATA_HMAC
           value: "{{ .Values.masterdata_api.hmac }}"
         - name: METAL_API_MASTERDATA_HOSTNAME
@@ -182,6 +197,23 @@ spec:
           value: /certs/masterdata-api/client-key.pem
         - name: METAL_API_PASSWORD_REASON_MINLENGTH
           value: "{{ .Values.metal_api.password_reason_minlength }}"
+        - name: METAL_API_MINIMUM_CLIENT_VERSION
+          value: "{{ .Values.metal_api.minimum_client_version }}"
+{{- if .Values.auditing.enabled }}
+        - name: METAL_API_AUDITING_ENABLED
+          value: "true"
+        - name: METAL_API_AUDITING_URL
+          value: "{{ .Values.auditing.url }}"
+        - name: METAL_API_AUDITING_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.auditing.existingMasterKeySecret }}"
+              key: MEILI_MASTER_KEY
+        - name: METAL_API_AUDITING_INDEX_PREFIX
+          value: "{{ .Values.auditing.index_prefix }}"
+        - name: METAL_API_AUDITING_INDEX_INTERVAL
+          value: "{{ .Values.auditing.index_interval }}"
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_api | indent 10 }}
@@ -323,7 +355,7 @@ spec:
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
-        - name: METALCTL_URL
+        - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
         - name: METALCTL_HMAC
           valueFrom:
@@ -350,7 +382,7 @@ spec:
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
         env:
-        - name: METALCTL_URL
+        - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
         - name: METALCTL_HMAC
           valueFrom:
@@ -416,7 +448,7 @@ spec:
         - name: METAL_API_DB_PASSWORD
           value: {{ .Values.metal_api.db_password }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: metal-api-liveliness
@@ -447,8 +479,48 @@ spec:
               value: {{ .Values.metal_api.db_address }}
             - name: METAL_API_DB_PASSWORD
               value: {{ .Values.metal_api.db_password }}
+{{- if .Values.metal_api.headscale.enabled }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-api-machines-vpn-connected
+  labels:
+    job: metal-api-machines-vpn-connected
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: metal-api
+            image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            command:
+            - /metal-api
+            - machines-vpn-connected
+            env:
+            - name: METAL_API_LOG_LEVEL
+              value: {{ .Values.metal_api.log_level }}
+            - name: METAL_API_DB_ADDR
+              value: {{ .Values.metal_api.db_address }}
+            - name: METAL_API_DB_PASSWORD
+              value: {{ .Values.metal_api.db_password }}
+            - name: METAL_API_HEADSCALE_API_KEY
+              value: "{{ .Values.metal_api.headscale.api_key }}"
+            - name: METAL_API_HEADSCALE_ADDR
+              value: {{ .Values.metal_api.headscale.internal_api_address }}
+            - name: METAL_API_HEADSCALE_CP_ADDR
+              value: {{ .Values.metal_api.headscale.control_plane_address }}
+{{- end }}
+---
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: metal-api-resurrection

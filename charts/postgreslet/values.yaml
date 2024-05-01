@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.8.0"
+  tag: "v0.13.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,8 +40,8 @@ securityContext: {}
 
 resources:
   limits:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 500m
+    memory: 384Mi
   requests:
     cpu: 100m
     memory: 128Mi
@@ -77,10 +77,14 @@ postgreslet:
   customPspName: ""
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
-  # postgresImage The operator image to use. Leave empty to use the default.
-  operatorImage: "ermajn/postgres-operator:v1.7.0-1-g711648b-dirty"
-  # postgresImage The Spilo image the operator should use when creating postgres instances. Leave empty to use the operator default.
-  postgresImage: "cybertecpostgresql/spilo:2.1-p1_de-sync-standby-cluster_0.3.2_8c82e1e"
+  # operatorImageRepository 
+  operatorImageRepository: "docker.io/ermajn/postgres-operator"
+  # operatorImageTag 
+  operatorImageTag: "v1.7.0-1-g711648b-dirty"
+  # postgresImageRepository 
+  postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
+  # postgresImageTag 
+  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.3_c52da81"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -97,6 +101,34 @@ postgreslet:
   enableNetPol: false
   # enablePodAntiaffinity enable anti-affinity of pods of the same postgres cluster, to prevent them running on the same worker node
   enablePodAntiaffinity: false
+  # patroniRetryTimeout sets the patroni retry timeout, which will also result in an updated patroni ttl ( ttl=(2*retry_timeout)+10 )
+  patroniRetryTimeout: 90
+  # enableStandbyLeaderSelector enables the use of a new, updated selector for use with newer Spilo images. The postgreslet will use spilo-role=standby_leader in the selectors of standby DBs then.
+  enableStandbyLeaderSelector: false
+  # enableLegacyStandbySelector enables the old default selector. The postgreslet will use spilo-role=master in the selectors of standby DBs then.
+  enableLegacyStandbySelector: false
+  # enableWalGEncryption enables the client side encryption in wal_g
+  enableWalGEncryption: false
+  # deployEtcd enables the deployment of a dedicated etcd for this postgreslet instance
+  deployEtcd: true
+  # etcdImageRepository The etcd image repository to use
+  etcdImageRepository: "quay.io/coreos/etcd"
+  # etcdImageTag The etcd image tag to use
+  etcdImageTag: "v3.5.6"
+  # etcdBackupSidecarImageRepository The sidecar image repository to use
+  etcdBackupSidecarImageRepository: "ghcr.io/metal-stack/backup-restore-sidecar"
+  # etcdBackupSidecarImageTag The sidecar image tag to use
+  etcdBackupSidecarImageTag: "v0.6.4"
+  # etcdBackupSecretName The name of the K8s secret containing the s3 credentials used for backup and restore
+  etcdBackupSecretName: pgaas-etcd-s3-credentials
+  # etcdPspName The name of a custom PSP to use for etcd
+  etcdPspName: ""
+  # enableLBSourceRanges Toggles the use of loadBalancerSourceRanges on the postgres' external service
+  enableLBSourceRanges: false
+  # enableRandomStorageEncrytionSecret enables the generation of a random storage-encryption-secret per postgres instance
+  enableRandomStorageEncrytionSecret: false
+  # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
+  enableBootsrtapStandbyFromS3: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -104,7 +136,8 @@ addRandomLabel: false
 
 sidecars:
   fluentbit:
-    image: "fluent/fluent-bit:1.9.3"
+    imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
+    imageTag: "2.1.2"
     resources:
       requests:
         cpu: "100m"
@@ -121,17 +154,22 @@ sidecars:
             Path /home/postgres/pgdata/pgroot/pg_log/*.csv
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.csv.pos
             Tag  psqlcsv
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
         [INPUT]
             Name tail
             Path /home/postgres/pgdata/pgroot/pg_log/*.log
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.log.pos
             Tag  psqllog
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
         [OUTPUT]
             Name  stdout
             Match **
 
   exporter:
-    image: "prometheuscommunity/postgres-exporter:v0.10.1"
+    imageRepository: "docker.io/prometheuscommunity/postgres-exporter"
+    imageTag: "v0.12.1"
     containerPort: 9187
     servicePort: 9187
     resources:
@@ -139,8 +177,8 @@ sidecars:
         cpu: "100m"
         memory: "200M"
       limits:
-        cpu: "500m"
-        memory: "256M"
+        cpu: "1"
+        memory: "400M"
     queries: |+
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
@@ -249,71 +287,6 @@ sidecars:
           - retained_bytes:
               usage: "GAUGE"
               description: "The amount of WAL (in bytes) being retained for this slot"
-
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
-
-      pg_stat_wal_receiver:
-        query: |
-          SELECT case status when 'stopped' then 0 when 'starting' then 1 when 'streaming' then 2 when 'waiting' then 3 when 'restarting' then 4 when 'stopping' then 5 else -1 end as status,
-                (receive_start_lsn- '0/0') % (2^52)::bigint as receive_start_lsn,
-                receive_start_tli,
-                (received_lsn- '0/0') % (2^52)::bigint as received_lsn,
-                received_tli,
-                extract(epoch from last_msg_send_time) as last_msg_send_time,
-                extract(epoch from last_msg_receipt_time) as last_msg_receipt_time,
-                (latest_end_lsn - '0/0') % (2^52)::bigint as latest_end_lsn,
-                extract(epoch from latest_end_time) as latest_end_time,
-                substring(slot_name from 'repmgr_slot_([0-9]*)') as upstream_node,
-                trim(both '''' from substring(conninfo from 'host=([^ ]*)')) as upstream_host,
-                slot_name
-            FROM pg_stat_wal_receiver
-        metrics:
-          - status:
-              usage: "GAUGE"
-              description: "Activity status of the WAL receiver process (0=stopped 1=starting 2=streaming 3=waiting 4=restarting 5=stopping)"
-          - receive_start_lsn:
-              usage: "COUNTER"
-              description: "First transaction log position used when WAL receiver is started"
-          - receive_start_tli:
-              usage: "GAUGE"
-              description: "First timeline number used when WAL receiver is started"
-          - received_lsn:
-              usage: "COUNTER"
-              description: "Last transaction log position already received and flushed to disk, the initial value of this field being the first log position used when WAL receiver is started"
-          - received_tli:
-              usage: "GAUGE"
-              description: "Timeline number of last transaction log position received and flushed to disk, the initial value of this field being the timeline number of the first log position used when WAL receiver is started"
-          - last_msg_send_time:
-              usage: "COUNTER"
-              description: "Send time of last message received from origin WAL sender"
-          - last_msg_receipt_time:
-              usage: "COUNTER"
-              description: "Receipt time of last message received from origin WAL sender"
-          - latest_end_lsn:
-              usage: "COUNTER"
-              description: "Last transaction log position reported to origin WAL sender"
-          - latest_end_time:
-              usage: "COUNTER"
-              description: "Time of last transaction log position reported to origin WAL sender"
-          - upstream_node:
-              usage: "GAUGE"
-              description: "The repmgr node from the upstream slot name"
-          - upstream_host:
-              usage: "LABEL"
-              description: "The upstream host this node is replicating from"
-          - slot_name:
-              usage: "LABEL"
-              description: "The upstream slot_name this node is replicating from"
 
       pg_archive_command_status:
         query: "SELECT CASE
@@ -434,18 +407,6 @@ sidecars:
               usage: "COUNTER"
               description: "Number of buffer hits in this table's TOAST table indexes (if any)"
 
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
-
       pg_database:
         query: "SELECT pg_database.datname, pg_database_size(pg_database.datname) as size FROM pg_database"
         metrics:
@@ -455,30 +416,20 @@ sidecars:
           - size:
               usage: "GAUGE"
               description: "Disk space used by the database"
+    queriesStatements: |+
       pg_stat_statements:
+        # user, datname, query, calls, total_exec_time, rows.
         query: "SELECT
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
-                    pg_stat_statements.queryid,
                     pg_stat_statements.query,
                     pg_stat_statements.calls,
-                    pg_stat_statements.total_time as time_milliseconds,
-                    pg_stat_statements.rows,
-                    pg_stat_statements.shared_blks_hit,
-                    pg_stat_statements.shared_blks_read,
-                    pg_stat_statements.shared_blks_dirtied,
-                    pg_stat_statements.shared_blks_written,
-                    pg_stat_statements.local_blks_hit,
-                    pg_stat_statements.local_blks_read,
-                    pg_stat_statements.local_blks_dirtied,
-                    pg_stat_statements.local_blks_written,
-                    pg_stat_statements.temp_blks_read,
-                    pg_stat_statements.temp_blks_written,
-                    pg_stat_statements.blk_read_time,
-                    pg_stat_statements.blk_write_time
+                    pg_stat_statements.total_exec_time as time_milliseconds,
+                    pg_stat_statements.rows
                 FROM pg_stat_statements
                 JOIN pg_database
-                ON pg_database.oid = pg_stat_statements.dbid"
+                ON pg_database.oid = pg_stat_statements.dbid
+                LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
             - user:
                 usage: "LABEL"
@@ -486,9 +437,6 @@ sidecars:
             - datname:
                 usage: "LABEL"
                 description: "The database in which the statement was executed"
-            - queryid:
-                usage: "LABEL"
-                description: "Internal hash code, computed from the statement's parse tree"
             - query:
                 usage: "LABEL"
                 description: "Processed query"
@@ -501,19 +449,24 @@ sidecars:
             - rows:
                 usage: "COUNTER"
                 description: "Total number of rows retrieved or affected by the statement"
-            - shared_blks_hit:
-                usage: "COUNTER"
-                description: "Total number of shared block cache hits by the statement"
-            - shared_blks_read:
-                usage: "COUNTER"
-                description: "Total number of shared blocks read by the statement"
-            - shared_blks_dirtied:
-                usage: "COUNTER"
-                description: "Total number of shared blocks dirtied by the statement"
-            - shared_blks_written:
-                usage: "COUNTER"
-                description: "Total number of shared blocks written by the statement"
-            - local_blks_hit:
-                usage: "COUNTER"
-                description: "Total number of local block cache hits by the statement"
-
+    enableStatementsQuery: false
+  initDBJob: |
+    do $$ 
+    declare 
+      monitoring_role_exists bool := false;
+    begin 
+      while monitoring_role_exists != true loop 
+        raise notice 'Waiting for monitoring user to be created by the operator first...';
+        PERFORM pg_sleep(5);
+        IF EXISTS (
+          SELECT                       -- SELECT list can stay empty for this
+          FROM   pg_catalog.pg_user
+          WHERE  usename = 'monitoring') THEN
+        monitoring_role_exists := true;
+        END IF;
+      end loop;
+      raise notice 'monitoring user found, continuing with init script';
+    end;
+    $$;
+    GRANT pg_monitor to monitoring;
+    GRANT pg_read_all_stats TO monitoring;

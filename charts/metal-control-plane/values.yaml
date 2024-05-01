@@ -115,6 +115,12 @@ metal_api:
     key: ""
     secret: ""
     firmware_bucket: ""
+  headscale:
+    enabled: false
+    api_key: ""
+    internal_api_address: ""
+    control_plane_address: ""
+  minimum_client_version: ""
 
 ipam:
   grpc_server_endpoint: "0.0.0.0:9090"
@@ -167,6 +173,13 @@ metal_console:
 ingress_public_dns:
 deploy_ingress: true
 ingress:
+  annotations: {}
   tls:
     enabled: false
-    annotations: {}
+
+auditing:
+  enabled: false
+  url: ""
+  index_prefix: "auditing"
+  index_interval: "@daily"
+  existingMasterKeySecret: "metal-auditing-master-key"

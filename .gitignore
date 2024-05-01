@@ -1,2 +1,5 @@
+.kubeconfig
+loop*
+
 .idea
 .vscode

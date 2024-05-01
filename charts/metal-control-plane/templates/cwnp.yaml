@@ -1,0 +1,15 @@
+{{- if .Capabilities.APIVersions.Has "metal-stack.io/v1" -}}
+---
+apiVersion: metal-stack.io/v1
+kind: ClusterwideNetworkPolicy
+metadata:
+  name: egress-allow-metal-console
+  namespace: firewall
+spec:
+  egress:
+  - ports:
+    - port: 3333
+      protocol: TCP
+    to:
+    - cidr: 0.0.0.0/0
+{{- end -}}

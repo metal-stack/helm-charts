@@ -75,7 +75,7 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   allowedHostPaths:
-  - pathPrefix: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+  - pathPrefix: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
   fsGroup:
     rule: RunAsAny
   privileged: true
@@ -151,6 +151,14 @@ spec:
                 values:
                 - csi-driver-lvm-plugin
             topologyKey: kubernetes.io/hostname
+{{- if .Values.nodeSelector.provisioner }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector.provisioner | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations.provisioner }}
+      tolerations:
+{{ toYaml .Values.tolerations.provisioner | indent 8 }}
+{{- end }}
       serviceAccountName: csi-driver-lvm-controller
       containers:
         - name: csi-attacher
@@ -189,7 +197,7 @@ spec:
               name: socket-dir
       volumes:
         - hostPath:
-            path: /var/lib/kubelet/plugins/{{ .Values.lvm.storageClassStub }}
+            path: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
             type: DirectoryOrCreate
           name: socket-dir
 ---
