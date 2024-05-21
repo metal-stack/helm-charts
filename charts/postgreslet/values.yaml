@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.13.1"
+  tag: "v0.13.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -129,6 +129,8 @@ postgreslet:
   enableRandomStorageEncrytionSecret: false
   # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
   enableBootsrtapStandbyFromS3: true
+  # tlsSubDomain enables the generation of postgres cluster specific TLS certificates with the given sub domain
+  tlsSubDomain: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
