@@ -70,6 +70,8 @@ ports:
   masterdata_api: 8443
   masterdata_api_metrics: 2113
   metal_console: 10001
+  ipam: 9090
+  ipam_metrics: 2112
 
 metal_api:
   replicas: 3
