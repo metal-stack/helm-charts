@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.13.2"
+  tag: "v0.14.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -129,6 +129,8 @@ postgreslet:
   enableRandomStorageEncrytionSecret: false
   # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
   enableBootsrtapStandbyFromS3: true
+  # tlsClusterIssuer An existing cert-manager Cluster Issuer to use when requesting TLS certificates per database instance. The startup of the postgres pod will fail if an issuer is configured but not working.
+  tlsClusterIssuer: ""
   # tlsSubDomain enables the generation of postgres cluster specific TLS certificates with the given sub domain
   tlsSubDomain: ""
 
