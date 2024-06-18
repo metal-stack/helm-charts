@@ -131,7 +131,7 @@ postgreslet:
   enableBootsrtapStandbyFromS3: true
   # tlsClusterIssuer An existing cert-manager Cluster Issuer to use when requesting TLS certificates per database instance. The startup of the postgres pod will fail if an issuer is configured but not working.
   tlsClusterIssuer: ""
-  # tlsSubDomain enables the generation of postgres cluster specific TLS certificates with the given sub domain
+  # tlsSubDomain when enabled, uses the given subdomain (in combination with the postgres isntance's UUID) as common name when requesting the certificate
   tlsSubDomain: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
