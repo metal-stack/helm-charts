@@ -1,0 +1,41 @@
+apiVersion: v1
+entries:
+  csi-driver-lvm:
+  - apiVersion: v1
+    appVersion: v0.5.2
+    created: "2024-06-18T13:21:59.040955592Z"
+    description: local persistend storage for lvm
+    digest: a985452fc95bdca744f8ae93946df86a5c554889c19cde018b825929d87b6e97
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/add-tls-sub-domain-param/csi-driver-lvm-0.6.0.tgz
+    version: 0.6.0
+  metal-control-plane:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2024-06-18T13:21:59.041724599Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: e563e72d0529a2968710555618cee2600f5e92203e62f423b627b79ad0d43eff
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/add-tls-sub-domain-param/metal-control-plane-0.4.1.tgz
+    version: 0.4.1
+  postgreslet:
+  - apiVersion: v2
+    appVersion: v0.14.0
+    created: "2024-06-18T13:21:59.042818161Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: 530ec612a72094ce4e69514396db4ba5a2de1d856f564db017e1d6bae241cedf
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/add-tls-sub-domain-param/postgreslet-0.12.0.tgz
+    version: 0.12.0
+generated: "2024-06-18T13:21:59.039703888Z"
