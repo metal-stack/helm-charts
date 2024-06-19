@@ -52,6 +52,8 @@ data:
   STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   TENANT: {{ .Values.postgreslet.tenant | quote }}
+  TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
+  TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
