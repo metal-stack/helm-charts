@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.12.0"
+  tag: "v0.13.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,8 +40,8 @@ securityContext: {}
 
 resources:
   limits:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 500m
+    memory: 384Mi
   requests:
     cpu: 100m
     memory: 128Mi
@@ -84,7 +84,7 @@ postgreslet:
   # postgresImageRepository 
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
-  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.2_c52da81"
+  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.3_c52da81"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -127,6 +127,8 @@ postgreslet:
   enableLBSourceRanges: false
   # enableRandomStorageEncrytionSecret enables the generation of a random storage-encryption-secret per postgres instance
   enableRandomStorageEncrytionSecret: false
+  # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
+  enableBootsrtapStandbyFromS3: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -286,18 +288,6 @@ sidecars:
               usage: "GAUGE"
               description: "The amount of WAL (in bytes) being retained for this slot"
 
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
-
       pg_archive_command_status:
         query: "SELECT CASE
           WHEN EXTRACT(epoch from (last_failed_time - last_archived_time)) IS NULL THEN 0
@@ -417,18 +407,6 @@ sidecars:
               usage: "COUNTER"
               description: "Number of buffer hits in this table's TOAST table indexes (if any)"
 
-      pg_wal_activity:
-        query: "SELECT last_5_min_size_bytes,
-            (SELECT COALESCE(sum(size),0) FROM pg_catalog.pg_ls_waldir()) AS total_size_bytes
-            FROM (SELECT COALESCE(sum(size),0) AS last_5_min_size_bytes FROM pg_catalog.pg_ls_waldir() WHERE modification > CURRENT_TIMESTAMP - '5 minutes'::interval) x;"
-        metrics:
-          - last_5_min_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the last 5 minutes of WAL generation. Includes recycled WALs."
-          - total_size_bytes:
-              usage: "GAUGE"
-              description: "Current size in bytes of the WAL directory"
-
       pg_database:
         query: "SELECT pg_database.datname, pg_database_size(pg_database.datname) as size FROM pg_database"
         metrics:
@@ -440,29 +418,18 @@ sidecars:
               description: "Disk space used by the database"
     queriesStatements: |+
       pg_stat_statements:
+        # user, datname, query, calls, total_exec_time, rows.
         query: "SELECT
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
-                    pg_stat_statements.queryid,
                     pg_stat_statements.query,
                     pg_stat_statements.calls,
-                    pg_stat_statements.total_time as time_milliseconds,
-                    pg_stat_statements.rows,
-                    pg_stat_statements.shared_blks_hit,
-                    pg_stat_statements.shared_blks_read,
-                    pg_stat_statements.shared_blks_dirtied,
-                    pg_stat_statements.shared_blks_written,
-                    pg_stat_statements.local_blks_hit,
-                    pg_stat_statements.local_blks_read,
-                    pg_stat_statements.local_blks_dirtied,
-                    pg_stat_statements.local_blks_written,
-                    pg_stat_statements.temp_blks_read,
-                    pg_stat_statements.temp_blks_written,
-                    pg_stat_statements.blk_read_time,
-                    pg_stat_statements.blk_write_time
+                    pg_stat_statements.total_exec_time as time_milliseconds,
+                    pg_stat_statements.rows
                 FROM pg_stat_statements
                 JOIN pg_database
-                ON pg_database.oid = pg_stat_statements.dbid"
+                ON pg_database.oid = pg_stat_statements.dbid
+                LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
             - user:
                 usage: "LABEL"
@@ -470,9 +437,6 @@ sidecars:
             - datname:
                 usage: "LABEL"
                 description: "The database in which the statement was executed"
-            - queryid:
-                usage: "LABEL"
-                description: "Internal hash code, computed from the statement's parse tree"
             - query:
                 usage: "LABEL"
                 description: "Processed query"
@@ -485,20 +449,24 @@ sidecars:
             - rows:
                 usage: "COUNTER"
                 description: "Total number of rows retrieved or affected by the statement"
-            - shared_blks_hit:
-                usage: "COUNTER"
-                description: "Total number of shared block cache hits by the statement"
-            - shared_blks_read:
-                usage: "COUNTER"
-                description: "Total number of shared blocks read by the statement"
-            - shared_blks_dirtied:
-                usage: "COUNTER"
-                description: "Total number of shared blocks dirtied by the statement"
-            - shared_blks_written:
-                usage: "COUNTER"
-                description: "Total number of shared blocks written by the statement"
-            - local_blks_hit:
-                usage: "COUNTER"
-                description: "Total number of local block cache hits by the statement"
     enableStatementsQuery: false
-
+  initDBJob: |
+    do $$ 
+    declare 
+      monitoring_role_exists bool := false;
+    begin 
+      while monitoring_role_exists != true loop 
+        raise notice 'Waiting for monitoring user to be created by the operator first...';
+        PERFORM pg_sleep(5);
+        IF EXISTS (
+          SELECT                       -- SELECT list can stay empty for this
+          FROM   pg_catalog.pg_user
+          WHERE  usename = 'monitoring') THEN
+        monitoring_role_exists := true;
+        END IF;
+      end loop;
+      raise notice 'monitoring user found, continuing with init script';
+    end;
+    $$;
+    GRANT pg_monitor to monitoring;
+    GRANT pg_read_all_stats TO monitoring;
