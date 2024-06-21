@@ -136,6 +136,10 @@ postgreslet:
   enableRandomStorageEncrytionSecret: false
   # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
   enableBootsrtapStandbyFromS3: true
+  # enableForceSharedIP When enabled, a shared load balancer for each database will be created, even when using the dedicated IP fesature
+  enableForceSharedIP: true
+  # enableSuperuserforDBO When enabled, the dbo user will have superuser permissions by default. DISABLING THIS WILL NOT REMOVE THE SUPERUSER PERMISSIONS FOR EXISTING USERS.
+  enableSuperuserforDBO: false
   # tlsClusterIssuer An existing cert-manager Cluster Issuer to use when requesting TLS certificates per database instance. The startup of the postgres pod will fail if an issuer is configured but not working.
   tlsClusterIssuer: ""
   # tlsSubDomain when enabled, uses the given subdomain (in combination with the postgres instance's UUID) as common name when requesting the certificate
