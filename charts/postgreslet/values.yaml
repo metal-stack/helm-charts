@@ -184,7 +184,7 @@ sidecars:
 
   exporter:
     imageRepository: "docker.io/prometheuscommunity/postgres-exporter"
-    imageTag: "v0.12.1"
+    imageTag: "v0.15.0"
     containerPort: 9187
     servicePort: 9187
     resources:
