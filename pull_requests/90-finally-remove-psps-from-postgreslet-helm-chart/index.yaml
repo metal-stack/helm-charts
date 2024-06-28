@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.5.2
-    created: "2024-06-28T11:27:14.217679666Z"
+    created: "2024-06-28T11:27:23.979001197Z"
     description: local persistend storage for lvm
-    digest: a3de6242483a030e7d52a5a6cc8e84e0ae8d045522696d87374d485a2f79e176
+    digest: 2ea458a9472e869e9e22d048a1b277ea6c143e38a135f64a383d39937059c4da
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2024-06-28T11:27:14.219011109Z"
+    created: "2024-06-28T11:27:23.979835059Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 8a877d0c82984aab5a292a4ba36ebe3b2280a72e5ef835033d2947a4a9fbd325
+    digest: 484aec51bd1c657fc0b767340ad688a311de667317dd9b4e56cbfb2ec66e9238
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/90-finally-remove-psps-from-postgreslet-helm-chart/metal-control-plane-0.4.1.tgz
@@ -30,7 +30,17 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.15.0
-    created: "2024-06-28T11:27:14.221186353Z"
+    created: "2024-06-28T11:27:23.98334246Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: 8e5d627c3e4640578546a0c9bc7f46e093128ebab089609fba550d858c5912ee
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/90-finally-remove-psps-from-postgreslet-helm-chart/postgreslet-0.13.0.tgz
+    version: 0.13.0
+  - apiVersion: v2
+    appVersion: v0.15.0
+    created: "2024-06-28T11:27:23.982242155Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 61cccec633bf9e8a305f09b33cfb6964c9916b4ce906a19efcefb760e3716737
     name: postgreslet
@@ -40,7 +50,7 @@ entries:
     version: 0.13.0-devel
   - apiVersion: v2
     appVersion: v0.13.1
-    created: "2024-06-28T11:27:14.22009004Z"
+    created: "2024-06-28T11:27:23.981107386Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 9445152438c0dfcdf052bc23a788e657a0e6fd2a1d576584c80d09bd0579a182
     name: postgreslet
@@ -48,4 +58,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/90-finally-remove-psps-from-postgreslet-helm-chart/postgreslet-0.12.0-devel.tgz
     version: 0.12.0-devel
-generated: "2024-06-28T11:27:14.216877476Z"
+generated: "2024-06-28T11:27:23.977638308Z"
