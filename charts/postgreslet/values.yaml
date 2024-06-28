@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.14.0"
+  tag: "v0.15.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -27,16 +27,23 @@ serviceAccount:
 
 podAnnotations: {}
 
+rbac:
+  # pspEnabled If true, a PSP for postgreslet will be created
+  pspEnabled: false
+
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532 # nonroot
+  seccompProfile:                                                                                                                                                                                                        
+    type: RuntimeDefault
 
 resources:
   limits:
@@ -80,11 +87,11 @@ postgreslet:
   # operatorImageRepository 
   operatorImageRepository: "docker.io/ermajn/postgres-operator"
   # operatorImageTag 
-  operatorImageTag: "v1.7.0-1-g711648b-dirty"
+  operatorImageTag: "v1.11.0"
   # postgresImageRepository 
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
   # postgresImageTag 
-  postgresImageTag: "3.0-p1_de-sync-standby-cluster_0.3.3_c52da81"
+  postgresImageTag: "3.2-p3_de-sync-standby-cluster_0.4_2024-06-04"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -114,11 +121,11 @@ postgreslet:
   # etcdImageRepository The etcd image repository to use
   etcdImageRepository: "quay.io/coreos/etcd"
   # etcdImageTag The etcd image tag to use
-  etcdImageTag: "v3.5.6"
+  etcdImageTag: "v3.5.13"
   # etcdBackupSidecarImageRepository The sidecar image repository to use
   etcdBackupSidecarImageRepository: "ghcr.io/metal-stack/backup-restore-sidecar"
   # etcdBackupSidecarImageTag The sidecar image tag to use
-  etcdBackupSidecarImageTag: "v0.6.4"
+  etcdBackupSidecarImageTag: "v0.10.2"
   # etcdBackupSecretName The name of the K8s secret containing the s3 credentials used for backup and restore
   etcdBackupSecretName: pgaas-etcd-s3-credentials
   # etcdPspName The name of a custom PSP to use for etcd
@@ -129,6 +136,10 @@ postgreslet:
   enableRandomStorageEncrytionSecret: false
   # enableBootsrtapStandbyFromS3 enables the bootstrapping of remote standby clusters via S3 instead of pgbasebackup
   enableBootsrtapStandbyFromS3: true
+  # enableForceSharedIP When enabled, a shared load balancer for each database will be created, even when using the dedicated IP fesature
+  enableForceSharedIP: true
+  # enableSuperuserforDBO When enabled, the dbo user will have superuser permissions by default. DISABLING THIS WILL NOT REMOVE THE SUPERUSER PERMISSIONS FOR EXISTING USERS.
+  enableSuperuserforDBO: false
   # tlsClusterIssuer An existing cert-manager Cluster Issuer to use when requesting TLS certificates per database instance. The startup of the postgres pod will fail if an issuer is configured but not working.
   tlsClusterIssuer: ""
   # tlsSubDomain when enabled, uses the given subdomain (in combination with the postgres instance's UUID) as common name when requesting the certificate
@@ -141,7 +152,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "2.1.2"
+    imageTag: "3.0.7"
     resources:
       requests:
         cpu: "100m"
@@ -173,7 +184,7 @@ sidecars:
 
   exporter:
     imageRepository: "docker.io/prometheuscommunity/postgres-exporter"
-    imageTag: "v0.12.1"
+    imageTag: "v0.15.0"
     containerPort: 9187
     servicePort: 9187
     resources:
