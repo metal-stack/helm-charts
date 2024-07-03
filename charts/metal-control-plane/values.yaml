@@ -13,6 +13,10 @@ images:
     image: ghcr.io/metal-stack/masterdata-api
     imagePullPolicy: IfNotPresent
     tag: latest
+  ipam:
+    image: ghcr.io/metal-stack/go-ipam
+    imagePullPolicy: IfNotPresent
+    tag: latest
   metalctl:
     image: ghcr.io/metal-stack/metalctl
     imagePullPolicy: IfNotPresent
@@ -31,6 +35,13 @@ resources:
       memory: "256Mi"
       cpu: "200m"
   masterdata_api:
+    requests:
+      memory: "32Mi"
+      cpu: "50m"
+    limits:
+      memory: "64Mi"
+      cpu: "200m"
+  ipam:
     requests:
       memory: "32Mi"
       cpu: "50m"
@@ -59,6 +70,8 @@ ports:
   masterdata_api: 8443
   masterdata_api_metrics: 2113
   metal_console: 10001
+  ipam: 9090
+  ipam_metrics: 2112
 
 metal_api:
   replicas: 3
@@ -66,11 +79,7 @@ metal_api:
   log_level: info
   db_address: ""
   db_password: ""
-  ipam_db_address: ""
-  ipam_db_port: 5432
-  ipam_db_name: ""
-  ipam_db_user: ""
-  ipam_db_password: ""
+  ipam_grpc_server_endpoint: ""
   dex_address: ""
   dex_clientid: ""
   view_key: ""
@@ -114,6 +123,15 @@ metal_api:
     internal_api_address: ""
     control_plane_address: ""
   minimum_client_version: ""
+
+ipam:
+  grpc_server_endpoint: "0.0.0.0:9090"
+  log_level: "info"
+  db_host: ""
+  db_port: 5432
+  db_name: ""
+  db_user: ""
+  db_password: ""
 
 masterdata_api:
   provider_tenant: ""
