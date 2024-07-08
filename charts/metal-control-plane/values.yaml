@@ -123,6 +123,7 @@ metal_api:
     internal_api_address: ""
     control_plane_address: ""
   minimum_client_version: ""
+  release_version: ""
 
 ipam:
   grpc_server_endpoint: "0.0.0.0:9090"
