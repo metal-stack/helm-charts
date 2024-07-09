@@ -189,6 +189,10 @@ spec:
           value: /certs/masterdata-api/client-key.pem
         - name: METAL_API_PASSWORD_REASON_MINLENGTH
           value: "{{ .Values.metal_api.password_reason_minlength }}"
+{{- if .Values.metal_api.release_version }}
+        - name: METAL_API_RELEASE_VERSION
+          value: "{{ .Values.metal_api.release_version }}"
+{{- end }}
         - name: METAL_API_MINIMUM_CLIENT_VERSION
           value: "{{ .Values.metal_api.minimum_client_version }}"
 {{- if .Values.auditing.enabled }}
