@@ -437,6 +437,7 @@ sidecars:
         query: "SELECT
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
+                    pg_stat_statements.queryid,
                     pg_stat_statements.query,
                     pg_stat_statements.calls,
                     pg_stat_statements.total_exec_time as time_milliseconds,
