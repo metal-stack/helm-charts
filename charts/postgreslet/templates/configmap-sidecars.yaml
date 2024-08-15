@@ -26,13 +26,24 @@ data:
         limits:
           cpu: {{ .Values.sidecars.exporter.resources.limits.cpu }}
           memory: {{ .Values.sidecars.exporter.resources.limits.memory }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       env:
         - name: DATA_SOURCE_URI
           value: 127.0.0.1:5432/postgres?sslmode=disable
         - name: DATA_SOURCE_USER
-          value: postgres
+          value: monitoring
         - name: DATA_SOURCE_PASS
-          value: "$(POSTGRES_PASSWORD)"
+          valueFrom:
+            secretKeyRef:
+              key: password
         - name: PG_EXPORTER_EXTEND_QUERY_PATH
           value: /metrics/queries.yaml
         - name: PG_EXPORTER_CONSTANT_LABELS
@@ -50,6 +61,14 @@ data:
         limits:
           cpu: {{ .Values.sidecars.fluentbit.resources.limits.cpu }}
           memory: {{ .Values.sidecars.fluentbit.resources.limits.memory }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
   additional-volumes: |
     - name: empty
       mountPath: /opt/empty

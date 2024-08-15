@@ -2,11 +2,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.attacher -}}
 {{- else -}}
-{{- if semverCompare ">=1.17-0" .Capabilities.KubeVersion.Version -}}
 {{- print "k8s.gcr.io/sig-storage/csi-attacher:v3.3.0" -}}
-{{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-attacher:v2.2.1" -}}
-{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -14,13 +10,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.provisioner -}}
 {{- else -}}
-{{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.Version -}}
 {{- print "k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0" -}}
-{{- else if semverCompare ">=1.17-0" .Capabilities.KubeVersion.Version -}}
-{{- print "k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2" -}}
-{{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-provisioner:v1.6.1" -}}
-{{- end -}}
 {{- end -}}
 {{- end -}}
 

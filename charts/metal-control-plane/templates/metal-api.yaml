@@ -115,16 +115,8 @@ spec:
             secretKeyRef:
               name: metal-api
               key: admin_key
-        - name: METAL_API_IPAM_DB_ADDR
-          value: {{ .Values.metal_api.ipam_db_address }}
-        - name: METAL_API_IPAM_DB_PORT
-          value: "{{ .Values.metal_api.ipam_db_port }}"
-        - name: METAL_API_IPAM_DB_NAME
-          value: {{ .Values.metal_api.ipam_db_name }}
-        - name: METAL_API_IPAM_DB_PASSWORD
-          value: {{ .Values.metal_api.ipam_db_password }}
-        - name: METAL_API_IPAM_DB_USER
-          value: {{ .Values.metal_api.ipam_db_user }}
+        - name: METAL_API_IPAM_GRPC_SERVER_ENDPOINT
+          value: {{ .Values.metal_api.ipam_grpc_server_endpoint }}
         - name: METAL_API_PROVIDER_TENANT
           value: "{{ .Values.masterdata_api.provider_tenant }}"
         - name: METAL_API_NSQLOOKUPD_ADDR
@@ -197,6 +189,10 @@ spec:
           value: /certs/masterdata-api/client-key.pem
         - name: METAL_API_PASSWORD_REASON_MINLENGTH
           value: "{{ .Values.metal_api.password_reason_minlength }}"
+{{- if .Values.metal_api.release_version }}
+        - name: METAL_API_RELEASE_VERSION
+          value: "{{ .Values.metal_api.release_version }}"
+{{- end }}
         - name: METAL_API_MINIMUM_CLIENT_VERSION
           value: "{{ .Values.metal_api.minimum_client_version }}"
 {{- if .Values.auditing.enabled }}
@@ -551,16 +547,8 @@ spec:
               value: {{ .Values.metal_api.db_address }}
             - name: METAL_API_DB_PASSWORD
               value: {{ .Values.metal_api.db_password }}
-            - name: METAL_API_IPAM_DB_ADDR
-              value: {{ .Values.metal_api.ipam_db_address }}
-            - name: METAL_API_IPAM_DB_PORT
-              value: "{{ .Values.metal_api.ipam_db_port }}"
-            - name: METAL_API_IPAM_DB_NAME
-              value: {{ .Values.metal_api.ipam_db_name }}
-            - name: METAL_API_IPAM_DB_PASSWORD
-              value: {{ .Values.metal_api.ipam_db_password }}
-            - name: METAL_API_IPAM_DB_USER
-              value: {{ .Values.metal_api.ipam_db_user }}
+            - name: METAL_API_IPAM_GRPC_SERVER_ENDPOINT
+              value: {{ .Values.metal_api.ipam_grpc_server_endpoint }}
             - name: METAL_API_NSQLOOKUPD_ADDR
               value: {{ .Values.metal_api.nsq.lookupd_address }}
             - name: METAL_API_NSQD_TCP_ADDR

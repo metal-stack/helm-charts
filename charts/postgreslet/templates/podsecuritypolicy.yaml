@@ -1,3 +1,4 @@
+{{- if .Values.rbac.pspEnabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -18,3 +19,4 @@ spec:
     - persistentVolumeClaim
     - configMap
     - emptyDir
+{{- end }}

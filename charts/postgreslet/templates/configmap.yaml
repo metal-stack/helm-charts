@@ -2,7 +2,9 @@ apiVersion: v1
 data:
   CUSTOM_PSP_NAME: {{ include "postgreslet.pspName" . | quote  }}
   DEPLOY_ETCD: {{ .Values.postgreslet.deployEtcd | quote }}
+  ENABLE_BOOTSRTAP_STANDBY_FROM_S3: {{ .Values.postgreslet.enableBootsrtapStandbyFromS3 | quote  }}
   ENABLE_CRD_VALIDATION: {{ .Values.postgreslet.enableCrdValidation | quote  }}
+  ENABLE_FORCE_SHARED_IP: {{ .Values.postgreslet.enableForceSharedIP | quote  }}
   ENABLE_LB_SOURCE_RANGES: {{ .Values.postgreslet.enableLBSourceRanges | quote }}
   ENABLE_LEADER_ELECTION: {{ .Values.postgreslet.enableLeaderElection | quote }}
   ENABLE_LEGACY_STANDBY_SELECTOR: {{ .Values.postgreslet.enableLegacyStandbySelector | quote }}
@@ -10,6 +12,7 @@ data:
   ENABLE_POD_ANTIAFFINITY: {{ .Values.postgreslet.enablePodAntiaffinity | quote }}
   ENABLE_RANDOM_STORAGE_ENCRYPTION_SECRET: {{ .Values.postgreslet.enableRandomStorageEncrytionSecret | quote }}
   ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
+  ENABLE_SUPERUSER_FOR_DBO: {{ .Values.postgreslet.enableSuperuserforDBO | quote }}
   ENABLE_WALG_ENCRYPTION: {{ .Values.postgreslet.enableWalGEncryption | quote }}
   ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
 {{- if .Values.postgreslet.etcdBackupSidecarImage }}
@@ -47,9 +50,12 @@ data:
   POSTGRESLET_FULLNAME: {{ include "postgreslet.fullname" . }}
   RUN_AS_NON_ROOT: {{ .Values.postgreslet.runAsNonRoot | quote  }}
   SIDECARS_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-sidecars
+  INITDB_JOB_CONFIGMAP_NAME: {{ include "postgreslet.fullname" . }}-postgres-initdbjob
   STANDBY_CLUSTERS_SOURCE_RANGES: {{ .Values.postgreslet.standbyClustersSourceRanges | quote  }}
   STORAGE_CLASS: {{ .Values.postgreslet.storageClass | quote  }}
   TENANT: {{ .Values.postgreslet.tenant | quote }}
+  TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
+  TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
