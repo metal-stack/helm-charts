@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   name: ipam
 spec:
+  replicas: {{ .Values.ipam.replicas }}
   selector:
     matchLabels:
       app: ipam
@@ -71,3 +72,34 @@ spec:
     targetPort: 2112
   selector:
     app: ipam
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ipam-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: ipam
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-pod-affinity
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - ipam
+          topologyKey: topology.kubernetes.io/zone
+  containers:
+  - name: with-pod-affinity
+    image: registry.k8s.io/pause:2.0
