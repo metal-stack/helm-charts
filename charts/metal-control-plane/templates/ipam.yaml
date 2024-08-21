@@ -17,6 +17,18 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
     spec:
+      affinity:
+       podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+         - weight: 100
+         podAffinityTerm:
+           labelSelector:
+             matchExpressions:
+             - key: app
+               operator: In
+               values:
+               - ipam
+           topologyKey: topology.kubernetes.io/zone
       containers:
       - name: ipam
         args:
@@ -82,24 +94,3 @@ spec:
   selector:
     matchLabels:
       app: ipam
-#---
-#apiVersion: v1
-#kind: Pod
-#metadata:
-#  name: with-pod-affinity
-#spec:
-#  affinity:
-#    podAntiAffinity:
-#      preferredDuringSchedulingIgnoredDuringExecution:
-#      - weight: 100
-#        podAffinityTerm:
-#          labelSelector:
-#            matchExpressions:
-#            - key: app
-#              operator: In
-#              values:
-#              - ipam
-#          topologyKey: topology.kubernetes.io/zone
-#  containers:
-#  - name: with-pod-affinity
-#    image: registry.k8s.io/pause:2.0
