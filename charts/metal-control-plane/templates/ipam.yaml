@@ -18,14 +18,16 @@ spec:
         prometheus.io/port: '2112'
     spec:
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: NotIn
-                values:
-                - ipam
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - ipam
             topologyKey: topology.kubernetes.io/zone
       containers:
       - name: ipam
