@@ -28,7 +28,7 @@ spec:
                   operator: In
                   values:
                   - ipam
-              topologyKey: topology.kubernetes.io/zone
+              topologyKey: kubernetes.io/hostname
       containers:
       - name: ipam
         args:
