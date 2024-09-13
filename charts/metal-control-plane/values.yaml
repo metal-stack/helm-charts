@@ -126,6 +126,7 @@ metal_api:
   release_version: ""
 
 ipam:
+  replicas: 2
   grpc_server_endpoint: "0.0.0.0:9090"
   log_level: "info"
   db_host: ""
