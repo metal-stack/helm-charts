@@ -2,7 +2,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.attacher -}}
 {{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-attacher:v3.3.0" -}}
+{{- print "registry.k8s.io/sig-storage/csi-attacher:v4.7.0" -}}
 {{- end -}}
 {{- end -}}
 
@@ -10,7 +10,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.provisioner -}}
 {{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0" -}}
+{{- print "registry.k8s.io/sig-storage/csi-provisioner:v5.1.0" -}}
 {{- end -}}
 {{- end -}}
 
@@ -18,7 +18,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.livenessprobe -}}
 {{- else -}}
-{{- print "k8s.gcr.io/sig-storage/livenessprobe:v2.4.0" -}}
+{{- print "registry.k8s.io/sig-storage/livenessprobe:v2.12.0" -}}
 {{- end -}}
 {{- end -}}
 
@@ -26,7 +26,7 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.resizer -}}
 {{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-resizer:v1.3.0" -}}
+{{- print "registry.k8s.io/sig-storage/csi-resizer:v1.12.0" -}}
 {{- end -}}
 {{- end -}}
 
@@ -34,6 +34,6 @@
 {{- if .Values.customCSISidecars.enabled -}}
 {{- print .Values.customCSISidecars.registrar -}}
 {{- else -}}
-{{- print "k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0" -}}
+{{- print "registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.12.0" -}}
 {{- end -}}
 {{- end -}}
