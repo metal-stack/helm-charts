@@ -167,6 +167,8 @@ spec:
         volumeMounts:
         - mountPath: /csi
           name: socket-dir
+        - mountPath: {{ .Values.kubernetes.kubeletPath }}/plugins/{{ .Values.lvm.storageClassStub }}
+          name: socket-dir
         - mountPath: /registration
           name: registration-dir
       - name: csi-driver-lvm-plugin
