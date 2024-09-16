@@ -5,13 +5,9 @@ metadata:
   name: {{ include "postgreslet.fullname" . }}-webhook-tls
   namespace: {{ .Release.Namespace }}
 spec:
-  dnsNames:
-    - webhook.pgaas-dev.fits.cloud
+  commonName: {{ include "postgreslet.fullname" . }}-webhook.{{ .Release.Namespace }}.svc
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
-    name: letsencrypt-prod
+    name: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   secretName: {{ include "postgreslet.fullname" . }}-webhook-tls
-  usages:
-    - digital signature
-    - key encipherment
