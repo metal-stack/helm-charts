@@ -5,7 +5,8 @@ metadata:
   name: {{ include "postgreslet.fullname" . }}-webhook-tls
   namespace: {{ .Release.Namespace }}
 spec:
-  commonName: {{ include "postgreslet.fullname" . }}-webhook.{{ .Release.Namespace }}.svc
+  dnsNames: 
+  - {{ include "postgreslet.fullname" . }}-webhook.{{ .Release.Namespace }}.svc
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
