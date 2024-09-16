@@ -22,7 +22,6 @@ spec:
     {{- include "postgreslet.selectorLabels" . | nindent 4 }}
   type: ClusterIP
 ---
-{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
 {{- if .Values.postgreslet.tlsClusterIssuer }}
 apiVersion: v1
 kind: Service
@@ -34,6 +33,7 @@ metadata:
   name: {{ include "postgreslet.fullname" . }}-webhook
   namespace: {{ .Release.Namespace }}
 spec:
+{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
   ports:
     - port: 443
       targetPort: 9443
