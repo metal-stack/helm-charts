@@ -2,12 +2,13 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "postgreslet.fullname" . }}-webhook-tls
   name: {{ include "postgreslet.fullname" . }}-webhook
 webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
-    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJoekNDQVN5Z0F3SUJBZ0lRYkJ5ZlRCVGszZ0lJR215Sys5TzdhekFLQmdncWhrak9QUVFEQWpBak1TRXcKSHdZRFZRUURFeGhtWld3dGQzQnpNVEF4TFhObGJHWnphV2R1WldRdFkyRXdIaGNOTWpRd09ERXhNRGN6TWpFegpXaGNOTWpReE1UQTVNRGN6TWpFeldqQWpNU0V3SHdZRFZRUURFeGhtWld3dGQzQnpNVEF4TFhObGJHWnphV2R1ClpXUXRZMkV3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVEraHdoZzJkV1dUWDNBZVdaMGM4a2cKU2V6czBmZFdscUM2SFcvWWVjK1VFcGdxb1F4VVpUdzdYVEh3Z2VIQ3Jka3dsdE0rK1RyRGRFMlRrY3kyVlgzNgpvMEl3UURBT0JnTlZIUThCQWY4RUJBTUNBcVF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVCkJRZk5sbGJWOFVXeDFoMFA2QnBIdTl1MFROd3dDZ1lJS29aSXpqMEVBd0lEU1FBd1JnSWhBTWV3eFI5dUk5WDcKUFB6RG84T2tLL2R5enp5eGNjTlAvRVQ1bU95VWZxd09BaUVBbjNjazU0NnR1RXRWQ3d3UTFwcDBiMDBYVlYyagpSQW5hWUcxREJNMm1NWW89Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
     service:
       name: {{ include "postgreslet.fullname" . }}-webhook
       namespace: {{ .Release.Namespace }}
