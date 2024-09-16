@@ -21,7 +21,7 @@ spec:
     control-plane: controller-manager
     {{- include "postgreslet.selectorLabels" . | nindent 4 }}
   type: ClusterIP
-
+{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook and .Values.postgreslet.tlsClusterIssuer }}
 ---
 apiVersion: v1
 kind: Service
@@ -39,3 +39,4 @@ spec:
   selector:
     control-plane: controller-manager
     {{- include "postgreslet.selectorLabels" . | nindent 4 }}
+{{- end }}
