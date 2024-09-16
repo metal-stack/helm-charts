@@ -51,6 +51,9 @@ spec:
             - mountPath: /var/run/secrets/postgreslet
               name: controlplane-kubeconfig
               readOnly: true
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: webhook-tls
+              readOnly: true
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
         - name: controlplane-kubeconfig
@@ -59,6 +62,10 @@ spec:
               - key: controlplane-kubeconfig
                 path: kube/config
             secretName: {{ include "postgreslet.fullname" . }}
+        - name: webhook-tls
+          secret:
+            defaultMode: 420
+            secretName: {{ include "postgreslet.fullname" . }}-webhook-tls
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
