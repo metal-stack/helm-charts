@@ -231,6 +231,9 @@ spec:
         - mountPath: /etc/lvm/cache
           name: lvmcache
           mountPropagation: Bidirectional
+        - mountPath: /etc/lvm/archive
+          name: lvmarchive
+          mountPropagation: Bidirectional
         - mountPath: /run/lock/lvm
           name: lvmlock
           mountPropagation: Bidirectional
@@ -285,6 +288,10 @@ spec:
           path: {{ .Values.lvm.hostWritePath }}/cache
           type: DirectoryOrCreate
         name: lvmcache
+      - hostPath:
+          path: {{ .Values.lvm.hostWritePath }}/archive
+          type: DirectoryOrCreate
+        name: lvmarchive
       - hostPath:
           path: {{ .Values.lvm.hostWritePath }}/lock
           type: DirectoryOrCreate
