@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2024-09-24T14:12:20.692777457Z"
+    created: "2024-09-24T14:13:53.62348959Z"
     description: local persistend storage for lvm
-    digest: 57ea02ed5b8f135556ec1a9fd1d8c949eaf90142e48524557c468320ab1457f3
+    digest: f41545797c5f91f378364668dd836ae755501c896e1becde3568d6e1bc7f219a
     home: https://metal-stack.io
     keywords:
     - storage
@@ -19,7 +19,7 @@ entries:
     version: 0.7.0
   - apiVersion: v1
     appVersion: v0.5.3
-    created: "2024-09-24T14:12:20.692075201Z"
+    created: "2024-09-24T14:13:53.622471687Z"
     description: local persistend storage for lvm
     digest: 718c9bb8cf43c08dd1f8040fd25c1b1fcec73b14f7c10921ed600c676e2dd2ef
     home: https://metal-stack.io
@@ -36,9 +36,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2024-09-24T14:12:20.693563493Z"
+    created: "2024-09-24T14:13:53.624275263Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: d452d5bb1c5e629ae71aa587bc886afe73170883ad1a014f1a49e84aa855bdfd
+    digest: fdc76c6230010ce9f153d167f1286f2a1424264427c4c83fd05cce68ef66ebf4
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/csi-driver-lvm-sidecars/metal-control-plane-0.4.4.tgz
@@ -46,12 +46,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.16.0
-    created: "2024-09-24T14:12:20.694671282Z"
+    created: "2024-09-24T14:13:53.625380411Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 9875bfd785b29d82e9d7ea5bd5511fbeac6c495a2ff8b05a6224a403a88c38c5
+    digest: b7b044a96e6c250da5633596efc99e219a406b26a9fec0f70c8555f1153c01b7
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/csi-driver-lvm-sidecars/postgreslet-0.14.0.tgz
     version: 0.14.0
-generated: "2024-09-24T14:12:20.69096136Z"
+generated: "2024-09-24T14:13:53.62168928Z"
