@@ -21,13 +21,20 @@ compat03x: false
 
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
-  tag: v0.5.3
+  tag: v0.6.0
   pullPolicy: IfNotPresent
 
 provisionerImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm-provisioner
-  tag: v0.5.3
+  tag: v0.6.0
   pullPolicy: IfNotPresent
+
+sidecarImages:
+  attacher: k8s.gcr.io/sig-storage/csi-attacher:v3.5.0
+  livenessprobe: k8s.gcr.io/sig-storage/livenessprobe:v2.7.0
+  provisioner: k8s.gcr.io/sig-storage/csi-provisioner:v3.2.1
+  registrar: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.5.1
+  resizer: k8s.gcr.io/sig-storage/csi-resizer:v1.6.0
 
 kubernetes:
   kubeletPath: /var/lib/kubelet
@@ -47,17 +54,6 @@ storageClasses:
     enabled: true
     additionalAnnotations: []
     reclaimPolicy: Delete
-
-customCSISidecars:
-  enabled: false
-
-  ## uncomment and set these if enabled=true
-
-  # attacher: k8s.gcr.io/sig-storage/csi-attacher:v3.5.0
-  # livenessprobe: k8s.gcr.io/sig-storage/livenessprobe:v2.7.0
-  # provisioner: k8s.gcr.io/sig-storage/csi-provisioner:v3.2.1
-  # registrar: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.5.1
-  # resizer: k8s.gcr.io/sig-storage/csi-resizer:v1.6.0
 
 nodeSelector:
   # The plugin daemonset will run on all nodes if it has a toleration,
