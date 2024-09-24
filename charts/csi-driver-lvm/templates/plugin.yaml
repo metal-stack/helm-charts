@@ -157,7 +157,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.nodeName
-        image: {{ template "externalImages.csiNodeDriverRegistrar" . }}
+        image: {{ .Values.sidecarImages.registrar }}
         imagePullPolicy: IfNotPresent
         resources: {}
         securityContext:
@@ -238,7 +238,7 @@ spec:
         args:
         - --csi-address=/csi/csi.sock
         - --health-port=9898
-        image: {{ template "externalImages.csiLivenessprobe" . }}
+        image: {{ .Values.sidecarImages.livenessprobe }}
         imagePullPolicy: IfNotPresent
         resources: {}
         securityContext:
