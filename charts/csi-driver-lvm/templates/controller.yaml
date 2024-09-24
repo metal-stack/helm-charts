@@ -168,6 +168,7 @@ spec:
             - --v=5
             - --csi-address=/csi/csi.sock
           securityContext:
+            readOnlyRootFilesystem: true
             privileged: true
           volumeMounts:
           - mountPath: /csi
@@ -180,6 +181,7 @@ spec:
             - --csi-address=/csi/csi.sock
             - --feature-gates=Topology=true
           securityContext:
+            readOnlyRootFilesystem: true
             privileged: true
           volumeMounts:
             - mountPath: /csi
@@ -191,6 +193,7 @@ spec:
             - -v=5
             - -csi-address=/csi/csi.sock
           securityContext:
+            readOnlyRootFilesystem: true
             privileged: true
           volumeMounts:
             - mountPath: /csi
