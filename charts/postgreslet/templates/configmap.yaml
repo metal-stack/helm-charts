@@ -56,6 +56,7 @@ data:
   TENANT: {{ .Values.postgreslet.tenant | quote }}
   TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
+  ENABLE_FSGROUP_CHANGE_POLICY_WEBHOOK: {{ .Values.postgreslet.enableFsGroupChangePolicyWebhook | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}

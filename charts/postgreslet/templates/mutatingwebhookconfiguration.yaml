@@ -1,0 +1,35 @@
+{{- if .Values.postgreslet.tlsClusterIssuer }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "postgreslet.fullname" . }}-webhook-tls
+  name: {{ include "postgreslet.fullname" . }}-webhook
+webhooks:
+{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "postgreslet.fullname" . }}-webhook
+      namespace: {{ .Release.Namespace }}
+      path: /mutate-apps-v1-statefulset
+  failurePolicy: Ignore
+  name: webhook.postgres.fits.cloud
+  objectSelector:
+    matchLabels:
+      application: spilo
+      postgres.database.fits.cloud/partition-id: {{ .Values.postgreslet.partitionId | quote }}
+  rules:
+  - apiGroups:
+    - apps
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - statefulsets
+  sideEffects: None
+{{- end }}
+{{- end }}
