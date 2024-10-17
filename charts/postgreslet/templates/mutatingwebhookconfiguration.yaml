@@ -13,7 +13,7 @@ webhooks:
     service:
       name: {{ include "postgreslet.fullname" . }}-webhook
       namespace: {{ .Release.Namespace }}
-      path: /mutate-apps-v1-statefulset
+      path: /mutate-v1-pod
   failurePolicy: Ignore
   name: webhook.postgres.fits.cloud
   objectSelector:
@@ -22,14 +22,14 @@ webhooks:
       postgres.database.fits.cloud/partition-id: {{ .Values.postgreslet.partitionId | quote }}
   rules:
   - apiGroups:
-    - apps
+    - ""
     apiVersions:
     - v1
     operations:
     - CREATE
     - UPDATE
     resources:
-    - statefulsets
+    - pods
   sideEffects: None
 {{- end }}
 {{- end }}
