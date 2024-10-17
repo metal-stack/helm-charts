@@ -2,8 +2,24 @@ apiVersion: v1
 entries:
   csi-driver-lvm:
   - apiVersion: v1
+    appVersion: v0.6.0
+    created: "2024-10-17T14:34:52.977998695Z"
+    description: local persistend storage for lvm
+    digest: 9ce110de8719836318adae3d50671dc0465172b40b5f02b966ab3e0bfc56d11c
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-mutating-webhook/csi-driver-lvm-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v1
     appVersion: v0.5.3
-    created: "2024-09-16T18:49:21.59613183Z"
+    created: "2024-10-17T14:34:52.976875286Z"
     description: local persistend storage for lvm
     digest: e014d69a67f91004143a4870efbd9f3987d21c9999e96a66416b6f6795374d5c
     home: https://metal-stack.io
@@ -20,7 +36,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2024-09-16T18:49:21.597614511Z"
+    created: "2024-10-17T14:34:52.979681403Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 5a450b4f33126e5d21e16f5a1669843ec480629930664288ab4985f5fa379354
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-mutating-webhook/metal-control-plane-0.4.5.tgz
+    version: 0.4.5
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2024-10-17T14:34:52.978946753Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 342edd3b40b7790f5b4fe32f1904c2c0a1fc0448002a7fb6eaef68bf38e3abea
     name: metal-control-plane
@@ -30,12 +55,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.17.0
-    created: "2024-09-16T18:49:21.598736311Z"
+    created: "2024-10-17T14:34:52.981017411Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 882fae3bd1b5d8ffca65f154aafb4f24a3462a39ffcf39a39ac9a4ccf24e3bad
+    digest: 14952eafe39e411df428e73250849f1242599077cf26ff3eeccd0f52f691f7d3
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-mutating-webhook/postgreslet-0.15.0.tgz
     version: 0.15.0
-generated: "2024-09-16T18:49:21.595330009Z"
+generated: "2024-10-17T14:34:52.976314333Z"
