@@ -1,3 +1,4 @@
+{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
 {{- if .Values.postgreslet.tlsClusterIssuer }}
 ---
 apiVersion: cert-manager.io/v1
@@ -13,4 +14,5 @@ spec:
     kind: ClusterIssuer
     name: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   secretName: {{ include "postgreslet.fullname" . }}-webhook-tls
+{{- end }}
 {{- end }}
