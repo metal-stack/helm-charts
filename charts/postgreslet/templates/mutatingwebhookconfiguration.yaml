@@ -1,11 +1,11 @@
-{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
-{{- if .Values.postgreslet.tlsClusterIssuer }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "postgreslet.fullname" . }}-webhook-tls
   name: {{ include "postgreslet.fullname" . }}-webhook
+{{- if .Values.postgreslet.enableFsGroupChangePolicyWebhook }}
+{{- if .Values.postgreslet.tlsClusterIssuer }}
 webhooks:
 - admissionReviewVersions:
   - v1
