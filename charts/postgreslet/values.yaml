@@ -492,6 +492,7 @@ sidecars:
     GRANT pg_monitor to monitoring;
     GRANT pg_read_all_stats TO monitoring;
   walGExporter:
+    enabled: true
     imageRepository: "ghcr.io/thedatabaseme/wal-g-exporter"
     imageTag: "latest"
     containerPort: 9351

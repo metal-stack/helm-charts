@@ -69,6 +69,7 @@ data:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+{{- if .Values.sidecars.walGExporter.enabled }}
     - name: "backup-exporter"
       image: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
       env:
@@ -93,6 +94,7 @@ data:
         limits:
           cpu: {{ .Values.sidecars.walGExporter.resources.limits.cpu }}
           memory: {{ .Values.sidecars.walGExporter.resources.limits.memory }}
+{{- end }}
   additional-volumes: |
     - name: empty
       mountPath: /opt/empty
