@@ -83,6 +83,8 @@ data:
               key: password
         - name: PGUSER
           value: monitoring
+        - name: PGDATABASE
+          value: postgres
       ports:
         - name: backup-exporter
           containerPort: {{ .Values.sidecars.walGExporter.containerPort }}
