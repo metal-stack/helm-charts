@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.16.0"
+  tag: "v0.17.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -144,6 +144,8 @@ postgreslet:
   tlsClusterIssuer: ""
   # tlsSubDomain when enabled, uses the given subdomain (in combination with the postgres instance's UUID) as common name when requesting the certificate
   tlsSubDomain: ""
+  # enableFsGroupChangePolicyWebhook when enabled, deploys a webhook that adds securityContext.fsGroupChangePolicy=OnRootMismatch to the Spilo StatefulSet when the securityContext.fsGroup field is set
+  enableFsGroupChangePolicyWebhook: true
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
