@@ -124,6 +124,7 @@ data:
           items:
             - key: fluent-bit.conf
               path: fluent-bit.conf
+{{- if .Values.sidecars.walGExporter.enabled }}
     - mountPath: /run/etc
       name: walg
       targetContainers:
@@ -131,6 +132,7 @@ data:
       - backup-exporter
       volumeSource:
         emptyDir: {}
+{{- end }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}-postgres-sidecars
