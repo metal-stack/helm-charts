@@ -496,6 +496,7 @@ sidecars:
     imageRepository: "ghcr.io/thedatabaseme/wal-g-exporter"
     imageTag: "latest"
     containerPort: 9351
+    servicePort: 9351
     resources:
       requests:
         cpu: "100m"
