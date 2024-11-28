@@ -136,6 +136,9 @@ ipam:
   db_user: ""
   db_password: ""
 
+pod_disruption_budget:
+  min_available: 1
+
 masterdata_api:
   provider_tenant: ""
   db_address: ""
