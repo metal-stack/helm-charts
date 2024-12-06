@@ -5,7 +5,7 @@ data:
 {{- if .Values.sidecars.walGExporter.enabled }}
   wal-g-exporter-service-port: {{ .Values.sidecars.walGExporter.servicePort | quote }}
   wal-g-exporter-service-target-port: {{ .Values.sidecars.walGExporter.containerPort | quote }}
-{{- else }}
+{{- end }}
 {{- if .Values.sidecars.exporter.enableStatementsQuery }}
   queries.yaml: {{ printf "%s\n%s" .Values.sidecars.exporter.queries .Values.sidecars.exporter.queriesStatements | b64enc  }}
 {{- else }}
