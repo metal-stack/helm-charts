@@ -2,6 +2,10 @@ apiVersion: v1
 data:
   postgres-exporter-service-port: {{ .Values.sidecars.exporter.servicePort | quote }}
   postgres-exporter-service-target-port: {{ .Values.sidecars.exporter.containerPort | quote }}
+{{- if .Values.sidecars.walGExporter.enabled }}
+  wal-g-exporter-service-port: {{ .Values.sidecars.walGExporter.servicePort | quote }}
+  wal-g-exporter-service-target-port: {{ .Values.sidecars.walGExporter.containerPort | quote }}
+{{- end }}
 {{- if .Values.sidecars.exporter.enableStatementsQuery }}
   queries.yaml: {{ printf "%s\n%s" .Values.sidecars.exporter.queries .Values.sidecars.exporter.queriesStatements | b64enc  }}
 {{- else }}
@@ -69,6 +73,34 @@ data:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+{{- if .Values.sidecars.walGExporter.enabled }}
+    - name: "backup-exporter"
+      image: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
+      env:
+        - name: PGHOST
+          value: 127.0.0.1
+        - name: PGPORT
+          value: "5432"
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+        - name: PGUSER
+          value: monitoring
+        - name: PGDATABASE
+          value: postgres
+      ports:
+        - name: backup-exporter
+          containerPort: {{ .Values.sidecars.walGExporter.containerPort }}
+          protocol: TCP
+      resources:
+        requests:
+          cpu: {{ .Values.sidecars.walGExporter.resources.requests.cpu }}
+          memory: {{ .Values.sidecars.walGExporter.resources.requests.memory }}
+        limits:
+          cpu: {{ .Values.sidecars.walGExporter.resources.limits.cpu }}
+          memory: {{ .Values.sidecars.walGExporter.resources.limits.memory }}
+{{- end }}
   additional-volumes: |
     - name: empty
       mountPath: /opt/empty
@@ -96,6 +128,15 @@ data:
           items:
             - key: fluent-bit.conf
               path: fluent-bit.conf
+{{- if .Values.sidecars.walGExporter.enabled }}
+    - mountPath: /run/etc
+      name: walg
+      targetContainers:
+      - postgres
+      - backup-exporter
+      volumeSource:
+        emptyDir: {}
+{{- end }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}-postgres-sidecars
