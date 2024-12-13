@@ -151,6 +151,7 @@ ipam:
   db_password: ""
 
 masterdata_api:
+  replicas: 2
   provider_tenant: ""
   db_address: ""
   db_port: 5432

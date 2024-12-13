@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   name: masterdata-api
 spec:
+  replicas: {{ .Values.masterdata_api.replicas }}
   selector:
     matchLabels:
       app: masterdata-api
