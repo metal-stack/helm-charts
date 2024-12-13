@@ -95,3 +95,15 @@ spec:
     targetPort: 2112
   selector:
     app: masterdata-api
+{{- if .Values.pod_disruption_budget.masterdata_api.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: masterdata-api
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.masterdata_api.min_available }}
+  selector:
+    matchLabels:
+      app: masterdata-api
+{{- end }}
