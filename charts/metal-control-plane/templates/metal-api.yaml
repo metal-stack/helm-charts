@@ -595,3 +595,15 @@ spec:
     name: metal-api
   targetCPUUtilizationPercentage: {{ .Values.hpa.metal_api.cpu_percentage }}
 {{- end }}
+{{- if .Values.pod_disruption_budget.metal_api.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: metal-api
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.metal_api.min_available }}
+  selector:
+    matchLabels:
+      app: metal-api
+{{- end }}

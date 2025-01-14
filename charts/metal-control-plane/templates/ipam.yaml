@@ -84,13 +84,15 @@ spec:
     targetPort: 2112
   selector:
     app: ipam
+{{- if .Values.pod_disruption_budget.ipam.enabled }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: ipam-pdb
+  name: ipam
 spec:
-  minAvailable: 2
+  minAvailable: {{ .Values.pod_disruption_budget.ipam.min_available }}
   selector:
     matchLabels:
       app: ipam
+{{- end }}
