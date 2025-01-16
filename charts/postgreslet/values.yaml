@@ -433,6 +433,55 @@ sidecars:
           - size:
               usage: "GAUGE"
               description: "Disk space used by the database"
+
+      pg_sync_standby_nominal_actual:
+        query: "WITH config AS (
+                    SELECT
+                        COALESCE(ARRAY_LENGTH(STRING_TO_ARRAY(setting, ','), 1), 0)
+                        AS nominal_sync_standbys
+                    FROM
+                        pg_settings
+                    WHERE
+                        name = 'synchronous_standby_names'
+                ),
+                current AS (
+                    SELECT
+                        COUNT(*) AS actual_sync_standbys
+                    FROM
+                        pg_stat_replication
+                    WHERE
+                        sync_state = 'sync'
+                )
+                SELECT
+                    config.nominal_sync_standbys,
+                    current.actual_sync_standbys,
+                    CASE
+                        WHEN current.actual_sync_standbys >= config.nominal_sync_standbys THEN 1
+                        ELSE 0
+                    END AS status
+                FROM
+                    config, current"
+        metrics:
+          - nominal_sync_standbys:
+              usage: "GAUGE"
+              description: "The number of nominal (configured) sync standbys"
+          - actual_sync_standbys:
+              usage: "GAUGE"
+              description: "The number of actual subscribed standbys"
+          - status:
+              usage: "GAUGE"
+              description: "Result of nominal-actual-comparision: 1=OK, 0=Fail (sync standbys are missing)"
+
+      pg_replication_blocked_transactions:
+        query: "SELECT COUNT(*) AS blocked_transactions
+          FROM pg_stat_activity
+          WHERE state = 'active'
+          AND wait_event='SyncRep'"
+        metrics:
+          - blocked_transactions:
+              usage: "COUNTER"
+              description: "Number of blocked transactions waiting for a defect sync standby"
+              
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
