@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-01-16T12:10:31.680099872Z"
+    created: "2025-01-20T09:15:45.184067121Z"
     description: local persistend storage for lvm
-    digest: c7d082826ab44fd2c37badc836928d3b3c2868e801c5dbba45cc4681edb2b513
+    digest: a9e9397e15e0a939951de92d1d09923c6599a8a2028f36ecd5f5a7d6d3f13436
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-01-16T12:10:31.6848995Z"
+    created: "2025-01-20T09:15:45.18749151Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: c6acc8559c1cbaa84f5b0c4906c16f691a69f84b327b0720aeedcde77d7557b7
+    digest: d014c7013102af7e31278893eb42fc1ee84664e588605828ac3b400b8251755b
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/backup-exporter-sidecar/metal-control-plane-0.4.7.tgz
     version: 0.4.7
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-01-16T12:10:31.683480553Z"
+    created: "2025-01-20T09:15:45.186687401Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 80033011d9c8ef601c26a006c8558d6bcd800bcd87a2f62c6ce9643c15f3c7c8
     name: metal-control-plane
@@ -38,7 +38,7 @@ entries:
     version: 0.4.6
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-01-16T12:10:31.682148708Z"
+    created: "2025-01-20T09:15:45.185689881Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 1a076b213a3ee3c5326ddd24c303246d9d87af4a921031e22ef0d9d15739a0c3
     name: metal-control-plane
@@ -48,12 +48,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.17.1
-    created: "2025-01-16T12:10:31.687427088Z"
+    created: "2025-01-20T09:15:45.188948265Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 2db2f63fbcd949961671df1671ef38a90ed17eb35f77c015f6070a8ba9885b61
+    digest: 86439ee23df6f6ccbfc718f14e7621ae111e3e10ae4246d5ceb285c56533feb2
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/backup-exporter-sidecar/postgreslet-0.16.0.tgz
     version: 0.16.0
-generated: "2025-01-16T12:10:31.679235085Z"
+generated: "2025-01-20T09:15:45.183252321Z"
