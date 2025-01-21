@@ -543,7 +543,7 @@ sidecars:
   walGExporter:
     enabled: true
     imageRepository: "ghcr.io/thedatabaseme/wal-g-exporter"
-    imageTag: "latest"
+    imageTag: "0.3.1"
     containerPort: 9351
     servicePort: 9351
     resources:
