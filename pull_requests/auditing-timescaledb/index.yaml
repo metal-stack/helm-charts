@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-01-24T13:02:14.95804333Z"
+    created: "2025-01-24T13:26:21.195916104Z"
     description: local persistend storage for lvm
-    digest: 2da1ac4f8f584e530cdb68898d21058116926c2c8a3303dc80dc3ff63c686b9d
+    digest: 70a4254444057ff6fa0a451aa21cd84fce09ecc9a235843756a129f7fa8f18e9
     home: https://metal-stack.io
     keywords:
     - storage
@@ -19,7 +19,7 @@ entries:
     version: 0.7.0
   - apiVersion: v1
     appVersion: v0.5.2
-    created: "2025-01-24T13:02:14.957182734Z"
+    created: "2025-01-24T13:26:21.195164134Z"
     description: local persistend storage for lvm
     digest: 051e781e484aa621beec06abbf25eadd8e44d414e3440680acf55f5df1560da9
     home: https://metal-stack.io
@@ -36,16 +36,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-01-24T13:02:14.960244485Z"
+    created: "2025-01-24T13:26:21.197515627Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: e2d6d520ace8ae3c20b822b657bbaf54f2dbda53e9a5f80fa54dbcb3b4a6bc0e
+    digest: 05bea2680b7b7e5f0a1b26faa1892152af5dd57fce5adbb716bf74972e746661
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/auditing-timescaledb/metal-control-plane-0.4.8.tgz
     version: 0.4.8
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-01-24T13:02:14.959399028Z"
+    created: "2025-01-24T13:26:21.196701729Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: e15701099651047390c977d115fa4b0f1a976c4923fd20142b07baef91abf013
     name: metal-control-plane
@@ -55,9 +55,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.17.1
-    created: "2025-01-24T13:02:14.962816212Z"
+    created: "2025-01-24T13:26:21.200079322Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: bdf0fc5d81822969336924ba1629875332ae71eaae87604d24fbc079c906636b
+    digest: f7207aa55ddada5af6f2b5cd7a81f372e857d22c0d9ff55bf068967aa8dbe02c
     name: postgreslet
     type: application
     urls:
@@ -65,7 +65,7 @@ entries:
     version: 0.16.0
   - apiVersion: v2
     appVersion: v0.15.0
-    created: "2025-01-24T13:02:14.961388088Z"
+    created: "2025-01-24T13:26:21.198828873Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: acdcc91bba4721489b858e14b57faa23b8cfef249c36d0a36298b39f2020bc49
     name: postgreslet
@@ -73,4 +73,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/auditing-timescaledb/postgreslet-0.13.1.tgz
     version: 0.13.1
-generated: "2025-01-24T13:02:14.956590119Z"
+generated: "2025-01-24T13:26:21.194010708Z"
