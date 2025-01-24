@@ -195,9 +195,11 @@ spec:
 {{- end }}
         - name: METAL_API_MINIMUM_CLIENT_VERSION
           value: "{{ .Values.metal_api.minimum_client_version }}"
-{{- if or .Values.auditing.meilisearch.enabled .Values.auditing.timescaledb.enabled  }}
+{{- if or .Values.auditing.enabled }}
         - name: METAL_API_AUDITING_ENABLED
           value: "true"
+{{- end }}
+{{- if hasKey .Values.auditing.meilisearch "enabled" }}
 {{- if .Values.auditing.meilisearch.enabled }}
         - name: METAL_API_AUDITING_MEILI_URL
           value: "{{ .Values.auditing.meilisearch.url }}"
@@ -211,6 +213,8 @@ spec:
         - name: METAL_API_AUDITING_MEILI_INDEX_INTERVAL
           value: "{{ .Values.auditing.meilisearch.index_interval }}"
 {{- end }}
+{{- end }}
+{{- if hasKey .Values.auditing.timescaledb "enabled" }}
 {{- if .Values.auditing.timescaledb.enabled }}
         - name: METAL_API_AUDITING_TIMESCALEDB_HOST
           value: "{{ .Values.auditing.timescaledb.host }}"
