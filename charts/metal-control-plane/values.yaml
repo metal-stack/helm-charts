@@ -63,6 +63,20 @@ hpa:
     min: 3
     cpu_percentage: 70
 
+pod_disruption_budget:
+  ipam:
+    enabled: true
+    min_available: 1
+  metal_api:
+    enabled: true
+    min_available: 2
+  masterdata_api:
+    enabled: true
+    min_available: 1
+  metal_console:
+    enabled: false
+    min_available: 1
+
 ports:
   metal_api: 8080
   metal_api_grpc: 50051
@@ -111,6 +125,7 @@ metal_api:
   projects: "[]"
   filesystemlayouts: "[]"
   sizeimageconstraints: "[]"
+  size_reservations: "[]"
   s3:
     enabled: false
     address: ""
@@ -136,6 +151,7 @@ ipam:
   db_password: ""
 
 masterdata_api:
+  replicas: 2
   provider_tenant: ""
   db_address: ""
   db_port: 5432
@@ -182,13 +198,14 @@ ingress:
     enabled: false
 
 auditing:
-  enabled: false
   meilisearch:
+    enabled: false
     url: ""
     index_prefix: "auditing"
     index_interval: "@daily"
     existingMasterKeySecret: "metal-auditing-master-key"
   timescaledb:
+    enabled: false
     host: ""
     port: "5432"
     db: auditing

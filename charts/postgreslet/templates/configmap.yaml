@@ -14,6 +14,7 @@ data:
   ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
   ENABLE_SUPERUSER_FOR_DBO: {{ .Values.postgreslet.enableSuperuserforDBO | quote }}
   ENABLE_WALG_ENCRYPTION: {{ .Values.postgreslet.enableWalGEncryption | quote }}
+  ENABLE_WAL_G_EXPORTER: {{ .Values.sidecars.walGExporter.enabled | quote }}
   ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
 {{- if .Values.postgreslet.etcdBackupSidecarImage }}
   ETCD_BACKUP_SIDECAR_IMAGE: {{ .Values.postgreslet.etcdBackupSidecarImage | quote  }}
@@ -56,6 +57,7 @@ data:
   TENANT: {{ .Values.postgreslet.tenant | quote }}
   TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
+  ENABLE_FSGROUP_CHANGE_POLICY_WEBHOOK: {{ .Values.postgreslet.enableFsGroupChangePolicyWebhook | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}

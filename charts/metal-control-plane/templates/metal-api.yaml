@@ -195,10 +195,10 @@ spec:
 {{- end }}
         - name: METAL_API_MINIMUM_CLIENT_VERSION
           value: "{{ .Values.metal_api.minimum_client_version }}"
-{{- if .Values.auditing.enabled }}
+{{- if or .Values.auditing.meilisearch.enabled .Values.auditing.timescaledb.enabled  }}
         - name: METAL_API_AUDITING_ENABLED
           value: "true"
-{{- if .Values.auditing.meilisearch.existingMasterKeySecret }}
+{{- if .Values.auditing.meilisearch.enabled }}
         - name: METAL_API_AUDITING_MEILI_URL
           value: "{{ .Values.auditing.meilisearch.url }}"
         - name: METAL_API_AUDITING_MEILI_API_KEY
@@ -211,7 +211,7 @@ spec:
         - name: METAL_API_AUDITING_MEILI_INDEX_INTERVAL
           value: "{{ .Values.auditing.meilisearch.index_interval }}"
 {{- end }}
-{{- if .Values.auditing.timescaledb.host }}
+{{- if .Values.auditing.timescaledb.enabled }}
         - name: METAL_API_AUDITING_TIMESCALEDB_HOST
           value: "{{ .Values.auditing.timescaledb.host }}"
         - name: METAL_API_AUDITING_TIMESCALEDB_PORT
@@ -343,6 +343,8 @@ data:
     {{ .Values.metal_api.filesystemlayouts | nindent 4 }}
   sizeimageconstraints.yaml: |
     {{ .Values.metal_api.sizeimageconstraints | nindent 4 }}
+  size_reservations.yaml: |
+    {{ .Values.metal_api.size_reservations | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -386,6 +388,7 @@ spec:
               /metalctl network ip apply -f /masterdata/ip.yaml
               /metalctl filesystemlayout apply -f /masterdata/filesystemlayouts.yaml
               /metalctl size imageconstraint apply -f /masterdata/sizeimageconstraints.yaml
+              /metalctl size reservation apply -f /masterdata/size_reservations.yaml
         volumeMounts:
         - name: masterdata
           mountPath: /masterdata
@@ -426,6 +429,8 @@ spec:
               path: filesystemlayouts.yaml
             - key: sizeimageconstraints.yaml
               path: sizeimageconstraints.yaml
+            - key: size_reservations.yaml
+              path: size_reservations.yaml
 ---
 apiVersion: batch/v1
 kind: Job
@@ -605,4 +610,16 @@ spec:
     kind: Deployment
     name: metal-api
   targetCPUUtilizationPercentage: {{ .Values.hpa.metal_api.cpu_percentage }}
+{{- end }}
+{{- if .Values.pod_disruption_budget.metal_api.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: metal-api
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.metal_api.min_available }}
+  selector:
+    matchLabels:
+      app: metal-api
 {{- end }}
