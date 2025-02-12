@@ -107,6 +107,7 @@ metal_api:
     tls:
       enabled: false
       secret_name: ""
+      checksum: ""
   grpc:
     tls:
       enabled: false
