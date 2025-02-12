@@ -42,7 +42,7 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65532 # nonroot
-  seccompProfile:                                                                                                                                                                                                        
+  seccompProfile:
     type: RuntimeDefault
 
 resources:
@@ -66,9 +66,9 @@ terminationGracePeriodSeconds: 10
 postgreslet:
   # enableLeaderElection specifies weather leader election should be performed
   enableLeaderElection: false
-  # partitionId specifies which partition this postgreslet is responsable for, postgres resources from other partitions will be ignored
+  # partitionId specifies which partition this postgreslet is responsible for, postgres resources from other partitions will be ignored
   partitionId: sample-partition
-  # tenant specifies which tenant this postgreslet is responsable for, postgres resources from other tenants will be ignored
+  # tenant specifies which tenant this postgreslet is responsible for, postgres resources from other tenants will be ignored
   tenant: sample-tenant
   # metricsAddr defines the listen address of the metrics endpoint
   metricsAddr: ":8080"
@@ -84,14 +84,14 @@ postgreslet:
   customPspName: ""
   # storageClass The name of the storageClass to use for Postgres clusters
   storageClass: "csi-lvm-sc-mirror"
-  # operatorImageRepository 
+  # operatorImageRepository
   operatorImageRepository: "docker.io/ermajn/postgres-operator"
-  # operatorImageTag 
+  # operatorImageTag
   operatorImageTag: "v1.11.0"
-  # postgresImageRepository 
+  # postgresImageRepository
   postgresImageRepository: "docker.io/cybertecpostgresql/spilo"
-  # postgresImageTag 
-  postgresImageTag: "3.3-p2_de-sync-standby-cluster_0.4_2024-11-27"
+  # postgresImageTag
+  postgresImageTag: "3.3-p2_de-sync-standby-cluster_0.4_2025-01-29"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -481,7 +481,7 @@ sidecars:
           - blocked_transactions:
               usage: "COUNTER"
               description: "Number of blocked transactions waiting for a defect sync standby"
-              
+
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
@@ -521,11 +521,11 @@ sidecars:
                 description: "Total number of rows retrieved or affected by the statement"
     enableStatementsQuery: false
   initDBJob: |
-    do $$ 
-    declare 
+    do $$
+    declare
       monitoring_role_exists bool := false;
-    begin 
-      while monitoring_role_exists != true loop 
+    begin
+      while monitoring_role_exists != true loop
         raise notice 'Waiting for monitoring user to be created by the operator first...';
         PERFORM pg_sleep(5);
         IF EXISTS (
