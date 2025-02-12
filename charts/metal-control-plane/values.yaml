@@ -198,6 +198,7 @@ ingress:
     enabled: false
 
 auditing:
+  search_backend: ""
   meilisearch:
     enabled: false
     url: ""

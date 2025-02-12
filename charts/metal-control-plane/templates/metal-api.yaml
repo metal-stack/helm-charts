@@ -198,6 +198,8 @@ spec:
 {{- if .Values.auditing.enabled }}
         - name: METAL_API_AUDITING_ENABLED
           value: "true"
+        - name: METAL_API_AUDITING_SEARCH_BACKEND
+          value: {{ .Values.auditing.search_backend }}
 {{- end }}
 {{- if .Values.auditing.meilisearch.enabled }}
         - name: METAL_API_AUDITING_MEILI_URL
