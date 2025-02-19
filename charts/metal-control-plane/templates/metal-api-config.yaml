@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api
+  name: metal-api
+type: Opaque
+stringData:
+  view_key: {{ .Values.metal_api.view_key }}
+  edit_key: {{ .Values.metal_api.edit_key }}
+  admin_key: {{ .Values.metal_api.admin_key }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-grpc
+  name: metal-api-grpc
+data:
+  server_key.pem: {{ .Values.metal_api.grpc.tls.server_key_enc }}
+  server.pem: {{ .Values.metal_api.grpc.tls.server_cert_enc }}
+  ca.pem: {{ .Values.metal_api.grpc.tls.ca_cert_enc }}
+{{- if .Values.metal_api.bmc.superuser.enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-bmc
+  name: metal-api-bmc
+data:
+  superuser.pwd: {{ .Values.metal_api.bmc.superuser.pwd_enc }}
+{{- end }}
+{{- if .Values.metal_api.s3.enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-s3
+  name: metal-api-s3
+type: Opaque
+stringData:
+  s3_address: {{ .Values.metal_api.s3.address }}
+  s3_key: {{ .Values.metal_api.s3.key }}
+  s3_secret: {{ .Values.metal_api.s3.secret }}
+  s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
+{{- end }}
