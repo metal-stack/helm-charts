@@ -198,17 +198,35 @@ spec:
 {{- if .Values.auditing.enabled }}
         - name: METAL_API_AUDITING_ENABLED
           value: "true"
-        - name: METAL_API_AUDITING_URL
-          value: "{{ .Values.auditing.url }}"
-        - name: METAL_API_AUDITING_API_KEY
+        - name: METAL_API_AUDITING_SEARCH_BACKEND
+          value: {{ .Values.auditing.search_backend }}
+{{- end }}
+{{- if .Values.auditing.meilisearch.enabled }}
+        - name: METAL_API_AUDITING_MEILI_URL
+          value: "{{ .Values.auditing.meilisearch.url }}"
+        - name: METAL_API_AUDITING_MEILI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.auditing.existingMasterKeySecret }}"
+              name: "{{ .Values.auditing.meilisearch.existingMasterKeySecret }}"
               key: MEILI_MASTER_KEY
-        - name: METAL_API_AUDITING_INDEX_PREFIX
-          value: "{{ .Values.auditing.index_prefix }}"
-        - name: METAL_API_AUDITING_INDEX_INTERVAL
-          value: "{{ .Values.auditing.index_interval }}"
+        - name: METAL_API_AUDITING_MEILI_INDEX_PREFIX
+          value: "{{ .Values.auditing.meilisearch.index_prefix }}"
+        - name: METAL_API_AUDITING_MEILI_INDEX_INTERVAL
+          value: "{{ .Values.auditing.meilisearch.index_interval }}"
+{{- end }}
+{{- if .Values.auditing.timescaledb.enabled }}
+        - name: METAL_API_AUDITING_TIMESCALEDB_HOST
+          value: "{{ .Values.auditing.timescaledb.host }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_PORT
+          value: "{{ .Values.auditing.timescaledb.port }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_DB
+          value: "{{ .Values.auditing.timescaledb.db }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_USER
+          value: "{{ .Values.auditing.timescaledb.user }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_PASSWORD
+          value: "{{ .Values.auditing.timescaledb.password }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_RETENTION
+          value: "{{ .Values.auditing.timescaledb.retention }}"
 {{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
