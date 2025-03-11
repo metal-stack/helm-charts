@@ -9,6 +9,10 @@ images:
     image: ghcr.io/metal-stack/metal-api
     imagePullPolicy: IfNotPresent
     tag: latest
+  metal_apiserver:
+    image: ghcr.io/metal-stack/metal-apiserver
+    imagePullPolicy: IfNotPresent
+    tag: latest
   masterdata_api:
     image: ghcr.io/metal-stack/masterdata-api
     imagePullPolicy: IfNotPresent
@@ -55,9 +59,21 @@ resources:
     limits:
       memory: "128Mi"
       cpu: "60m"
+  metal_apiserver:
+    requests:
+      memory: "200Mi"
+      cpu: "200m"
+    limits:
+      memory: "2Gi"
+      cpu: "2"
 
 hpa:
   metal_api:
+    enabled: false
+    max: 5
+    min: 3
+    cpu_percentage: 70
+  metal_apiserver:
     enabled: false
     max: 5
     min: 3
@@ -76,9 +92,14 @@ pod_disruption_budget:
   metal_console:
     enabled: false
     min_available: 1
+  metal_apiserver:
+    enabled: false
+    min_available: 2
 
 ports:
   metal_api: 8080
+  metal_apiserver: 8080
+  metal_apiserver_metrics: 2112
   metal_api_grpc: 50051
   metal_api_metrics: 2112
   masterdata_api: 8443
@@ -141,6 +162,36 @@ metal_api:
   minimum_client_version: ""
   release_version: ""
 
+metal_apiserver:
+  replicas: 1
+  log_level: info
+  url:
+  db:
+    addresses: []
+    password:
+  oidc:
+    client_id:
+    client_secret:
+    discovery_url:
+    end_session_url:
+  session_secret:
+  redis:
+    addr:
+    password:
+  admin_subjects: []
+  auditing:
+    enabled: true
+    timescaledb:
+      host: auditing-timescaledb
+      port: 5432
+      db: auditing
+      user: postgres
+      password: "change-me"
+      retention: "14-days"
+  rateLimit:
+    maxRequestsPerMinute: 1000
+    maxUnauthenticatedRequestsPerMinute: 50
+
 ipam:
   replicas: 2
   grpc_server_endpoint: "0.0.0.0:9090"
@@ -192,6 +243,8 @@ metal_console:
       ca_cert_enc: ""
 
 ingress_public_dns:
+v2_ingress_public_dns:
+
 deploy_ingress: true
 ingress:
   annotations: {}

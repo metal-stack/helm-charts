@@ -1,0 +1,144 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metal-apiserver
+  name: metal-apiserver
+spec:
+  replicas: {{ .Values.metal_apiserver.replicas }}
+  selector:
+    matchLabels:
+      app: metal-apiserver
+  template:
+    metadata:
+      labels:
+        app: metal-apiserver
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/metal-apiserver-config.yaml") . | sha256sum }}
+        checksum/masterdata-api-config: {{ include (print $.Template.BasePath "/masterdata-api-config.yaml") . | sha256sum }}
+    spec:
+      restartPolicy: Always
+      # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
+      enableServiceLinks: False
+      containers:
+      - name: apiserver
+        image: {{ .Values.images.metal_apiserver.image }}:{{ .Values.images.metal_apiserver.tag }}
+        imagePullPolicy: {{ .Values.images.metal_apiserver.imagePullPolicy }}
+        ports:
+        - containerPort: 8080
+        - containerPort: 2112
+        # TODO: implement
+        # readinessProbe:
+        #   httpGet:
+        #     path: {{ .Values.metal_apiserver.base_path }}v1/health
+        #     port: 8080
+        #   initialDelaySeconds: 15
+        #   successThreshold: 1
+        #   timeoutSeconds: 10
+        env:
+          - name: SESSION_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: session_secret
+                name: metal-apiserver
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: redis_password
+                name: metal-apiserver
+          - name: OIDC_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: oidc_client_id
+                name: metal-apiserver
+          - name: OIDC_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: oidc_client_secret
+                name: metal-apiserver
+          - name: MASTERDATA_API_HMAC
+            valueFrom:
+              secretKeyRef:
+                key: masterdata_api_hmac
+                name: metal-apiserver
+        args:
+          - serve
+          - --log-level={{ .Values.metal_apiserver.log_level }}
+          - --http-server-endpoint=0.0.0.0:8080
+          - --server-http-url={{ .Values.metal_apiserver.url }}
+          - --masterdata-api-hostname=masterdata-api
+          - --masterdata-api-port={{ .Values.ports.masterdata_api }}
+          - --redis-addr={{ .Values.metal_apiserver.redis.addr }}
+          - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
+          - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.enabled }}true{{ else }}false{{end}}
+          - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
+          - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
+          - --auditing-timescaledb-db={{ .Values.metal_apiserver.auditing.timescaledb.database }}
+          - --auditing-timescaledb-user={{ .Values.metal_apiserver.auditing.timescaledb.user }}
+          - --auditing-timescaledb-password={{ .Values.metal_apiserver.auditing.timescaledb.password }}
+          - --auditing-timescaledb-retention={{ .Values.metal_apiserver.auditing.timescaledb.retention }}
+          - --rethinkdb-addresses={{ join "," .Values.metal_apiserver.db.addresses }}
+          - --rethinkdb-password={{ .Values.metal_apiserver.db.password }}
+          - --max-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxRequestsPerMinute }}
+          - --max-unauthenticated-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxUnauthenticatedRequestsPerMinute }}
+          - --oidc-discovery-url={{ .Values.metal_apiserver.oidc.discovery_url }}
+          - --oidc-end-session-url={{ .Values.metal_apiserver.oidc.end_session_url }}
+{{- if .Values.set_resource_limits }}
+        resources:
+{{ toYaml .Values.resources.metal_apiserver | indent 10 }}
+{{- end }}
+        volumeMounts:
+        - name: masterdata-api-tls
+          mountPath: /certs/
+      volumes:
+        - name: masterdata-api-tls
+          secret:
+            secretName: masterdata-api-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metal-apiserver
+  name: metal-apiserver
+spec:
+  ports:
+  - name: "{{ .Values.ports.metal_apiserver }}"
+    port: {{ .Values.ports.metal_apiserver }}
+    targetPort: 8080
+  - name: "{{ .Values.ports.metal_apiserver_metrics }}"
+    port: {{ .Values.ports.metal_apiserver_metrics }}
+    targetPort: 2112
+  selector:
+    app: metal-apiserver
+
+{{- if .Values.hpa.metal_apiserver.enabled }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  name: metal-apiserver
+spec:
+  maxReplicas: {{ .Values.hpa.metal_apiserver.max }}
+  minReplicas: {{ .Values.hpa.metal_apiserver.min }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: metal-apiserver
+  targetCPUUtilizationPercentage: {{ .Values.hpa.metal_apiserver.cpu_percentage }}
+{{- end }}
+
+{{- if .Values.pod_disruption_budget.metal_apiserver.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: metal-apiserver
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.metal_apiserver.min_available }}
+  selector:
+    matchLabels:
+      app: metal-apiserver
+{{- end }}

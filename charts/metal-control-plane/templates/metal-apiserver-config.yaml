@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-apiserver
+  name: metal-apiserver
+type: Opaque
+stringData:
+  oidc_client_id: {{ .Values.metal_apiserver.oidc.client_id }}
+  oidc_client_secret: {{ .Values.metal_apiserver.oidc.client_secret }}
+  masterdata_api_hmac: {{ .Values.masterdata_api.hmac }}
+  redis_password: {{ .Values.metal_apiserver.redis.password }}
+  session_secret: {{ .Values.metal_apiserver.session_secret }}
