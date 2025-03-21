@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-02-03T11:10:34.883256545Z"
+    created: "2025-03-21T14:32:27.784835375Z"
     description: local persistend storage for lvm
-    digest: f805bd6e707226c0320a6b5759d6c66b77f82cecce27f4493bf37a72a1abf3e4
+    digest: 605ed5ad65da981ee0ffaf4ab01e2a8bc1b8cb32e9dc32074b588d3b01cc9fe1
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,7 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-02-03T11:10:34.884240668Z"
+    created: "2025-03-21T14:32:27.78745959Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: ce66538916b6f55f542e0e2db8ce9da4123a5576d04d6388cc3b95ff33310dba
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/fix-statements-distinct/metal-control-plane-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2025-03-21T14:32:27.786590472Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 721d817aea259ffc8bcbb3f953039bdd8e6e8c82ba6c964ba28d8d70600e48ba
     name: metal-control-plane
@@ -29,8 +38,18 @@ entries:
     version: 0.4.7
   postgreslet:
   - apiVersion: v2
+    appVersion: v0.18.0
+    created: "2025-03-21T14:32:27.790115695Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: 3c56b3aac7b4e2f1779a5449d72c5bd518fcb8268ac7fca3c5c8d3ada211c54a
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/fix-statements-distinct/postgreslet-0.16.3.tgz
+    version: 0.16.3
+  - apiVersion: v2
     appVersion: v0.17.1
-    created: "2025-02-03T11:10:34.88583623Z"
+    created: "2025-03-21T14:32:27.788682757Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: e1bf3cfe417ace92a0cf8178564ccbc9a40c3f547468c43badf48a172566aa84
     name: postgreslet
@@ -38,4 +57,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/fix-statements-distinct/postgreslet-0.16.2.tgz
     version: 0.16.2
-generated: "2025-02-03T11:10:34.882386053Z"
+generated: "2025-03-21T14:32:27.784227414Z"
