@@ -1,53 +1,4 @@
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    app: metal-api
-  name: metal-api
-type: Opaque
-stringData:
-  view_key: {{ .Values.metal_api.view_key }}
-  edit_key: {{ .Values.metal_api.edit_key }}
-  admin_key: {{ .Values.metal_api.admin_key }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    app: metal-api-grpc
-  name: metal-api-grpc
-data:
-  server_key.pem: {{ .Values.metal_api.grpc.tls.server_key_enc }}
-  server.pem: {{ .Values.metal_api.grpc.tls.server_cert_enc }}
-  ca.pem: {{ .Values.metal_api.grpc.tls.ca_cert_enc }}
-{{- if .Values.metal_api.bmc.superuser.enabled }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    app: metal-api-bmc
-  name: metal-api-bmc
-data:
-  superuser.pwd: {{ .Values.metal_api.bmc.superuser.pwd_enc }}
-{{- end }}
-{{- if .Values.metal_api.s3.enabled }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  labels:
-    app: metal-api-s3
-  name: metal-api-s3
-type: Opaque
-stringData:
-  s3_address: {{ .Values.metal_api.s3.address }}
-  s3_key: {{ .Values.metal_api.s3.key }}
-  s3_secret: {{ .Values.metal_api.s3.secret }}
-  s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
-{{- end }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,6 +14,12 @@ spec:
     metadata:
       labels:
         app: metal-api
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/metal-api-config.yaml") . | sha256sum }}
+        checksum/masterdata-api-config: {{ include (print $.Template.BasePath "/masterdata-api-config.yaml") . | sha256sum }}
+{{- if .Values.metal_api.nsq.tls.enabled }}
+        checksum/nsqd-tls-config: {{ .Values.metal_api.nsq.tls.checksum }}
+{{- end }}
     spec:
       restartPolicy: Always
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
@@ -198,17 +155,35 @@ spec:
 {{- if .Values.auditing.enabled }}
         - name: METAL_API_AUDITING_ENABLED
           value: "true"
-        - name: METAL_API_AUDITING_URL
-          value: "{{ .Values.auditing.url }}"
-        - name: METAL_API_AUDITING_API_KEY
+        - name: METAL_API_AUDITING_SEARCH_BACKEND
+          value: {{ .Values.auditing.search_backend }}
+{{- end }}
+{{- if .Values.auditing.meilisearch.enabled }}
+        - name: METAL_API_AUDITING_MEILI_URL
+          value: "{{ .Values.auditing.meilisearch.url }}"
+        - name: METAL_API_AUDITING_MEILI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.auditing.existingMasterKeySecret }}"
+              name: "{{ .Values.auditing.meilisearch.existingMasterKeySecret }}"
               key: MEILI_MASTER_KEY
-        - name: METAL_API_AUDITING_INDEX_PREFIX
-          value: "{{ .Values.auditing.index_prefix }}"
-        - name: METAL_API_AUDITING_INDEX_INTERVAL
-          value: "{{ .Values.auditing.index_interval }}"
+        - name: METAL_API_AUDITING_MEILI_INDEX_PREFIX
+          value: "{{ .Values.auditing.meilisearch.index_prefix }}"
+        - name: METAL_API_AUDITING_MEILI_INDEX_INTERVAL
+          value: "{{ .Values.auditing.meilisearch.index_interval }}"
+{{- end }}
+{{- if .Values.auditing.timescaledb.enabled }}
+        - name: METAL_API_AUDITING_TIMESCALEDB_HOST
+          value: "{{ .Values.auditing.timescaledb.host }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_PORT
+          value: "{{ .Values.auditing.timescaledb.port }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_DB
+          value: "{{ .Values.auditing.timescaledb.db }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_USER
+          value: "{{ .Values.auditing.timescaledb.user }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_PASSWORD
+          value: "{{ .Values.auditing.timescaledb.password }}"
+        - name: METAL_API_AUDITING_TIMESCALEDB_RETENTION
+          value: "{{ .Values.auditing.timescaledb.retention }}"
 {{- end }}
 {{- if .Values.set_resource_limits }}
         resources:

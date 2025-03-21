@@ -107,6 +107,7 @@ metal_api:
     tls:
       enabled: false
       secret_name: ""
+      checksum: ""
   grpc:
     tls:
       enabled: false
@@ -198,8 +199,18 @@ ingress:
     enabled: false
 
 auditing:
-  enabled: false
-  url: ""
-  index_prefix: "auditing"
-  index_interval: "@daily"
-  existingMasterKeySecret: "metal-auditing-master-key"
+  search_backend: ""
+  meilisearch:
+    enabled: false
+    url: ""
+    index_prefix: "auditing"
+    index_interval: "@daily"
+    existingMasterKeySecret: "metal-auditing-master-key"
+  timescaledb:
+    enabled: false
+    host: ""
+    port: "5432"
+    db: auditing
+    user: postgres
+    password: ""
+    retention: "14 days"
