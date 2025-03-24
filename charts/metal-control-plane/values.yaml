@@ -200,12 +200,6 @@ ingress:
 
 auditing:
   search_backend: ""
-  meilisearch:
-    enabled: false
-    url: ""
-    index_prefix: "auditing"
-    index_interval: "@daily"
-    existingMasterKeySecret: "metal-auditing-master-key"
   timescaledb:
     enabled: false
     host: ""
