@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-03-11T13:55:38.059433424Z"
+    created: "2025-03-25T08:00:51.848688352Z"
     description: local persistend storage for lvm
-    digest: 582ee773697073a5e92e16a0ee6b5400c7a43e8b19c9e2d93093455c7766ef2b
+    digest: 9ce5fbdac5863cda2682a4f2e4690cfd149363e6e5fe40276531a651e78fe31b
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,17 +20,27 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-03-11T13:55:38.060580594Z"
+    created: "2025-03-25T08:00:51.850789854Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 0e25f9b765810610363f1136b1a859be11a023b491fa169728d48a676e5907db
+    digest: a9ff8df96c892ef67d73f37c3b4faa3f2aa9a05d461ee654cca3d4a498ede52e
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver/metal-control-plane-0.6.0.tgz
     version: 0.6.0
   postgreslet:
   - apiVersion: v2
+    appVersion: v0.18.0
+    created: "2025-03-25T08:00:51.853422702Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: 4966d80d3b0be8940a93eb3df42d99024ed77092acbb6f3b9a4774042f927f16
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver/postgreslet-0.16.3.tgz
+    version: 0.16.3
+  - apiVersion: v2
     appVersion: v0.17.1
-    created: "2025-03-11T13:55:38.062036963Z"
+    created: "2025-03-25T08:00:51.852037484Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 2b717530b032afad6147eafb699d3752ad77a6777088182a8490d02e7ba3eee4
     name: postgreslet
@@ -38,4 +48,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver/postgreslet-0.16.2.tgz
     version: 0.16.2
-generated: "2025-03-11T13:55:38.058794847Z"
+generated: "2025-03-25T08:00:51.84812749Z"
