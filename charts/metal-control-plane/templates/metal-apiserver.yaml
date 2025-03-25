@@ -29,14 +29,14 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 2112
-        # TODO: implement
-        # readinessProbe:
-        #   httpGet:
-        #     path: {{ .Values.metal_apiserver.base_path }}v1/health
-        #     port: 8080
-        #   initialDelaySeconds: 15
-        #   successThreshold: 1
-        #   timeoutSeconds: 10
+        livenessProbe:
+          grpc:
+            port: 8080
+          initialDelaySeconds: 10
+        readinessProbe:
+          grpc:
+            port: 8080
+          initialDelaySeconds: 10
         env:
           - name: SESSION_SECRET
             valueFrom:
