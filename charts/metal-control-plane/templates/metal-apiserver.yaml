@@ -1,3 +1,4 @@
+{{ if .Values.metal_apiserver.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -141,4 +142,6 @@ spec:
   selector:
     matchLabels:
       app: metal-apiserver
+{{- end }}
+
 {{- end }}

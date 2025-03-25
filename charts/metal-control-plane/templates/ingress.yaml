@@ -37,6 +37,7 @@ spec:
             name: "metal-api"
             port:
               number: {{ .Values.ports.metal_api }}
+{{ if .Values.metal_apiserver.enabled }}
   - host: {{ .Values.v2_ingress_public_dns }}
     http:
       paths:
@@ -47,4 +48,5 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
+{{- end }}
 {{- end }}

@@ -163,6 +163,7 @@ metal_api:
   release_version: ""
 
 metal_apiserver:
+  enabled: false
   replicas: 1
   log_level: info
   url:
