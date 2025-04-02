@@ -552,4 +552,4 @@ sidecars:
         memory: "100M"
       limits:
         cpu: "500m"
-        memory: "256M"
+        memory: "500M"
