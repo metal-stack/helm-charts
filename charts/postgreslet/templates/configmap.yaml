@@ -58,6 +58,8 @@ data:
   TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
   ENABLE_FSGROUP_CHANGE_POLICY_WEBHOOK: {{ .Values.postgreslet.enableFsGroupChangePolicyWebhook | quote  }}
+  WAL_G_EXPORTER_IMAGE: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
+  WAL_G_EXPORTER_MEM_LIMIT: "{{ .Values.sidecars.walGExporter.resources.limits.memory }}"
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
