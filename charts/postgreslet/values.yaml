@@ -154,7 +154,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "3.2.10"
+    imageTag: "4.0.0"
     resources:
       requests:
         cpu: "100m"
