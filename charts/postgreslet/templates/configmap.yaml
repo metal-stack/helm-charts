@@ -14,7 +14,7 @@ data:
   ENABLE_STANDBY_LEADER_SELECTOR: {{ .Values.postgreslet.enableStandbyLeaderSelector | quote }}
   ENABLE_SUPERUSER_FOR_DBO: {{ .Values.postgreslet.enableSuperuserforDBO | quote }}
   ENABLE_WALG_ENCRYPTION: {{ .Values.postgreslet.enableWalGEncryption | quote }}
-  ENABLE_WAL_G_EXPORTER: {{ .Values.sidecars.walGExporter.enabled | quote }}
+  ENABLE_WALG_EXPORTER: {{ .Values.sidecars.walGExporter.enabled | quote }}
   ETCD_BACKUP_SECRET_NAME: {{ .Values.postgreslet.etcdBackupSecretName | quote  }}
 {{- if .Values.postgreslet.etcdBackupSidecarImage }}
   ETCD_BACKUP_SIDECAR_IMAGE: {{ .Values.postgreslet.etcdBackupSidecarImage | quote  }}
@@ -58,6 +58,9 @@ data:
   TLS_CLUSTER_ISSUER: {{ .Values.postgreslet.tlsClusterIssuer | quote  }}
   TLS_SUB_DOMAIN: {{ .Values.postgreslet.tlsSubDomain | quote  }}
   ENABLE_FSGROUP_CHANGE_POLICY_WEBHOOK: {{ .Values.postgreslet.enableFsGroupChangePolicyWebhook | quote  }}
+  WALG_EXPORTER_IMAGE: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
+  WALG_EXPORTER_CPU_LIMIT: "{{ .Values.sidecars.walGExporter.resources.limits.cpu }}"
+  WALG_EXPORTER_MEMORY_LIMIT: "{{ .Values.sidecars.walGExporter.resources.limits.memory }}"
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
