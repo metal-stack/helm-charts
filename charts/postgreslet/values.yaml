@@ -91,7 +91,7 @@ postgreslet:
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-16"
   # postgresImageTag
-  postgresImageTag: "3.2_2025-04-14"
+  postgresImageTag: "4.0_2025-04-28"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
