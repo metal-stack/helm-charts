@@ -293,7 +293,11 @@ sidecars:
               description: "Replication lag in bytes"
 
       pg_replication_slots:
-        query: "SELECT slot_name, active::int, pg_wal_lsn_diff(pg_current_wal_insert_lsn(), restart_lsn) AS retained_bytes FROM pg_catalog.pg_replication_slots"
+        query: "SELECT
+          slot_name, active::int,
+          pg_wal_lsn_diff(pg_current_wal_insert_lsn(), restart_lsn) AS retained_bytes
+          FROM pg_catalog.pg_replication_slots
+          LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
           - slot_name:
               usage: "LABEL"
