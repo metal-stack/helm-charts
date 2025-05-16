@@ -482,6 +482,13 @@ sidecars:
               usage: "COUNTER"
               description: "Number of blocked transactions waiting for a defect sync standby"
 
+      pg_stat_wal_receivers:
+        query: "SELECT CASE WHEN pg_is_in_recovery() = true THEN count(*) ELSE 2 END AS count FROM pg_stat_wal_receiver;"
+        metrics:
+          - count:
+              usage: "COUNTER"
+              description: "Number of wal receiving connections to the primary database. 2=Primary (not receiving), 1=OK (connected), 0=Fail (no connection to primary)"
+
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
