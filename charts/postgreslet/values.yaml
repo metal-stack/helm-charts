@@ -483,7 +483,7 @@ sidecars:
           rolcanlogin::int AS rolcanlogin,
           rolreplication::int AS rolreplication,
           rolbypassrls::int AS rolbypassrls
-          FROM pg_roles;
+          FROM pg_roles WHERE rolcanlogin = true;
         metrics:
           - rolname:
               usage: "LABEL"
