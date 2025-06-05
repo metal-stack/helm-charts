@@ -1,3 +1,19 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: masterdata-api-registry-credentials
+  name: masterdata-api-registry-credentials
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,10 +34,19 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: masterdata-api-registry-credentials
+{{- end }}
       containers:
       - name: masterdata-api
         image: {{ .Values.images.masterdata_api.image }}:{{ .Values.images.masterdata_api.tag }}
         imagePullPolicy: {{ .Values.images.masterdata_api.imagePullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         env:
           - name: MASTERDATA_API_CA
             value: /certs/ca.pem

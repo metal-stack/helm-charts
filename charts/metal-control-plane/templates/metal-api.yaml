@@ -1,3 +1,19 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-registry-credentials
+  name: metal-api-registry-credentials
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -21,6 +37,10 @@ spec:
         checksum/nsqd-tls-config: {{ .Values.metal_api.nsq.tls.checksum }}
 {{- end }}
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Always
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
       enableServiceLinks: False
@@ -28,6 +48,11 @@ spec:
       - name: metal-api
         image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
         imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         ports:
         - containerPort: 8080
         - containerPort: 50051
@@ -243,7 +268,7 @@ metadata:
     job: metal-api-initdb
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -252,12 +277,28 @@ spec:
       labels:
         job: metal-api-initdb
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       enableServiceLinks: False
       containers:
       - name: initdb
         image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
         imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         command: ["/metal-api"]
         args: ["initdb"]
         env:
@@ -300,7 +341,7 @@ metadata:
     job: metal-api-create-masterdata
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-weight": "2"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -309,11 +350,28 @@ spec:
       labels:
         job: metal-api-create-masterdata
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: metalctl
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         env:
         - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
@@ -342,6 +400,20 @@ spec:
       - name: wait-for-api
         image: {{ .Values.images.metalctl.image }}:{{ .Values.images.metalctl.tag }}
         imagePullPolicy: {{ .Values.images.metalctl.imagePullPolicy }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         env:
         - name: METALCTL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
@@ -386,7 +458,7 @@ metadata:
     job: metal-api-migrate-db
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -395,11 +467,27 @@ spec:
       labels:
         job: metal-api-migrate-db
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: migration
         image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
         imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         command:
         - /metal-api
         - migrate
@@ -427,11 +515,27 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-liveliness
             image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
             imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            resources:
+              requests:
+                memory: "128Mi"
+                cpu: "100m"
+              limits:
+                memory: "256Mi"
+                cpu: "200m"
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
             command:
             - /metal-api
             - machine-liveliness
@@ -460,11 +564,27 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: metal-api
             image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
             imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            resources:
+              requests:
+                memory: "128Mi"
+                cpu: "100m"
+              limits:
+                memory: "256Mi"
+                cpu: "200m"
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
             command:
             - /metal-api
             - machines-vpn-connected
@@ -499,11 +619,27 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-resurrection
             image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
             imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            resources:
+              requests:
+                memory: "128Mi"
+                cpu: "100m"
+              limits:
+                memory: "256Mi"
+                cpu: "200m"
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
             command:
             - /metal-api
             - resurrect-machines
