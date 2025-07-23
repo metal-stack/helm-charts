@@ -175,9 +175,15 @@ sidecars:
             Skip_Long_Lines on
         [INPUT]
             Name tail
-            Path /home/postgres/pgdata/pgroot/pg_log/*.log
+            Path /home/postgres/pgdata/pgroot/pg_log/postgresql-*.log
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.log.pos
             Tag  psqllog
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
+        [INPUT]
+            Name tail
+            Path /home/postgres/pgdata/pgroot/pg_log/postgres_backup.log
+            Tag  backuplog
             Buffer_Max_Size 48k
             Skip_Long_Lines on
         [OUTPUT]
