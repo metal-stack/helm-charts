@@ -475,6 +475,72 @@ sidecars:
           - status:
               usage: "GAUGE"
               description: "Result of nominal-actual-comparision: 1=OK, 0=Fail (sync standbys are missing)"
+    
+      pg_roles:
+        query: |
+            SELECT
+                rl.rolname,
+                rl.rolsuper::int AS superuser,
+                rl.rolinherit::int AS inherit,
+                rl.rolcreaterole::int AS createrole,
+                rl.rolcreatedb::int AS createdb,
+                rl.rolreplication::int AS replication,
+                rl.rolbypassrls::int AS bypassrls,
+                MAX(st.state_change) AS active_since,
+                COUNT(st.state_change) AS active_sessions,
+                rl.oid as user
+            FROM
+                pg_roles AS rl
+            LEFT JOIN
+                pg_stat_activity AS st
+                ON rl.rolname = st.usename
+            WHERE
+                rl.rolcanlogin = true
+            AND    
+                rl.rolname NOT IN ('standby','monitoring','postgres')
+            AND
+                rl.rolname NOT LIKE '%prepdb01_%user'
+            GROUP BY
+                rl.rolname,
+                rl.rolsuper,
+                rl.rolinherit,
+                rl.rolcreaterole,
+                rl.rolcreatedb,
+                rl.rolreplication,
+                rl.rolbypassrls,
+                rl.oid
+            LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END);    
+        metrics:
+          - rolname:
+              usage: "LABEL"
+              description: "Name of the postgres role"
+          - superuser:
+              usage: "LABEL"
+              description: "User has superuser permissions"
+          - inherit:
+              usage: "LABEL"
+              description: "User inherits role permissions"
+          - createrole:
+              usage: "LABEL"
+              description: "User has permission to create roles"
+          - createdb:
+              usage: "LABEL"
+              description: "User has permission to create databases"
+          - replication:
+              usage: "LABEL"
+              description: "User has replication permissions"
+          - bypassrls:
+              usage: "LABEL"
+              description: "User has permission to bypass RLS rules"
+          - active_since:
+              usage: "LABEL"
+              description: "User is active since this timestamp"
+          - active_sessions:
+              usage: "GAUGE"
+              description: "Active sessions of user"
+          - user:
+              usage: "GAUGE"
+              description: "User ID"
 
       pg_replication_blocked_transactions:
         query: "SELECT COUNT(*) AS blocked_transactions
