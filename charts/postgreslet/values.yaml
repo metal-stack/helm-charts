@@ -485,7 +485,7 @@ sidecars:
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
-        query: "SELECT
+        query: "SELECT distinct
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
                     pg_stat_statements.queryid,
