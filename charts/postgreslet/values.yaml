@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.20"
+  tag: "v0.21.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -146,6 +146,10 @@ postgreslet:
   tlsSubDomain: ""
   # enableFsGroupChangePolicyWebhook when enabled, deploys a webhook that adds securityContext.fsGroupChangePolicy=OnRootMismatch to the Spilo StatefulSet when the securityContext.fsGroup field is set
   enableFsGroupChangePolicyWebhook: true
+  # podAntiaffinityPreferredDuringScheduling when anti affinity is enabled, switch between required and preferred. The default is false which means it is required rather than preferred
+  podAntiaffinityPreferredDuringScheduling: false
+  # podAntiaffinityTopologyKey when anti affinity is enabled, overrides the topology key for anti affinity
+  podAntiaffinityTopologyKey: ""
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
