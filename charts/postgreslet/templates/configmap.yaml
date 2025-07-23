@@ -61,6 +61,8 @@ data:
   WALG_EXPORTER_IMAGE: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
   WALG_EXPORTER_CPU_LIMIT: "{{ .Values.sidecars.walGExporter.resources.limits.cpu }}"
   WALG_EXPORTER_MEMORY_LIMIT: "{{ .Values.sidecars.walGExporter.resources.limits.memory }}"
+  POD_ANTIAFFINITY_PREFERRED_DURING_SCHEDULING: {{ .Values.postgreslet.podAntiaffinityPreferredDuringScheduling | quote }}
+  POD_ANTIAFFINITY_TOPOLOGY_KEY: {{ .Values.postgreslet.podAntiaffinityTopologyKey | quote }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
