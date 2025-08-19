@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "valkey.fullname" . }}
+  labels:
+    {{- include "valkey.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: Parallel
+  serviceName: {{ include "valkey.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "valkey.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "valkey.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      # setup configuration, directories and ensure correct permissions
+      initContainers:
+        - name: init-config
+          image: busybox
+          command: ["sh", "/scripts/init-config.sh"]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/valkey
+              readOnly: true
+            - name: scripts
+              mountPath: /scripts
+            - name: workdir
+              mountPath: /config
+            - name: data
+              mountPath: /data
+          env:
+            - name: REPLICAS
+              value: {{ .Values.replicaCount | quote }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP        
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-c"]
+          args: ["sh /scripts/init-cluster.sh & valkey-server /etc/valkey/valkey.conf"]
+          env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: "metadata.name"
+          - name: REPLICAS
+            value: {{ .Values.replicaCount | quote }}
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace    
+          ports:
+            - name: client
+              containerPort: 6379
+            - name: cluster
+              containerPort: 16379
+          readinessProbe:
+            exec:
+              command:
+              - redis-cli
+              - ping
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: workdir
+              mountPath: /etc/valkey
+            - name: scripts
+              mountPath: /scripts
+            {{- with .Values.volumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- if .Values.prometheusExporter.enabled }}
+        - name: redis-exporter
+          image: oliver006/redis_exporter:latest
+          securityContext:
+            runAsUser: 59000
+            runAsGroup: 59000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: {{ .Values.prometheusExporter.port }}
+              name: metrics
+          env:
+            - name: REDIS_ADDR
+              value: redis://localhost:6379
+            - name: REDIS_EXPORTER_IS_CLUSTER
+              value: "true"
+        {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: valkey
+        - name: scripts
+          configMap:
+            name: valkey
+            items:
+              - key: init-cluster.sh
+                path: init-cluster.sh
+              - key: init-config.sh
+                path: init-config.sh
+            defaultMode: 0755
+        - name: workdir
+          emptyDir: {}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.storage.data.claimSize }}
