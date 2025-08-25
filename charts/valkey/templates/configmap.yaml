@@ -6,24 +6,29 @@ data:
   valkey.conf: |
     protected-mode no
     notify-keyspace-events "KEA$"
+    port 6379
+    appendonly yes
+{{ if .Values.cluster.enabled }}
+    replica-read-only no
     cluster-enabled yes
     cluster-config-file nodes.conf
     cluster-node-timeout 5000
     cluster-allow-reads-when-down yes
     cluster-announce-port 6379
     cluster-announce-bus-port 16379
-    port 6379
     cluster-port 16379
-    appendonly yes
-    replica-read-only no
+{{ end }}
+
   init-config.sh: |
     #!/bin/sh
 
     cp /etc/valkey/valkey.conf /tmp/valkey.conf
-    if [ "${REPLICAS}" -gt "1" ]; then
-      echo "replica-announce-ip ${POD_IP}" >> /tmp/valkey.conf
-      echo "cluster-announce-ip ${POD_IP}" >> /tmp/valkey.conf
-    fi
+    
+{{ if .Values.cluster.enabled }}
+    echo "replica-announce-ip ${POD_IP}" >> /tmp/valkey.conf
+    echo "cluster-announce-ip ${POD_IP}" >> /tmp/valkey.conf
+{{ end }}
+
     cp /tmp/valkey.conf /config/valkey.conf
 
     mkdir -p /data

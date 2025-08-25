@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "valkey.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ include "valkey.replicas" . }}
   podManagementPolicy: Parallel
   serviceName: {{ include "valkey.fullname" . }}
   selector:
@@ -44,7 +44,7 @@ spec:
               mountPath: /data
           env:
             - name: REPLICAS
-              value: {{ .Values.replicaCount | quote }}
+              value: {{ include "valkey.replicas" . | quote }}
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -69,7 +69,7 @@ spec:
               fieldRef:
                 fieldPath: "metadata.name"
           - name: REPLICAS
-            value: {{ .Values.replicaCount | quote }}
+            value: {{ include "valkey.replicas" . | quote }}
           - name: NAMESPACE
             valueFrom:
               fieldRef:
@@ -158,6 +158,9 @@ spec:
         name: data
       spec:
         accessModes: ["ReadWriteOnce"]
+        {{- with .Values.storage.data.storageClass }}
+        storageClass:  {{ .Values.storage.data.storageClass }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.storage.data.claimSize }}

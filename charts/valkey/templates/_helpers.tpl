@@ -60,3 +60,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Determine number of replicas
+*/}}
+{{- define "valkey.replicas" -}}
+{{- if .Values.cluster.enabled }}
+{{- .Values.replicaCount }}
+{{- else }}1
+{{- end }}
+{{- end }}
