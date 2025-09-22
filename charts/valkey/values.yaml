@@ -48,6 +48,9 @@ ports:
   cluster:
     port: 16379
 
+service:
+  type: ClusterIP
+
 podSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000

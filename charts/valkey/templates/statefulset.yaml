@@ -76,9 +76,9 @@ spec:
                 fieldPath: metadata.namespace    
           ports:
             - name: client
-              containerPort: 6379
+              containerPort: {{ .Values.ports.client.port }}
             - name: cluster
-              containerPort: 16379
+              containerPort: {{ .Values.ports.cluster.port }}
           readinessProbe:
             exec:
               command:
@@ -119,7 +119,7 @@ spec:
               name: metrics
           env:
             - name: REDIS_ADDR
-              value: redis://localhost:6379
+              value: redis://localhost:{{ .Values.ports.client.port }}
             - name: REDIS_EXPORTER_IS_CLUSTER
               value: "true"
         {{- end }}
