@@ -82,6 +82,8 @@ resources: {}
 storage:
   data:
     claimSize: 5Gi
+    claimName: valkey-data
+    storageClass:
 
 # Additional volumes on the output Deployment definition.
 volumes: {}

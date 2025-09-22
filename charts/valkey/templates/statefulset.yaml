@@ -40,7 +40,7 @@ spec:
               mountPath: /scripts
             - name: workdir
               mountPath: /config
-            - name: data
+            - name: {{ .Values.storage.data.claimName }}
               mountPath: /data
           env:
             - name: REPLICAS
@@ -91,7 +91,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: data
+            - name: {{ .Values.storage.data.claimName }}
               mountPath: /data
             - name: workdir
               mountPath: /etc/valkey
@@ -155,7 +155,7 @@ spec:
       {{- end }}
   volumeClaimTemplates:
     - metadata:
-        name: data
+        name: {{ .Values.storage.data.claimName }}
       spec:
         accessModes: ["ReadWriteOnce"]
         {{- with .Values.storage.data.storageClass }}
