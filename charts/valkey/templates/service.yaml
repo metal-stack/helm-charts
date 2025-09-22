@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "valkey.fullname" . }}
+  labels:
+    {{- include "valkey.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: client
+      port: {{ .Values.ports.client.port }}
+      targetPort: {{ .Values.ports.client.port }}
+    - name: cluster
+      port: {{ .Values.ports.cluster.port }}
+      targetPort: {{ .Values.ports.cluster.port }}
+    {{- if .Values.prometheusExporter.enable }}
+    - name: metrics
+      port: {{ .Values.prometheusExporter.port }}
+      targetPort: {{ .Values.prometheusExporter.port }}
+    {{- end}}
+  type: {{ .Values.service.type }}
+  {{- if .Values.cluster.enabled }}
+  clusterIP: None
+  {{- end}}
+  selector:
+    {{- include "valkey.selectorLabels" . | nindent 4 }}

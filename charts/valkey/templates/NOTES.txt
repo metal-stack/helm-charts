@@ -1,0 +1,10 @@
+Installing Valkey HelmChart for Metalstack named {{ .Release.Name }}.
+
+{{- if .Values.cluster.enabled }}
+Cluster-mode is enabled with {{ .Values.replicaCount }} total instances.
+
+The current setup has a glitch, that it is required to run `redis-cli --cluster fix <host>:<port>` before the cluster is usable.
+Contributions to fix that are highly appreciated.
+{{- else }}
+Cluster mode is disabled using 1 instance.
+{{- end }}
