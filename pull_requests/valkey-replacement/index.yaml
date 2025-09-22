@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-09-18T13:12:37.893583523Z"
+    created: "2025-09-22T11:38:24.497498906Z"
     description: local persistend storage for lvm
-    digest: eb2854e744b156da0a29bfa96444ac75bdd3ec401f6f4cd9f03156dc4e549e7f
+    digest: aeecc952af3b6b17742105d94bf15565894b9341646a58af640bab876b7f49e4
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-09-18T13:12:37.895499382Z"
+    created: "2025-09-22T11:38:24.498532026Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 25d033cc2f08c0939669c5151ca53f7152034c664b66e418279c8149205af5b9
+    digest: 7da1a8d84bfe5294c3a66164d24d0039999c2a28fb8c17c648652f2e0df2736a
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/valkey-replacement/metal-control-plane-0.6.0.tgz
@@ -30,9 +30,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.21.0
-    created: "2025-09-18T13:12:37.89681922Z"
+    created: "2025-09-22T11:38:24.500038284Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: af627921adff87a17ba2634537cd67ab88c02fe71b26a6a15854ae01d4b8002f
+    digest: 1afd63549a202c66ef3c39af83c438b4ad703651b959d71e4abbd1789364cb26
     name: postgreslet
     type: application
     urls:
@@ -41,12 +41,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2025-09-18T13:12:37.897236873Z"
+    created: "2025-09-22T11:38:24.500475805Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: 32a5c74bf12ae90528cdee555d9a4f97f02074088bffc3d52e7b31422b04fb64
+    digest: d5cffee53cc15f4b08ea9ecdab0b0bae0c5d73b5f39b4d6c7b7cdbd8200f6f53
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/valkey-replacement/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-18T13:12:37.893063947Z"
+generated: "2025-09-22T11:38:24.496085751Z"
