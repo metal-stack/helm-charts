@@ -158,6 +158,8 @@ postgreslet:
   podTopologySpreadConstraintMaxSkew: 1
   # podTopologySpreadConstraintMinDomains changes the minDomains to use in our custom podTopologyConstraint. When set to a value larger than 0, whenUnsatisfiable changes from ScheduleAnyway to DoNotSchedule, effectively switching from a soft to a hard scheduling requirement.
   podTopologySpreadConstraintMinDomains: 0
+  # enableSpiloReadinessProbe Tells to postgres-operator to enable or disable the built-in readinessProbe
+  enableSpiloReadinessProbe: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
