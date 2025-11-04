@@ -569,19 +569,6 @@ sidecars:
               usage: "COUNTER"
               description: "Number of wal receiving connections to the primary database. 2=Primary (not receiving), 1=OK (connected), 0=Fail (no connection to primary)"
 
-      pg_database_extensions:
-        query: "SELECT * FROM collect_all_extensions();"
-        metrics:
-          - database_name:
-              usage: "LABEL"
-              description: "logical database"
-          - extension_name:
-              usage: "LABEL"
-              description: "enabled extension"
-          - count:
-              usage: "GAUGE"
-              description: "extension count"
-
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
