@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "pr-readiness_probe"
+  tag: "v0.23.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,7 +91,7 @@ postgreslet:
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-16"
   # postgresImageTag
-  postgresImageTag: "4.0_2025-09-01"
+  postgresImageTag: "4.0_2025-10-27"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
