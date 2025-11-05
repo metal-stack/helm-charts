@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.21.0"
+  tag: "v0.23.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,7 +91,7 @@ postgreslet:
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-16"
   # postgresImageTag
-  postgresImageTag: "4.0_2025-07-21"
+  postgresImageTag: "4.0_2025-10-27"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -150,6 +150,16 @@ postgreslet:
   podAntiaffinityPreferredDuringScheduling: false
   # podAntiaffinityTopologyKey when anti affinity is enabled, overrides the topology key for anti affinity
   podAntiaffinityTopologyKey: ""
+  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one
+  enablePodTopologySpreadConstraintWebhook: false
+  # podTopologySpreadConstraintTopologyKey changes the topologyKey to use in our custom podTopologyConstraint
+  podTopologySpreadConstraintTopologyKey: "machine.metal-stack.io/rack"
+  # ppodTopologySpreadConstraintMaxSkew changes the maxSkew to use in our custom podTopologyConstraint
+  podTopologySpreadConstraintMaxSkew: 1
+  # podTopologySpreadConstraintMinDomains changes the minDomains to use in our custom podTopologyConstraint. When set to a value larger than 0, whenUnsatisfiable changes from ScheduleAnyway to DoNotSchedule, effectively switching from a soft to a hard scheduling requirement.
+  podTopologySpreadConstraintMinDomains: 0
+  # enableSpiloReadinessProbe Tells to postgres-operator to enable or disable the built-in readinessProbe
+  enableSpiloReadinessProbe: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
