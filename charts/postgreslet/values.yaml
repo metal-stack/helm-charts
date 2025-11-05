@@ -635,6 +635,39 @@ sidecars:
       raise notice 'monitoring user found, continuing with init script';
     end;
     $$;
+
+    CREATE EXTENSION IF NOT EXISTS dblink;
+
+    CREATE OR REPLACE FUNCTION collect_all_extensions()
+    RETURNS TABLE(database_name text, extension_name text, count int) AS $$
+    DECLARE
+        db record;
+        ext record;
+    BEGIN
+        FOR db IN
+            SELECT datname
+            FROM pg_database
+            WHERE datallowconn = true
+              AND datistemplate = false
+        LOOP
+            BEGIN
+                FOR ext IN
+                    SELECT extname
+                    FROM dblink('dbname=' || db.datname, 'SELECT extname FROM pg_extension')
+                    AS t(extname text)
+                LOOP
+                    database_name := db.datname;
+                    extension_name := ext.extname;
+                    count := 1;
+                    RETURN NEXT;
+                END LOOP;
+            EXCEPTION WHEN OTHERS THEN
+                RAISE NOTICE 'Skipping database % due to error: %', db.datname, SQLERRM;
+            END;
+        END LOOP;
+    END;
+    $$ LANGUAGE plpgsql SECURITY DEFINER;
+    
     GRANT pg_monitor to monitoring;
     GRANT pg_read_all_stats TO monitoring;
   walGExporter:
