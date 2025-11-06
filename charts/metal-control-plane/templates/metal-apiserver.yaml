@@ -51,13 +51,13 @@ spec:
           - name: OIDC_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                key: oidc_client_id
-                name: metal-apiserver
+                key: client_id
+                name: {{ .Values.metal_apiserver.oidc.secret_name }}
           - name: OIDC_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                key: oidc_client_secret
-                name: metal-apiserver
+                key: client_secret
+                name: {{ .Values.metal_apiserver.oidc.secret_name }}
           - name: MASTERDATA_API_HMAC
             valueFrom:
               secretKeyRef:
