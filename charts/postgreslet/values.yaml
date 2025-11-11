@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.19.0"
+  tag: "v0.23.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,7 +91,7 @@ postgreslet:
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-16"
   # postgresImageTag
-  postgresImageTag: "4.0_2025-04-28"
+  postgresImageTag: "4.0_2025-10-27"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -146,6 +146,20 @@ postgreslet:
   tlsSubDomain: ""
   # enableFsGroupChangePolicyWebhook when enabled, deploys a webhook that adds securityContext.fsGroupChangePolicy=OnRootMismatch to the Spilo StatefulSet when the securityContext.fsGroup field is set
   enableFsGroupChangePolicyWebhook: true
+  # podAntiaffinityPreferredDuringScheduling when anti affinity is enabled, switch between required and preferred. The default is false which means it is required rather than preferred
+  podAntiaffinityPreferredDuringScheduling: false
+  # podAntiaffinityTopologyKey when anti affinity is enabled, overrides the topology key for anti affinity
+  podAntiaffinityTopologyKey: ""
+  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one
+  enablePodTopologySpreadConstraintWebhook: false
+  # podTopologySpreadConstraintTopologyKey changes the topologyKey to use in our custom podTopologyConstraint
+  podTopologySpreadConstraintTopologyKey: "machine.metal-stack.io/rack"
+  # ppodTopologySpreadConstraintMaxSkew changes the maxSkew to use in our custom podTopologyConstraint
+  podTopologySpreadConstraintMaxSkew: 1
+  # podTopologySpreadConstraintMinDomains changes the minDomains to use in our custom podTopologyConstraint. When set to a value larger than 0, whenUnsatisfiable changes from ScheduleAnyway to DoNotSchedule, effectively switching from a soft to a hard scheduling requirement.
+  podTopologySpreadConstraintMinDomains: 0
+  # enableSpiloReadinessProbe Tells to postgres-operator to enable or disable the built-in readinessProbe
+  enableSpiloReadinessProbe: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -154,7 +168,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "4.0.0"
+    imageTag: "4.0.4"
     resources:
       requests:
         cpu: "100m"
@@ -175,9 +189,15 @@ sidecars:
             Skip_Long_Lines on
         [INPUT]
             Name tail
-            Path /home/postgres/pgdata/pgroot/pg_log/*.log
+            Path /home/postgres/pgdata/pgroot/pg_log/postgresql-*.log
             #DB /home/postgres/pgdata/pgroot/pg_log/postgresql.log.pos
             Tag  psqllog
+            Buffer_Max_Size 48k
+            Skip_Long_Lines on
+        [INPUT]
+            Name tail
+            Path /home/postgres/pgdata/pgroot/pg_log/postgres_backup.log
+            Tag  backuplog
             Buffer_Max_Size 48k
             Skip_Long_Lines on
         [OUTPUT]
@@ -293,7 +313,11 @@ sidecars:
               description: "Replication lag in bytes"
 
       pg_replication_slots:
-        query: "SELECT slot_name, active::int, pg_wal_lsn_diff(pg_current_wal_insert_lsn(), restart_lsn) AS retained_bytes FROM pg_catalog.pg_replication_slots"
+        query: "SELECT
+          slot_name, active::int,
+          pg_wal_lsn_diff(pg_current_wal_insert_lsn(), restart_lsn) AS retained_bytes
+          FROM pg_catalog.pg_replication_slots
+          LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
         metrics:
           - slot_name:
               usage: "LABEL"
@@ -471,6 +495,72 @@ sidecars:
           - status:
               usage: "GAUGE"
               description: "Result of nominal-actual-comparision: 1=OK, 0=Fail (sync standbys are missing)"
+    
+      pg_roles:
+        query: |
+            SELECT
+                rl.rolname,
+                rl.rolsuper::int AS superuser,
+                rl.rolinherit::int AS inherit,
+                rl.rolcreaterole::int AS createrole,
+                rl.rolcreatedb::int AS createdb,
+                rl.rolreplication::int AS replication,
+                rl.rolbypassrls::int AS bypassrls,
+                MAX(st.state_change) AS active_since,
+                COUNT(st.state_change) AS active_sessions,
+                rl.oid as user
+            FROM
+                pg_roles AS rl
+            LEFT JOIN
+                pg_stat_activity AS st
+                ON rl.rolname = st.usename
+            WHERE
+                rl.rolcanlogin = true
+            AND    
+                rl.rolname NOT IN ('standby','monitoring','postgres')
+            AND
+                rl.rolname NOT LIKE '%prepdb01_%user'
+            GROUP BY
+                rl.rolname,
+                rl.rolsuper,
+                rl.rolinherit,
+                rl.rolcreaterole,
+                rl.rolcreatedb,
+                rl.rolreplication,
+                rl.rolbypassrls,
+                rl.oid
+            LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END);    
+        metrics:
+          - rolname:
+              usage: "LABEL"
+              description: "Name of the postgres role"
+          - superuser:
+              usage: "LABEL"
+              description: "User has superuser permissions"
+          - inherit:
+              usage: "LABEL"
+              description: "User inherits role permissions"
+          - createrole:
+              usage: "LABEL"
+              description: "User has permission to create roles"
+          - createdb:
+              usage: "LABEL"
+              description: "User has permission to create databases"
+          - replication:
+              usage: "LABEL"
+              description: "User has replication permissions"
+          - bypassrls:
+              usage: "LABEL"
+              description: "User has permission to bypass RLS rules"
+          - active_since:
+              usage: "LABEL"
+              description: "User is active since this timestamp"
+          - active_sessions:
+              usage: "GAUGE"
+              description: "Active sessions of user"
+          - user:
+              usage: "GAUGE"
+              description: "User ID"
 
       pg_replication_blocked_transactions:
         query: "SELECT COUNT(*) AS blocked_transactions
@@ -482,10 +572,17 @@ sidecars:
               usage: "COUNTER"
               description: "Number of blocked transactions waiting for a defect sync standby"
 
+      pg_stat_wal_receivers:
+        query: "SELECT CASE WHEN pg_is_in_recovery() = true THEN count(*) ELSE 2 END AS count FROM pg_stat_wal_receiver;"
+        metrics:
+          - count:
+              usage: "COUNTER"
+              description: "Number of wal receiving connections to the primary database. 2=Primary (not receiving), 1=OK (connected), 0=Fail (no connection to primary)"
+
     queriesStatements: |+
       pg_stat_statements:
         # user, datname, query, calls, total_exec_time, rows.
-        query: "SELECT
+        query: "SELECT distinct
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
                     pg_stat_statements.queryid,
