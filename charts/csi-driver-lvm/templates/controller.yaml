@@ -180,6 +180,18 @@ spec:
             - -v=5
             - --csi-address=/csi/csi.sock
             - --feature-gates=Topology=true
+            - --enable-capacity
+          env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
           securityContext:
             readOnlyRootFilesystem: true
             privileged: true
