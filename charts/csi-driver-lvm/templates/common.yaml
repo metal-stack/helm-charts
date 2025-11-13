@@ -12,4 +12,3 @@ spec:
   - Ephemeral
   podInfoOnMount: true
   attachRequired: false
-  storageCapacity: true
