@@ -1,4 +1,4 @@
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -34,7 +34,7 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: masterdata-api-registry-credentials
 {{- end }}

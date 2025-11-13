@@ -1,4 +1,4 @@
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -37,7 +37,7 @@ spec:
         checksum/nsqd-tls-config: {{ .Values.metal_api.nsq.tls.checksum }}
 {{- end }}
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: metal-api-registry-credentials
 {{- end }}
@@ -277,7 +277,7 @@ spec:
       labels:
         job: metal-api-initdb
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: metal-api-registry-credentials
 {{- end }}
@@ -350,7 +350,7 @@ spec:
       labels:
         job: metal-api-create-masterdata
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: metal-api-registry-credentials
 {{- end }}
@@ -467,7 +467,7 @@ spec:
       labels:
         job: metal-api-migrate-db
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: metal-api-registry-credentials
 {{- end }}
@@ -515,7 +515,7 @@ spec:
       backoffLimit: 3
       template:
         spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
           imagePullSecrets:
           - name: metal-api-registry-credentials
 {{- end }}
@@ -564,7 +564,7 @@ spec:
       backoffLimit: 3
       template:
         spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
           imagePullSecrets:
           - name: metal-api-registry-credentials
 {{- end }}
@@ -619,7 +619,7 @@ spec:
       backoffLimit: 3
       template:
         spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
           imagePullSecrets:
           - name: metal-api-registry-credentials
 {{- end }}
