@@ -227,7 +227,7 @@ spec:
       - name: csi-driver-lvm
         args:
         - --drivername={{ .Values.lvm.driverName }}
-        - --endpoint=unix:///csi/csi.sock
+        - --endpoint=/csi/csi.sock
         - --hostwritepath={{ .Values.lvm.hostWritePath }}
         - --devices={{ .Values.lvm.devicePattern }}
         - --nodeid=$(KUBE_NODE_NAME)
