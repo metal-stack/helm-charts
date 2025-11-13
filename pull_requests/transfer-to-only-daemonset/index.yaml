@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-11-13T13:54:41.962370361Z"
+    created: "2025-11-13T13:58:15.688567864Z"
     description: local persistend storage for lvm
-    digest: ef00882bd540d247ba8fc96249f7fcf760ef21494eff39903d2e31504310f05f
+    digest: 93ba2492afe1f46dcf62b91a7661d4ade9acb907e57735a0d7cf54cda4745647
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-11-13T13:54:41.964045175Z"
+    created: "2025-11-13T13:58:15.690588593Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 1c05922016f124a356e74a154ecfe16ff1628d32d082a4933a3838a34ba84f23
+    digest: 316506257a28c421601ccd8348ae13c95ed48ba5e6300fef2dad0c814c2a897f
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/transfer-to-only-daemonset/metal-control-plane-0.6.0.tgz
@@ -30,9 +30,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.23.0
-    created: "2025-11-13T13:54:41.965890877Z"
+    created: "2025-11-13T13:58:15.692002722Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 09b8467eb26bbea5e10f761c1f1686b768eaa87ae4f10e090b2322de0360b8c9
+    digest: 0ab05bccdedecd336832d9d17eaa76c308f53101a0532b8817e10e030876ca76
     name: postgreslet
     type: application
     urls:
@@ -41,12 +41,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2025-11-13T13:54:41.966329973Z"
+    created: "2025-11-13T13:58:15.692590345Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: a884341edbbcb99dec86c23de12f59a40e6c4d2d2078962e04fb19416efdbb1c
+    digest: 2c66070b9c85b620ebfbeab4c510f83813147d0b33f55bf3a7cd5dbf5d69b19b
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/transfer-to-only-daemonset/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2025-11-13T13:54:41.961759606Z"
+generated: "2025-11-13T13:58:15.688029974Z"
