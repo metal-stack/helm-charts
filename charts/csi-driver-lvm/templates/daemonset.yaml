@@ -231,9 +231,6 @@ spec:
         - --devices={{ .Values.lvm.devicePattern }}
         - --nodeid=$(KUBE_NODE_NAME)
         - --vgname={{ .Values.lvm.vgName }}
-        - --namespace={{ .Release.Namespace }}
-        - --provisionerimage={{ .Values.provisionerImage.repository }}:{{ .Values.provisionerImage.tag }}
-        - --pullpolicy={{ .Values.provisionerImage.pullPolicy }}
         env:
         - name: KUBE_NODE_NAME
           valueFrom:
