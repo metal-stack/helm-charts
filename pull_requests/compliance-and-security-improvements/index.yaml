@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.6.0
-    created: "2025-11-13T17:28:31.661329632Z"
+    created: "2025-11-13T17:47:44.704867429Z"
     description: local persistend storage for lvm
-    digest: ae2315e065dc1dd97d746e7b03524608a6d6e18e73ae6eaa77665caf1c0baea4
+    digest: 03ce82523332e4d7421adf3f131e3e4d1d29fafbe20873ee349f04b7a63faac2
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2025-11-13T17:28:31.663525917Z"
+    created: "2025-11-13T17:47:44.707293109Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 0ccfaef1d3dc31f4f556ce25a793f1a6152926091b8897613e82683f2ffcdf6b
+    digest: d130e66b00d38e655ca9b3d8238daf38640ca5a70b5ad7cb39c690b45649727d
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/compliance-and-security-improvements/metal-control-plane-0.6.1.tgz
@@ -30,9 +30,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.23.0
-    created: "2025-11-13T17:28:31.665033281Z"
+    created: "2025-11-13T17:47:44.708961429Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 79396dbfb1fd3e4dcc9b9fd7e3922165a4eba296f60c103a6f61e1ffdd7378d2
+    digest: 3040167b601baa600947f72c21bec1c2c5b20699fb61594e8a6a636fcfe3a2a9
     name: postgreslet
     type: application
     urls:
@@ -41,12 +41,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2025-11-13T17:28:31.665447051Z"
+    created: "2025-11-13T17:47:44.709374878Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: 1f3307a9bbf0b63f60282818d64df9e8ecdbcb5594cbed7f7051ecbca3d4ffdb
+    digest: c39e68cb6c00061a9a6071f800de578f39b5f664f83cce8f00c3922166d17859
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/compliance-and-security-improvements/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2025-11-13T17:28:31.66079641Z"
+generated: "2025-11-13T17:47:44.704309011Z"
