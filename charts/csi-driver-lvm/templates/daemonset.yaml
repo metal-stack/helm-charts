@@ -178,6 +178,7 @@ spec:
           - -v=5
           - --csi-address=/csi/csi.sock
           - --feature-gates=Topology=true
+          - --enable-capacity
         securityContext:
           readOnlyRootFilesystem: true
           privileged: true
