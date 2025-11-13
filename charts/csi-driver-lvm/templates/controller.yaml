@@ -51,7 +51,6 @@ rules:
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["get", "list", "watch"]
-    
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -185,7 +184,7 @@ spec:
             - --csi-address=/csi/csi.sock
             - --feature-gates=Topology=true
             - --enable-capacity
-            - --capacity-poll-interval {{ .Values.capacityTracking.pollInterval }}
+            - --capacity-poll-interval={{ .Values.capacityTracking.pollInterval }}
           env:
           - name: NAMESPACE
             valueFrom:
