@@ -263,7 +263,7 @@ auditing:
     password: ""
     retention: "14 days"
 
-metal_registry_auth_enabled:
+metal_registry_auth_enabled: false
 metal_registry_auth:
   auths:
     https://index.docker.io/v1/:
