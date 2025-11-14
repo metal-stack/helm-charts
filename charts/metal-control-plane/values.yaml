@@ -263,6 +263,6 @@ auditing:
     password: ""
     retention: "14 days"
 
-registry_auth_enabled:
-registry_auth:
+metal_registry_auth_enabled:
+metal_registry_auth:
   auths: {}
