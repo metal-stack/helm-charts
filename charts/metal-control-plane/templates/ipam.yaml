@@ -1,4 +1,4 @@
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -12,7 +12,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+  .dockerconfigjson: {{ .Values.registry_auth | toJson | b64enc }}
 {{- end }}
 ---
 apiVersion: apps/v1
@@ -33,7 +33,7 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
     spec:
-{{- if .Values.metal_registry_auth_enabled }}
+{{- if .Values.registry_auth_enabled }}
       imagePullSecrets:
       - name: ipam-registry-credentials
 {{- end }}
