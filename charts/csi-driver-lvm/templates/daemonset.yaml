@@ -183,6 +183,7 @@ spec:
           - --feature-gates=Topology=true
           - --node-deployment
           - --enable-capacity
+          - --strict-topology
         env:
           - name: NODE_NAME
             valueFrom:
