@@ -231,6 +231,7 @@ spec:
         - --devices={{ .Values.lvm.devicePattern }}
         - --nodeid=$(KUBE_NODE_NAME)
         - --vgname={{ .Values.lvm.vgName }}
+        - --log-level={{ .Values.lvm.logLevel }}
         env:
         - name: KUBE_NODE_NAME
           valueFrom:

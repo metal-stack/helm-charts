@@ -11,6 +11,7 @@ lvm:
   vgName: csi-lvm
   driverName: lvm.csi.metal-stack.io
   storageClassStub: csi-driver-lvm
+  logLevel: info
 
 rbac:
   create: true
