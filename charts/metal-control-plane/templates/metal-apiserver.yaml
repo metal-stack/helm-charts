@@ -84,7 +84,9 @@ spec:
           - --max-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxRequestsPerMinute }}
           - --max-unauthenticated-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxUnauthenticatedRequestsPerMinute }}
           - --oidc-discovery-url={{ .Values.metal_apiserver.oidc.discovery_url }}
+{{- if .Values.metal_apiserver.oidc.end_session_url -}}
           - --oidc-end-session-url={{ .Values.metal_apiserver.oidc.end_session_url }}
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_apiserver | indent 10 }}
