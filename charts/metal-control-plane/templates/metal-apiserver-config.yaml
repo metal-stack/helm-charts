@@ -8,7 +8,7 @@ metadata:
   name: metal-apiserver
 type: Opaque
 stringData:
-  oidc_client_id: {{ .Values.metal_apiserver.oidc.client_id }}
+  oidc_client_id: "{{ .Values.metal_apiserver.oidc.client_id }}"
   oidc_client_secret: {{ .Values.metal_apiserver.oidc.client_secret }}
   masterdata_api_hmac: {{ .Values.masterdata_api.hmac }}
   redis_password: {{ .Values.metal_apiserver.redis.password }}
