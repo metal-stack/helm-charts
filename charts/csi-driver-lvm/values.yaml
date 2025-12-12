@@ -11,6 +11,7 @@ lvm:
   vgName: csi-lvm
   driverName: lvm.csi.metal-stack.io
   storageClassStub: csi-driver-lvm
+  logLevel: info
 
 rbac:
   create: true
@@ -21,12 +22,7 @@ compat03x: false
 
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
-  tag: v0.6.0
-  pullPolicy: IfNotPresent
-
-provisionerImage:
-  repository: ghcr.io/metal-stack/csi-driver-lvm-provisioner
-  tag: v0.6.0
+  tag: v0.8.0
   pullPolicy: IfNotPresent
 
 sidecarImages:
