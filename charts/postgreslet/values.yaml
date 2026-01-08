@@ -495,7 +495,7 @@ sidecars:
           - status:
               usage: "GAUGE"
               description: "Result of nominal-actual-comparision: 1=OK, 0=Fail (sync standbys are missing)"
-    
+
       pg_roles:
         query: |
             SELECT
@@ -516,7 +516,7 @@ sidecars:
                 ON rl.rolname = st.usename
             WHERE
                 rl.rolcanlogin = true
-            AND    
+            AND
                 rl.rolname NOT IN ('standby','monitoring','postgres')
             AND
                 rl.rolname NOT LIKE '%prepdb01_%user'
@@ -529,7 +529,7 @@ sidecars:
                 rl.rolreplication,
                 rl.rolbypassrls,
                 rl.oid
-            LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END);    
+            LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END);
         metrics:
           - rolname:
               usage: "LABEL"
