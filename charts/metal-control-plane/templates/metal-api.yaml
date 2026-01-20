@@ -1,3 +1,19 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-registry-credentials
+  name: metal-api-registry-credentials
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -21,6 +37,10 @@ spec:
         checksum/nsqd-tls-config: {{ .Values.metal_api.nsq.tls.checksum }}
 {{- end }}
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Always
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
       enableServiceLinks: False
@@ -243,7 +263,7 @@ metadata:
     job: metal-api-initdb
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -252,6 +272,10 @@ spec:
       labels:
         job: metal-api-initdb
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       enableServiceLinks: False
       containers:
@@ -300,7 +324,7 @@ metadata:
     job: metal-api-create-masterdata
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-weight": "2"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -309,6 +333,10 @@ spec:
       labels:
         job: metal-api-create-masterdata
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: metalctl
@@ -386,7 +414,7 @@ metadata:
     job: metal-api-migrate-db
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
@@ -395,6 +423,10 @@ spec:
       labels:
         job: metal-api-migrate-db
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: migration
@@ -427,6 +459,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-liveliness
@@ -460,6 +496,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: metal-api
@@ -499,6 +539,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-resurrection
