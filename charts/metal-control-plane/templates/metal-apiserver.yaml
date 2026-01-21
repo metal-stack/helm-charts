@@ -87,6 +87,11 @@ spec:
           - --oidc-end-session-url={{ .Values.metal_apiserver.oidc.end_session_url }}
           - --oidc-unique-user-key={{ .Values.metal_apiserver.oidc.unique_user_key }}
           - --oidc-tls-skip-verify={{ .Values.metal_apiserver.oidc.tls_skip_verify }}
+{{- if .Values.metal_apiserver.headscale.enabled }}
+          - --headscale-addr={{ .Values.metal_apiserver.headscale.internal_api_address }}
+          - --headscale-cp-addr={{ .Values.metal_apiserver.headscale.control_plane_address }}
+          - --headscale-api-key={{ .Values.metal_apiserver.headscale.api_key }}
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_apiserver | indent 10 }}
@@ -115,6 +120,70 @@ spec:
     targetPort: 2112
   selector:
     app: metal-apiserver
+
+
+
+{{- if .Values.metal_apiserver.headscale.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-machines-vpn-connected
+  labels:
+    job: metal-apiserver-machines-vpn-connected
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: metal-apiserver
+            image: {{ .Values.images.metal_apiserver.image }}:{{ .Values.images.metal_apiserver.tag }}
+            imagePullPolicy: {{ .Values.images.metal_apiserver.imagePullPolicy }}
+            command:
+            - /server
+            - vpn
+            - connected-machines
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: redis_password
+                name: metal-apiserver
+          - name: MASTERDATA_API_HMAC
+            valueFrom:
+              secretKeyRef:
+                key: masterdata_api_hmac
+                name: metal-apiserver
+        args:
+          - serve
+          - --log-level={{ .Values.metal_apiserver.log_level }}
+          - --masterdata-api-hostname=masterdata-api
+          - --masterdata-api-port={{ .Values.ports.masterdata_api }}
+          - --redis-addr={{ .Values.metal_apiserver.redis.addr }}
+          - --rethinkdb-addresses={{ join "," .Values.metal_apiserver.db.addresses }}
+          - --rethinkdb-password={{ .Values.metal_apiserver.db.password }}
+          - --headscale-addr={{ .Values.metal_apiserver.headscale.internal_api_address }}
+          - --headscale-cp-addr={{ .Values.metal_apiserver.headscale.control_plane_address }}
+          - --headscale-api-key={{ .Values.metal_apiserver.headscale.api_key }}
+{{- if .Values.set_resource_limits }}
+        resources:
+{{ toYaml .Values.resources.metal_apiserver | indent 10 }}
+{{- end }}
+        volumeMounts:
+        - name: masterdata-api-tls
+          mountPath: /certs/
+      volumes:
+        - name: masterdata-api-tls
+          secret:
+            secretName: masterdata-api-tls
+
+{{- end }}
 
 {{- if .Values.hpa.metal_apiserver.enabled }}
 ---
