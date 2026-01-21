@@ -191,6 +191,11 @@ metal_apiserver:
       user: postgres
       password: "change-me"
       retention: "14-days"
+  headscale:
+    enabled: false
+    api_key: ""
+    internal_api_address: ""
+    control_plane_address: ""
   rateLimit:
     maxRequestsPerMinute: 1000
     maxUnauthenticatedRequestsPerMinute: 50
