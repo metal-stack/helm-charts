@@ -172,6 +172,24 @@ spec:
         - name: METAL_API_AUDITING_TIMESCALEDB_RETENTION
           value: "{{ .Values.auditing.timescaledb.retention }}"
 {{- end }}
+{{- if .Values.auditing.splunk.enabled }}
+        - name: METAL_API_AUDITING_SPLUNK_ENDPOINT
+          value: "{{ .Values.auditing.splunk.endpoint }}"
+        - name: METAL_API_AUDITING_SPLUNK_HEC_TOKEN
+          value: "{{ .Values.auditing.splunk.hec }}"
+        - name: METAL_API_AUDITING_SPLUNK_SOURCE
+          value:  "{{ .Values.auditing.splunk.source }}"
+        - name: METAL_API_AUDITING_SPLUNK_SOURCE_TYPE
+          value: "{{ .Values.auditing.splunk.source_type }}"
+        - name: METAL_API_AUDITING_SPLUNK_INDEX
+          value: "{{ .Values.auditing.splunk.index }}"
+        - name: METAL_API_AUDITING_SPLUNK_HOST
+          value: "{{ .Values.auditing.splunk.host }}"
+{{- if .Values.auditing.splunk.ca }}
+        - name: METAL_API_AUDITING_SPLUNK_CA
+          value: "/certs/splunk/ca.pem"
+{{- end }}
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_api | indent 10 }}
@@ -186,6 +204,13 @@ spec:
         - name: grpc
           mountPath: /certs/grpc/
           readOnly: true
+{{- end }}
+{{- if .Values.auditing.splunk.enabled }}
+{{- if .Values.auditing.splunk.ca }}
+        - name: splunk
+          mountPath: /certs/splunk/
+          readOnly: true
+{{- end }}
 {{- end }}
 {{- if .Values.metal_api.bmc.superuser.enabled }}
         - name: bmc
@@ -205,6 +230,13 @@ spec:
       - name: grpc
         secret:
           secretName: metal-api-grpc
+{{- end }}
+{{- if .Values.auditing.splunk.enabled }}
+{{- if .Values.auditing.splunk.ca }}
+      - name: splunk
+        secret:
+          secretName: metal-api-splunk-audit-certs
+{{- end }}
 {{- end }}
 {{- if .Values.metal_api.bmc.superuser.enabled }}
       - name: bmc

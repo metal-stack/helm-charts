@@ -47,3 +47,16 @@ stringData:
   s3_secret: {{ .Values.metal_api.s3.secret }}
   s3_firmware_bucket: {{ .Values.metal_api.s3.firmware_bucket }}
 {{- end }}
+{{- if .Values.auditing.splunk.enabled }}
+{{- if .Values.auditing.splunk.ca }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-splunk-audit-certs
+  name: metal-api-splunk-audit-certs
+data:
+  ca.pem: {{ .Values.auditing.splunk.ca }}
+{{- end }}
+{{- end }}

@@ -264,3 +264,12 @@ auditing:
     user: postgres
     password: ""
     retention: "14 days"
+  splunk:
+    enabled: false
+    endpoint: ""
+    hec: ""
+    source: ""
+    source_type: ""
+    index: ""
+    host: ""
+    ca:
