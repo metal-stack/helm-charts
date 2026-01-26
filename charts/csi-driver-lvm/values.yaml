@@ -23,12 +23,12 @@ evictionEnabled: false
 
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
-  tag: v0.8.1
+  tag: v0.8.2
   pullPolicy: IfNotPresent
 
 evictionControllerImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm-controller
-  tag: v0.8.1
+  tag: v0.8.2
   pullPolicy: IfNotPresent
 
 sidecarImages:
@@ -62,9 +62,9 @@ nodeSelector:
   # so it is not necessary to set a nodeSelector for it
 
   # plugin:
-  # node-role.kubernetes.io/master: ""
-  # Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
-  # in the future
+  #   node-role.kubernetes.io/master: ""
+  #   # Key name may need to be updated to 'node-role.kubernetes.io/control-plane'
+  #   # in the future
 
   # The provisioner has an affinity for nodes with a plugin pod,
   # but since that's a daemonset, we allow more fine-grained node selection
