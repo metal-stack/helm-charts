@@ -1,7 +1,7 @@
 name: csi-driver-lvm
-version: 0.8.1
+version: 0.8.2
 description: local persistend storage for lvm
-appVersion: v0.8.1
+appVersion: v0.8.2
 apiVersion: v1
 keywords:
 - storage
