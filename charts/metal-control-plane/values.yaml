@@ -273,3 +273,7 @@ auditing:
     index: ""
     host: ""
     ca:
+
+metal_registry_auth_enabled:
+metal_registry_auth:
+  auths: {}

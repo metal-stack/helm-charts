@@ -1,3 +1,15 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: masterdata-api-registry-credentials
+  name: masterdata-api-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,6 +30,10 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: '2112'
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: masterdata-api-registry-credentials
+{{- end }}
       containers:
       - name: masterdata-api
         image: {{ .Values.images.masterdata_api.image }}:{{ .Values.images.masterdata_api.tag }}

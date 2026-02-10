@@ -1,4 +1,16 @@
 {{ if .Values.metal_apiserver.enabled }}
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-apiserver-registry-credentials
+  name: metal-apiserver-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,6 +31,10 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/metal-apiserver-config.yaml") . | sha256sum }}
         checksum/masterdata-api-config: {{ include (print $.Template.BasePath "/masterdata-api-config.yaml") . | sha256sum }}
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-apiserver-registry-credentials
+{{- end }}
       restartPolicy: Always
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
       enableServiceLinks: False

@@ -1,3 +1,15 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-api-registry-credentials
+  name: metal-api-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -21,6 +33,10 @@ spec:
         checksum/nsqd-tls-config: {{ .Values.metal_api.nsq.tls.checksum }}
 {{- end }}
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Always
       # it's better to disable the service links as the default args do not work properly otherwise (metal#64)
       enableServiceLinks: False
@@ -284,6 +300,10 @@ spec:
       labels:
         job: metal-api-initdb
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       enableServiceLinks: False
       containers:
@@ -341,6 +361,10 @@ spec:
       labels:
         job: metal-api-create-masterdata
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: metalctl
@@ -427,6 +451,10 @@ spec:
       labels:
         job: metal-api-migrate-db
     spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-api-registry-credentials
+{{- end }}
       restartPolicy: Never
       containers:
       - name: migration
@@ -459,6 +487,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-liveliness
@@ -492,6 +524,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: metal-api
@@ -531,6 +567,10 @@ spec:
       backoffLimit: 3
       template:
         spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-api-registry-credentials
+{{- end }}
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-resurrection
