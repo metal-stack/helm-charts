@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: r.metal-stack.io/postgreslet
   pullPolicy: IfNotPresent
-  tag: "v0.23.0"
+  tag: "v0.26.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -87,11 +87,11 @@ postgreslet:
   # operatorImageRepository
   operatorImageRepository: "ghcr.io/zalando/postgres-operator"
   # operatorImageTag
-  operatorImageTag: "v1.14.0"
+  operatorImageTag: "v1.15.1"
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-16"
   # postgresImageTag
-  postgresImageTag: "4.0_2025-10-27"
+  postgresImageTag: "4.0_2026-01-26"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -160,6 +160,8 @@ postgreslet:
   podTopologySpreadConstraintMinDomains: 0
   # enableSpiloReadinessProbe Tells to postgres-operator to enable or disable the built-in readinessProbe
   enableSpiloReadinessProbe: false
+  # enableKubernetesUseConfigMaps Enables or disables the kubernetes_use_configmaps in the postgres-operator configuration, needed for the migration from Endpoints to ConfigMaps (https://github.com/zalando/postgres-operator/pull/2961)
+  enableKubernetesUseConfigMaps: false
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
@@ -168,7 +170,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "4.0.4"
+    imageTag: "4.2.2"
     resources:
       requests:
         cpu: "100m"

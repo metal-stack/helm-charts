@@ -68,6 +68,7 @@ data:
   POD_TOPOLOGY_SPREAD_CONSTRAINT_MAX_SKEW: {{ .Values.postgreslet.podTopologySpreadConstraintMaxSkew | quote }}
   POD_TOPOLOGY_SPREAD_CONSTRAINT_MIN_DOMAINS: {{ .Values.postgreslet.podTopologySpreadConstraintMinDomains | quote }}
   ENABLE_SPILO_READINESS_PROBE: {{ .Values.postgreslet.enableSpiloReadinessProbe | quote  }}
+  ENABLE_KUBERNETES_USE_CONFIGMAPS: {{ .Values.postgreslet.enableKubernetesUseConfigMaps | quote  }}
 kind: ConfigMap
 metadata:
   name: {{ include "postgreslet.fullname" . }}
