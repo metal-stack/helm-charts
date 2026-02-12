@@ -64,6 +64,8 @@ spec:
               secretKeyRef:
                 key: redis_password
                 name: metal-apiserver
+          - name: REDIS_ADDR
+            value: "{{ .Values.metal_apiserver.redis.addr }}"
           - name: OIDC_CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -79,14 +81,14 @@ spec:
               secretKeyRef:
                 key: masterdata_api_hmac
                 name: metal-apiserver
+          - name: SERVER_HTTP_URL
+            value: "{{ .Values.metal_apiserver.url }}"
         args:
           - serve
           - --log-level={{ .Values.metal_apiserver.log_level }}
           - --http-server-endpoint=0.0.0.0:8080
-          - --server-http-url={{ .Values.metal_apiserver.url }}
           - --masterdata-api-hostname=masterdata-api
           - --masterdata-api-port={{ .Values.ports.masterdata_api }}
-          - --redis-addr={{ .Values.metal_apiserver.redis.addr }}
           - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
