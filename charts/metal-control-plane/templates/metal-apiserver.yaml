@@ -93,7 +93,7 @@ spec:
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
           - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
-          - --auditing-timescaledb-db={{ .Values.metal_apiserver.auditing.timescaledb.database }}
+          - --auditing-timescaledb-db={{ .Values.metal_apiserver.auditing.timescaledb.db }}
           - --auditing-timescaledb-user={{ .Values.metal_apiserver.auditing.timescaledb.user }}
           - --auditing-timescaledb-password={{ .Values.metal_apiserver.auditing.timescaledb.password }}
           - --auditing-timescaledb-retention={{ .Values.metal_apiserver.auditing.timescaledb.retention }}
@@ -105,6 +105,9 @@ spec:
           - --oidc-end-session-url={{ .Values.metal_apiserver.oidc.end_session_url }}
           - --oidc-unique-user-key={{ .Values.metal_apiserver.oidc.unique_user_key }}
           - --oidc-tls-skip-verify={{ .Values.metal_apiserver.oidc.tls_skip_verify }}
+{{- if .Values.metal_apiserver.provider_tenant }}
+          - --ensure-provider-tenant={{ .Values.metal_apiserver.provider_tenant }}
+{{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
 {{ toYaml .Values.resources.metal_apiserver | indent 10 }}
