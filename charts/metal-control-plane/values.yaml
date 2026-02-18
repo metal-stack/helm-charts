@@ -167,6 +167,7 @@ metal_apiserver:
   replicas: 1
   log_level: info
   url:
+  provider_tenant:
   db:
     addresses: []
     password:
