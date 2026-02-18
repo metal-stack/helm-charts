@@ -24,6 +24,9 @@ spec:
   tls:
     - hosts:
       - {{ .Values.ingress_public_dns }}
+{{ if .Values.metal_apiserver.enabled }}
+      - {{ .Values.v2_ingress_public_dns}}
+{{- end }}
       secretName: control-plane-ingress-tls
 {{- end }}
   rules:
