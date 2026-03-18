@@ -86,11 +86,7 @@ spec:
               secretKeyRef:
                 key: rethinkdb_password
                 name: metal-apiserver
-          - name: AUDITING_SPLUNK_HEC_TOKEN
-            valueFrom:
-              secretKeyRef:
-                key: splunk_hec_token
-                name: metal-apiserver
+
           - name: AUDITING_TIMESCALEDB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -112,12 +108,14 @@ spec:
           - --auditing-timescaledb-user={{ .Values.metal_apiserver.auditing.timescaledb.user }}
           - --auditing-timescaledb-retention={{ .Values.metal_apiserver.auditing.timescaledb.retention }}
           - --auditing-splunk-enabled={{ if .Values.metal_apiserver.auditing.splunk.enabled }}true{{ else }}false{{end}}
+{{- if .Values.metal_apiserver.auditing.splunk.enabled }}
           - --auditing-splunk-endpoint={{ .Values.metal_apiserver.auditing.splunk.endpoint }}
           - --auditing-splunk-host={{ .Values.metal_apiserver.auditing.splunk.host }}
           - --auditing-splunk-source={{ .Values.metal_apiserver.auditing.splunk.source }}
           - --auditing-splunk-source-type={{ .Values.metal_apiserver.auditing.splunk.source_type }}
           - --auditing-splunk-index={{ .Values.metal_apiserver.auditing.splunk.index }}
           - --auditing-splunk-ca=/splunk/ca.pem
+{{- end }}
           - --rethinkdb-addresses={{ join "," .Values.metal_apiserver.db.addresses }}
           - --max-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxRequestsPerMinute }}
           - --max-unauthenticated-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxUnauthenticatedRequestsPerMinute }}

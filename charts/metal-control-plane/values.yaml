@@ -195,12 +195,12 @@ metal_apiserver:
       retention: "14-days"
     splunk:
       enabled: false
-      endpoint: ""
-      hec: ""
-      source: ""
-      source_type: ""
-      index: ""
-      host: ""
+      endpoint:
+      hec:
+      source:
+      source_type:
+      index:
+      host:
       ca:
 
   rateLimit:
