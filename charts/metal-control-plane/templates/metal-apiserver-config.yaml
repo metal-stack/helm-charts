@@ -13,4 +13,22 @@ stringData:
   masterdata_api_hmac: {{ .Values.masterdata_api.hmac }}
   redis_password: {{ .Values.metal_apiserver.redis.password }}
   session_secret: {{ .Values.metal_apiserver.session_secret }}
+  rethinkdb_password: {{ .Values.metal_apiserver.db.password }}
+  timescaledb_password: {{ .Values.metal_apiserver.auditing.timescaledb.password }}
+  splunk_hec_token: {{ .Values.metal_apiserver.auditing.splunk.hec }}
+
+{{- if .Values.metal_apiserver.auditing.splunk.enabled }}
+{{- if .Values.metal_apiserver.auditing.splunk.ca }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-apiserver-auditing
+  name: metal-apiserver-auditing
+data:
+  ca.pem: {{ .Values.metal_apiserver.auditing.splunk.ca }}
+{{- end }}
+{{- end }}
+
 {{- end }}

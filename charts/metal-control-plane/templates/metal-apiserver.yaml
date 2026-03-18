@@ -81,6 +81,21 @@ spec:
               secretKeyRef:
                 key: masterdata_api_hmac
                 name: metal-apiserver
+          - name: RETHINKDB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: rethinkdb_password
+                name: metal-apiserver
+          - name: AUDITING_SPLUNK_HEC_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: splunk_hec_token
+                name: metal-apiserver
+          - name: AUDITING_TIMESCALEDB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: timescaledb_password
+                name: metal-apiserver
           - name: SERVER_HTTP_URL
             value: "{{ .Values.metal_apiserver.url }}"
         args:
@@ -90,15 +105,20 @@ spec:
           - --masterdata-api-hostname=masterdata-api
           - --masterdata-api-port={{ .Values.ports.masterdata_api }}
           - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
-          - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.enabled }}true{{ else }}false{{end}}
+          - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
           - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
           - --auditing-timescaledb-db={{ .Values.metal_apiserver.auditing.timescaledb.db }}
           - --auditing-timescaledb-user={{ .Values.metal_apiserver.auditing.timescaledb.user }}
-          - --auditing-timescaledb-password={{ .Values.metal_apiserver.auditing.timescaledb.password }}
           - --auditing-timescaledb-retention={{ .Values.metal_apiserver.auditing.timescaledb.retention }}
+          - --auditing-splunk-enabled={{ if .Values.metal_apiserver.auditing.splunk.enabled }}true{{ else }}false{{end}}
+          - --auditing-splunk-endpoint={{ .Values.metal_apiserver.auditing.splunk.endpoint }}
+          - --auditing-splunk-host={{ .Values.metal_apiserver.auditing.splunk.host }}
+          - --auditing-splunk-source={{ .Values.metal_apiserver.auditing.splunk.source }}
+          - --auditing-splunk-source-type={{ .Values.metal_apiserver.auditing.splunk.source_type }}
+          - --auditing-splunk-index={{ .Values.metal_apiserver.auditing.splunk.index }}
+          - --auditing-splunk-ca=/splunk/ca.pem
           - --rethinkdb-addresses={{ join "," .Values.metal_apiserver.db.addresses }}
-          - --rethinkdb-password={{ .Values.metal_apiserver.db.password }}
           - --max-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxRequestsPerMinute }}
           - --max-unauthenticated-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxUnauthenticatedRequestsPerMinute }}
           - --oidc-discovery-url={{ .Values.metal_apiserver.oidc.discovery_url }}
@@ -115,10 +135,19 @@ spec:
         volumeMounts:
         - name: masterdata-api-tls
           mountPath: /certs/
+{{ .Values.metal_apiserver.auditing.splunk.ca }}
+        - name: metal-apiserver-auditing
+          mountPath: /splunk
+{{- end }}
       volumes:
         - name: masterdata-api-tls
           secret:
             secretName: masterdata-api-tls
+{{ .Values.metal_apiserver.auditing.splunk.ca }}
+        - name: metal-apiserver-auditing
+          secret:
+            secretName: metal-apiserver-auditing
+{{- end }}
 ---
 apiVersion: v1
 kind: Service

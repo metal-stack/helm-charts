@@ -184,14 +184,25 @@ metal_apiserver:
     password:
   admin_subjects: []
   auditing:
-    enabled: true
+    search_backend: timescaledb
     timescaledb:
+      enabled: true
       host: auditing-timescaledb
       port: 5432
       db: auditing
       user: postgres
       password: "change-me"
       retention: "14-days"
+    splunk:
+      enabled: false
+      endpoint: ""
+      hec: ""
+      source: ""
+      source_type: ""
+      index: ""
+      host: ""
+      ca:
+
   rateLimit:
     maxRequestsPerMinute: 1000
     maxUnauthenticatedRequestsPerMinute: 50
