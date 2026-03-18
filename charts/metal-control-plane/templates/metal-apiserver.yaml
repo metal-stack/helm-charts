@@ -135,7 +135,7 @@ spec:
         volumeMounts:
         - name: masterdata-api-tls
           mountPath: /certs/
-{{ .Values.metal_apiserver.auditing.splunk.ca }}
+{{ if .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           mountPath: /splunk
 {{- end }}
@@ -143,7 +143,7 @@ spec:
         - name: masterdata-api-tls
           secret:
             secretName: masterdata-api-tls
-{{ .Values.metal_apiserver.auditing.splunk.ca }}
+{{ if .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           secret:
             secretName: metal-apiserver-auditing
