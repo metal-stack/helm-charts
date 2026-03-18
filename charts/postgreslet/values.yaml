@@ -162,6 +162,8 @@ postgreslet:
   enableSpiloReadinessProbe: false
   # enableKubernetesUseConfigMaps Enables or disables the kubernetes_use_configmaps in the postgres-operator configuration, needed for the migration from Endpoints to ConfigMaps (https://github.com/zalando/postgres-operator/pull/2961)
   enableKubernetesUseConfigMaps: false
+    # spiloCpuRequestsPercentage The percentage of the CPU Requests compared to the CPU Limits, e.g. 50
+  spiloCpuRequestsPercentage: 50
 
 # addRandomLabel adds a random label each time the deployment.yaml is rendered, forcing k8s to update that deployment.
 # In combination with image.PullPolicy=Always, this effetifely forces a reload of the pod, even if the image tag stays the same.
