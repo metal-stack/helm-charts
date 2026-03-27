@@ -1,0 +1,90 @@
+{{- if .Values.deploy_gateway_api }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: traefik
+spec:
+  controllerName: traefik.io/gateway-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: traefik-gateway
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same 
+
+{{- if .Values.ingress.tls.enabled }}
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Passthrough
+        certificateRefs:
+          - name: control-plane-ingress-tls
+            namespace: default
+
+      allowedRoutes:
+        namespaces:
+          from: Same
+{{- end }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-api
+  namespace: default
+spec:
+  parentRefs:
+    - name: traefik-gateway 
+      sectionName: http
+      kind: Gateway
+
+  hostnames:
+    - {{ .Values.ingress_public_dns }}
+
+  rules:
+     - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.metal_api.base_path }} 
+
+       backendRefs:
+        - name: metal-api
+          namespace: default
+          port: {{ .Values.ports.metal_api }}
+{{ if .Values.metal_apiserver.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-apiserver
+  namespace: default
+spec:
+  parentRefs:
+    - name: traefik-gateway 
+      sectionName: http
+      kind: Gateway
+
+  hostnames:
+    - {{ .Values.v2_ingress_public_dns }}
+
+  rules:
+     - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+       backendRefs:
+        - name: metal-apiserver
+          namespace: default
+          port: {{ .Values.ports.metal_apiserver }} 
+{{- end }}
+{{- end }}

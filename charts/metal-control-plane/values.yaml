@@ -260,9 +260,14 @@ metal_console:
 ingress_public_dns:
 v2_ingress_public_dns:
 
-deploy_ingress: true
+deploy_ingress: false
 ingress:
   annotations: {}
+  tls:
+    enabled: false
+
+deploy_gateway_api: true
+gateway_api:
   tls:
     enabled: false
 
