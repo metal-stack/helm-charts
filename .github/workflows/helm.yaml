@@ -72,7 +72,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         linting: off
-        target_dir: ./pull_requests/${{ env.path }}
+        target_dir: ${{ env.path }}
         override_releases: yes
       if: ${{ github.event_name != 'release' }}
 
@@ -118,7 +118,7 @@ jobs:
       uses: appany/helm-oci-chart-releaser@v0.5.0
       with:
         name: ${{ matrix.chart }}
-        repository: ${{ github.event.repository.name }}
+        repository: ${{ github.repository }}
         tag: ${{ env.tag }}
         path: charts/${{ matrix.chart }}
         registry: ${{ env.REGISTRY }}
