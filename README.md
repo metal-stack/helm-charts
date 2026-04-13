@@ -4,6 +4,17 @@ Contains Helm Charts of metal-stack.
 
 The charts can be consumed as follows:
 
+```bash
+helm install <chart-name> oci://ghcr.io/metal-stack/helm-charts/<chart-name> --version <chart-version>
+
+# for pull requests:
+# helm install <chart-name> oci://ghcr.io/metal-stack/helm-charts/<chart-name> --version <chart-version>-pull-request.<pull-request-number>
+# for latest:
+# helm install <chart-name> oci://ghcr.io/metal-stack/helm-charts/<chart-name> --version <chart-version>-master
+```
+
+In addition to that, charts are also provided on https://helm.metal-stack.io. They can be used like this:
+
 1. Add the charts repository to your helm repository index.
 
    ```bash

@@ -1,1 +1,7 @@
 *   @metal-stack/helm-charts-maintainers
+
+# postgreslet
+charts/postgreslet/ @metal-stack/helm-charts-maintainers-postgreslet
+
+# csi-driver-lvm
+charts/csi-driver-lvm/ @metal-stack/helm-charts-maintainers-csi-driver-lvm
