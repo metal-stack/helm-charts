@@ -1,0 +1,117 @@
+name: Helm Chart Lint and Publish
+
+on:
+  pull_request:
+    branches:
+      - master
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - master
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v5
+      with:
+        version: v3.20.1
+
+    - name: Helm Lint
+      run: |
+        for c in $(ls charts); do helm lint charts/${c}; done
+
+    - name: Test chart bump in pull requests
+      run: |
+        for c in $(ls charts); do helm lint charts/${c}; done
+
+        # please see README.md for why this is here
+        function check_version_bump {
+          for changed_file in $(git diff --name-only origin/master HEAD charts); do
+            chart_folder=${changed_file%/*/*}
+            if ! ls ${chart_folder}/Chart.yaml &> /dev/null; then
+              continue
+            elif ! git diff origin/master HEAD ${changed_file%/*/*}/Chart.yaml | grep "version:" > /dev/null; then
+              echo "missing version bump in Chart.yaml"
+              return 1
+            fi
+          done
+        }
+
+        check_version_bump
+      if: ${{ github.event_name == 'pull_request' }}
+
+  publish-gh-pages:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+
+    - name: Make tag
+      run: |
+        [ "${GITHUB_EVENT_NAME}" == 'pull_request' ] && echo "path=./pull_requests/${GITHUB_HEAD_REF##*/}" >> $GITHUB_ENV || true
+        [ "${GITHUB_EVENT_NAME}" == 'push' ] && echo "path=latest" >> $GITHUB_ENV || true
+
+    - name: Publish on helm.metal-stack.io
+      uses: Gerrit91/helm-gh-pages@override-releases
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        linting: off
+        target_dir: ./pull_requests/${{ env.path }}
+        override_releases: yes
+      if: ${{ github.event_name != 'release' }}
+
+    - name: Publish release on helm.metal-stack.io
+      uses: Gerrit91/helm-gh-pages@override-releases
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        linting: off
+      if: ${{ github.event_name == 'release' }}
+
+  publish-oci:
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      matrix:
+        chart:
+          - csi-driver-lvm
+          # - metal-control-plane
+          # - postgreslet
+          # - valkey
+
+    steps:
+    - name: Get
+      id: get_release
+      uses: mikefarah/yq@v4
+      with:
+        cmd: yq '.version' ./charts/${{ matrix.chart }}/Chart.yaml
+
+    - name: Make tag
+      run: |
+        [ "${GITHUB_EVENT_NAME}" == 'pull_request' ] && echo "tag=v${{ steps.get_release.outputs.result }}-pull-request.${{ github.event.number }}" >> $GITHUB_ENV || true
+        [ "${GITHUB_EVENT_NAME}" == 'release' ] && echo "tag=v${{ steps.get_release.outputs.result }}" >> $GITHUB_ENV || true
+        [ "${GITHUB_EVENT_NAME}" == 'push' ] && echo "tag=v${{ steps.get_release.outputs.result }}-${GITHUB_REF##*/}" >> $GITHUB_ENV || true
+
+    # we can replace this with the helm/chart-releaser-action after
+    # https://github.com/helm/chart-releaser-action/issues/107 was resolved
+    - name: Release Helm OCI Artifact
+      uses: appany/helm-oci-chart-releaser@v0.5.0
+      with:
+        name: ${{ matrix.chart }}
+        repository: ${{ github.event.repository.name }}
+        tag: ${{ env.tag }}
+        path: charts/${{ matrix.chart }}
+        registry: ${{ env.REGISTRY }}
+        registry_username: ${{ secrets.DOCKER_REGISTRY_USER }}
+        registry_password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
