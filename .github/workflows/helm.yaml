@@ -90,9 +90,9 @@ jobs:
       matrix:
         chart:
           - csi-driver-lvm
-          # - metal-control-plane
-          # - postgreslet
-          # - valkey
+          - metal-control-plane
+          - postgreslet
+          - valkey
 
     steps:
     - name: Checkout
