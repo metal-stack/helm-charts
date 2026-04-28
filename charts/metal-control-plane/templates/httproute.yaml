@@ -1,0 +1,72 @@
+{{- if .Values.httproute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-api
+  {{- with .Values.httproute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.httproute.parentRefs | indent 4 }}
+  hostnames:
+    - {{ .Values.ingress_public_dns | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.metal_api.base_path | quote }}
+      backendRefs:
+        - name: metal-api
+          port: {{ .Values.ports.metal_api }}
+{{- if .Values.metal_apiserver.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+# Although metal-apiservers serves GRPC traffic we are using a HTTPRoute
+# because we do not require any grpc features
+# https://gateway-api.sigs.k8s.io/api-types/grpcroute/#when-to-use-grpcroute
+kind: HTTPRoute
+metadata:
+  name: metal-apiserver
+  {{- with .Values.httproute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.httproute.parentRefs | indent 4 }}
+  hostnames:
+    - {{ .Values.v2_ingress_public_dns | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: metal-apiserver
+          port: {{ .Values.ports.metal_apiserver }}
+{{- end }}
+{{- if .Values.httproute.httpsRedirect.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-control-plane-https-redirect
+spec:
+  parentRefs:
+{{ toYaml .Values.httproute.httpsRedirect.redirectParentRefs | indent 4 }}
+  hostnames:
+    - {{ .Values.ingress_public_dns | quote }}
+{{- if .Values.metal_apiserver.enabled }}
+    - {{ .Values.v2_ingress_public_dns | quote }}
+{{- end }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+{{- end }}
+{{- end }}
