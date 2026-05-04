@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2026-05-04T13:10:46.21237386Z"
+    created: "2026-05-04T16:03:36.161518413Z"
     description: local persistend storage for lvm
-    digest: 15af2d2eab1ab41c3752c17e688d16cbaccedb81fceb6b822020e6a56902bb1f
+    digest: d50e0219d5f12d13b5aae99eb6015ddfe0cf97bdeccb92804a2f4fbaf1efd09c
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-05-04T13:10:46.214458807Z"
+    created: "2026-05-04T16:03:36.163845724Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 22acaca77a1b11c72cfca18f775e8fb2dc07d3d2c79b077dc92fb955ecef3597
+    digest: 6d8d6ede2e99b06f2990166336ecbab74093acffc0817f9498e17fdae61cc4a4
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/gateway-api/metal-control-plane-0.8.0.tgz
@@ -30,9 +30,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-05-04T13:10:46.215834487Z"
+    created: "2026-05-04T16:03:36.165560983Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 0bddd199bd4e648b8a3077be6f674bcacaf0c78e13476d2f4d7035c9e3d9046c
+    digest: fa2bf99fb5b2ea611b74d8f3845755d20a2bbaac35de29e31b078166c273d260
     name: postgreslet
     type: application
     urls:
@@ -41,12 +41,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-05-04T13:10:46.216377902Z"
+    created: "2026-05-04T16:03:36.165991558Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: f5f96e3f6bb5f09901855237d7bfc1e3d56ea2005a05cc6804384deffe29e208
+    digest: c8f55ed0aacee401c317737829a2601ddc78554e64c50d26266498ffd6d09dea
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/gateway-api/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-04T13:10:46.211825425Z"
+generated: "2026-05-04T16:03:36.160909595Z"
