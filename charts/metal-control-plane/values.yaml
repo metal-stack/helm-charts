@@ -266,6 +266,34 @@ ingress:
   tls:
     enabled: false
 
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  # We serve the metal-api http and metal-apiserver grpc v2 apis over the same gateway section for now
+  # Make sure the parent section is configured to serve ingress_public_dns and v2_ingress_public_dns
+  parentRefs: []
+  #   - name: metal-gateway
+  #     namespace: gateway-system
+  #     sectionName: https
+
+  # When enabled, an additional HTTPRoute is created that redirects
+  # plain HTTP requests to HTTPS. The redirect route must attach to an
+  # HTTP listener via redirectParentRefs.
+  httpsRedirect:
+    enabled: false
+    redirectParentRefs: []
+
+# TCPRoute for metal-api(v1) grpc
+# TODO: discuss tls if we want to move tls termination to Gateway
+tcpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs: []
+  #   - name: metal-gateway
+  #     namespace: gateway-system
+  #     sectionName: metal-api-grpc
+
 auditing:
   search_backend: ""
   timescaledb:
