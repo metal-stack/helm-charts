@@ -284,6 +284,16 @@ httproute:
     enabled: false
     redirectParentRefs: []
 
+# TCPRoute for metal-api(v1) grpc
+# TODO: discuss tls if we want to move tls termination to Gateway
+tcproute:
+  enabled: false
+  annotations: {}
+  parentRefs: []
+  #   - name: metal-gateway
+  #     namespace: gateway-system
+  #     sectionName: metal-api-grpc
+
 auditing:
   search_backend: ""
   timescaledb:
