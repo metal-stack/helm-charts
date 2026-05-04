@@ -24,9 +24,8 @@ spec:
 {{- if .Values.metal_apiserver.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
-# Although metal-apiservers serves GRPC traffic we are using a HTTPRoute
-# because we do not require any grpc features
-# https://gateway-api.sigs.k8s.io/api-types/grpcroute/#when-to-use-grpcroute
+# Although metal-apiservers serves gRPC traffic we are using a HTTPRoute because
+# we use https://connectrpc.com/ to also allow non-gRPC clients in the future
 kind: HTTPRoute
 metadata:
   name: metal-apiserver
