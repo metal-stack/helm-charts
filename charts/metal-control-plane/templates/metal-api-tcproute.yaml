@@ -1,16 +1,16 @@
-{{- if .Values.tcproute.enabled }}
+{{- if .Values.tcpRoute.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
   name: metal-api-grpc
-  {{- with .Values.tcproute.annotations }}
+  {{- with .Values.tcpRoute.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
   {{- end }}
 spec:
   parentRefs:
-{{ toYaml .Values.tcproute.parentRefs | indent 4 }}
+{{ toYaml .Values.tcpRoute.parentRefs | indent 4 }}
   rules:
     - backendRefs:
         - name: metal-api

@@ -267,7 +267,7 @@ ingress:
     enabled: false
 
 
-httproute:
+httpRoute:
   enabled: false
   annotations: {}
   # We serve the metal-api http and metal-apiserver grpc v2 apis over the same gateway section for now
@@ -286,7 +286,7 @@ httproute:
 
 # TCPRoute for metal-api(v1) grpc
 # TODO: discuss tls if we want to move tls termination to Gateway
-tcproute:
+tcpRoute:
   enabled: false
   annotations: {}
   parentRefs: []
