@@ -249,6 +249,13 @@ masterdata_api:
 metal_console:
   enabled: false
   replicas: 3
+  tcpRoute:
+    enabled: false
+    annotations: {}
+    parentRefs: []
+    #   - name: metal-gateway
+    #     namespace: gateway-system
+    #     sectionName: metal-console
   bmc_proxy:
     tls:
       server_key_enc: ""
