@@ -1,0 +1,45 @@
+# Metal_apiserver
+{{- if .Values.metal_apiserver.httpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+# Although metal-apiservers serves gRPC traffic we are using a HTTPRoute because
+# we use https://connectrpc.com/ to also allow non-gRPC clients in the future
+kind: HTTPRoute
+metadata:
+  name: metal-apiserver
+  {{- with .Values.metal_apiserver.httpRoute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_apiserver.httpRoute.parentRefs | indent 4 }}
+  hostnames:
+{{ toYaml .Values.metal_apiserver.httpRoute.hostnames | indent 4 }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: metal-apiserver
+          port: {{ .Values.ports.metal_apiserver }}
+{{- end }}
+{{- if .Values.metal_apiserver.httpRoute.httpsRedirect.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-apiserver-https-redirect
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_apiserver.httpRoute.httpsRedirect.parentRefs | indent 4 }}
+  hostnames:
+{{ toYaml .Values.metal_apiserver.httpRoute.hostnames | indent 4 }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+{{- end }}

@@ -1,0 +1,60 @@
+{{- if .Values.metal_api.httpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-api
+  {{- with .Values.metal_api.httpRoute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_api.httpRoute.parentRefs | indent 4 }}
+  hostnames:
+{{ toYaml .Values.metal_api.httpRoute.hostnames | indent 4 }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ .Values.metal_api.base_path | quote }}
+      backendRefs:
+        - name: metal-api
+          port: {{ .Values.ports.metal_api }}
+{{- end }}
+{{- if .Values.metal_api.httpRoute.httpsRedirect.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: metal-api-https-redirect
+spec:
+  parentRefs:
+{{ toYaml .Values.httpRoute.httpsRedirect.redirectParentRefs | indent 4 }}
+  hostnames:
+{{ toYaml .Values.metal_api.httpRoute.hostnames | indent 4 }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+{{- end }}
+{{- if .Values.metal_api.tcpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: metal-api-grpc
+  {{- with .Values.metal_api.tcpRoute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_api.tcpRoute.parentRefs | indent 4 }}
+  rules:
+    - backendRefs:
+        - name: metal-api
+          port: {{ .Values.ports.metal_api_grpc }}
+{{- end }}
