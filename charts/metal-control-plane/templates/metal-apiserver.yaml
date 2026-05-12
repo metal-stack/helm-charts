@@ -158,6 +158,7 @@ spec:
   - name: "{{ .Values.ports.metal_apiserver }}"
     port: {{ .Values.ports.metal_apiserver }}
     targetPort: 8080
+    appProtocol: kubernetes.io/h2c
   - name: "{{ .Values.ports.metal_apiserver_metrics }}"
     port: {{ .Values.ports.metal_apiserver_metrics }}
     targetPort: 2112
