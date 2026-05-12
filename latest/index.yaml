@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2026-04-14T06:52:52.766909973Z"
+    created: "2026-05-12T14:31:52.513768387Z"
     description: local persistend storage for lvm
-    digest: b1d7c33f93fefdc460031df92d5c814fe036820a1bd8ac3502d04421940876f2
+    digest: fa7f0c54565a07d8af0569a4a8052cba459c3c2ab7cd9729e5308cac7cae6bce
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,7 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-04-14T06:52:52.768478018Z"
+    created: "2026-05-12T14:31:52.516377544Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 1010cd4c2dfb1e607ceb077fb13e72d89277c11ccffb69c9ce334690a220b205
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/latest/metal-control-plane-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2026-05-12T14:31:52.51522822Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 73665cc7a5cf70f77c76d6efbd89aff23888f96cb5b866efdd4ae56a5472f6f7
     name: metal-control-plane
@@ -30,9 +39,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-04-14T06:52:52.769615544Z"
+    created: "2026-05-12T14:31:52.517850183Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: af0ade718c9333c10f03c9a80b1b4bf3a9323ed81b6f849c3d3d3cad0e1ed522
+    digest: bf086b59f306bd25cb58632169f54b5af80b3486526f994b35ca0e78ace85bff
     name: postgreslet
     type: application
     urls:
@@ -41,12 +50,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-04-14T06:52:52.769937882Z"
+    created: "2026-05-12T14:31:52.518249461Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: 00a602a3fb70fff348adb54590529373a85dcd266e903a0f80473a264ef052c2
+    digest: 0fb126e7b879198154136d2a7cb670061a66948dbf2820e759a17c2daab6d368
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/latest/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-14T06:52:52.766418124Z"
+generated: "2026-05-12T14:31:52.512680164Z"
