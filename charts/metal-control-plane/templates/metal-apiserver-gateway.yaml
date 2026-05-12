@@ -24,7 +24,6 @@ spec:
       backendRefs:
         - name: metal-apiserver
           port: {{ .Values.ports.metal_apiserver }}
-{{- end }}
 {{- if .Values.metal_apiserver.httpRoute.httpsRedirect.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -42,4 +41,5 @@ spec:
           requestRedirect:
             scheme: https
             statusCode: 301
+{{- end }}
 {{- end }}
