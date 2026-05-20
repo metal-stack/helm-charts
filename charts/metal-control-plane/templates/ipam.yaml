@@ -75,12 +75,12 @@ spec:
           protocol: TCP
         - containerPort: 9090
         readinessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          grpc:
+            port: 9090
           initialDelaySeconds: 5
         livenessProbe:
-          exec:
-            command: ["/bin/grpc_health_probe", "-addr=:9090"]
+          grpc:
+            port: 9090
           initialDelaySeconds: 10
 ---
 apiVersion: v1
