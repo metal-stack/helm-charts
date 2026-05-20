@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2026-05-12T14:31:52.513768387Z"
+    created: "2026-05-20T06:01:10.034071081Z"
     description: local persistend storage for lvm
-    digest: fa7f0c54565a07d8af0569a4a8052cba459c3c2ab7cd9729e5308cac7cae6bce
+    digest: aa6cdd24b642b6167ed59603894cab7711202ce72fe1564185f502b4ba018b42
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,7 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-05-12T14:31:52.516377544Z"
+    created: "2026-05-20T06:01:10.038206498Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: d9ad8bb77cc214e8a7afdc0476785230bc4c0e36553b60eb37b5cb24a3d7a2e9
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/latest/metal-control-plane-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2026-05-20T06:01:10.037041499Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 1010cd4c2dfb1e607ceb077fb13e72d89277c11ccffb69c9ce334690a220b205
     name: metal-control-plane
@@ -29,7 +38,7 @@ entries:
     version: 0.8.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-05-12T14:31:52.51522822Z"
+    created: "2026-05-20T06:01:10.035873175Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 73665cc7a5cf70f77c76d6efbd89aff23888f96cb5b866efdd4ae56a5472f6f7
     name: metal-control-plane
@@ -39,9 +48,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-05-12T14:31:52.517850183Z"
+    created: "2026-05-20T06:01:10.039700196Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: bf086b59f306bd25cb58632169f54b5af80b3486526f994b35ca0e78ace85bff
+    digest: f2cff672870695beb1c7744866e0818880d45637d1712793e0777d19e27111dc
     name: postgreslet
     type: application
     urls:
@@ -50,12 +59,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-05-12T14:31:52.518249461Z"
+    created: "2026-05-20T06:01:10.040112254Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: 0fb126e7b879198154136d2a7cb670061a66948dbf2820e759a17c2daab6d368
+    digest: a928119267cddccd409315568614ad27ce0b60980020fde79cc0502cac9ad5bb
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/latest/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-12T14:31:52.512680164Z"
+generated: "2026-05-20T06:01:10.033044895Z"
