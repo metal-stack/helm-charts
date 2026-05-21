@@ -23,12 +23,12 @@ evictionEnabled: false
 
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
-  tag: v0.8.2
+  tag: v0.9.0
   pullPolicy: IfNotPresent
 
 evictionControllerImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm-controller
-  tag: v0.8.2
+  tag: v0.9.0
   pullPolicy: IfNotPresent
 
 sidecarImages:
@@ -56,6 +56,27 @@ storageClasses:
     enabled: true
     additionalAnnotations: []
     reclaimPolicy: Delete
+  linearEncrypted:
+    enabled: false
+    additionalAnnotations: []
+    reclaimPolicy: Delete
+    encryptionSecret:
+      name: csi-lvm-encryption-secret
+      namespace: default
+  stripedEncrypted:
+    enabled: false
+    additionalAnnotations: []
+    reclaimPolicy: Delete
+    encryptionSecret:
+      name: csi-lvm-encryption-secret
+      namespace: default
+  mirrorEncrypted:
+    enabled: false
+    additionalAnnotations: []
+    reclaimPolicy: Delete
+    encryptionSecret:
+      name: csi-lvm-encryption-secret
+      namespace: default
 
 nodeSelector:
   # The plugin daemonset will run on all nodes if it has a toleration,
