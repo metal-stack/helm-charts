@@ -37,18 +37,21 @@ spec:
       - name: tenant-apiserver
         image: {{ .Values.images.tenant_apiserver.image }}:{{ .Values.images.tenant_apiserver.tag }}
         imagePullPolicy: {{ .Values.images.tenant_apiserver.imagePullPolicy }}
+        command:
+          - /server
+          - postgres
         env:
           - name: TENANT_APISERVER_GRPC_SERVER_ENDPOINT
             value: "0.0.0.0:8080"
-          - name: tenant_apiserver_DBHOST
+          - name: TENANT_APISERVER_PG_HOST
             value: {{ .Values.tenant_apiserver.db_address }}
-          - name: tenant_apiserver_DBNAME
+          - name: TENANT_APISERVER_PG_DBNAME
             value: {{ .Values.tenant_apiserver.db_name }}
-          - name: tenant_apiserver_DBPASSWORD
+          - name: TENANT_APISERVER_PG_PASSWORD
             value: {{ .Values.tenant_apiserver.db_password }}
-          - name: tenant_apiserver_DBPORT
+          - name: TENANT_APISERVER_PG_PORT
             value: "{{ .Values.tenant_apiserver.db_port }}"
-          - name: tenant_apiserver_DBUSER
+          - name: TENANT_APISERVER_PG_USER
             value: {{ .Values.tenant_apiserver.db_user }}
 {{- if .Values.set_resource_limits }}
         resources:
