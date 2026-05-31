@@ -1,0 +1,98 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: tenant-apiserver-registry-credentials
+  name: tenant-apiserver-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-apiserver
+spec:
+  replicas: {{ .Values.tenant_apiserver.replicas }}
+  selector:
+    matchLabels:
+      app: tenant-apiserver
+  template:
+    metadata:
+      labels:
+        app: tenant-apiserver
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: /metrics
+        prometheus.io/port: '2112'
+    spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: tenant-apiserver-registry-credentials
+{{- end }}
+      containers:
+      - name: tenant-apiserver
+        image: {{ .Values.images.tenant_apiserver.image }}:{{ .Values.images.tenant_apiserver.tag }}
+        imagePullPolicy: {{ .Values.images.tenant_apiserver.imagePullPolicy }}
+        env:
+          - name: TENANT_APISERVER_GRPC_SERVER_ENDPOINT
+            value: "0.0.0.0:8080"
+          - name: tenant_apiserver_DBHOST
+            value: {{ .Values.tenant_apiserver.db_address }}
+          - name: tenant_apiserver_DBNAME
+            value: {{ .Values.tenant_apiserver.db_name }}
+          - name: tenant_apiserver_DBPASSWORD
+            value: {{ .Values.tenant_apiserver.db_password }}
+          - name: tenant_apiserver_DBPORT
+            value: "{{ .Values.tenant_apiserver.db_port }}"
+          - name: tenant_apiserver_DBUSER
+            value: {{ .Values.tenant_apiserver.db_user }}
+{{- if .Values.set_resource_limits }}
+        resources:
+{{ toYaml .Values.resources.tenant_apiserver | indent 10 }}
+{{- end }}
+        ports:
+        - containerPort: 2112
+          protocol: TCP
+        - containerPort: 8080
+        readinessProbe:
+          grpc:
+            port: 8080
+          initialDelaySeconds: 5
+        livenessProbe:
+          grpc:
+            port: 8080
+          initialDelaySeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tenant-apiserver
+  labels:
+    app: tenant-apiserver
+spec:
+  type: ClusterIP
+  ports:
+  - name: "{{ .Values.ports.tenant_apiserver }}"
+    port: {{ .Values.ports.tenant_apiserver }}
+    targetPort: 8080
+  - name: "{{ .Values.ports.tenant_apiserver_metrics }}"
+    port: {{ .Values.ports.tenant_apiserver_metrics }}
+    targetPort: 2112
+  selector:
+    app: tenant-apiserver
+{{- if .Values.pod_disruption_budget.tenant_apiserver.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: tenant-apiserver
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.tenant_apiserver.min_available }}
+  selector:
+    matchLabels:
+      app: tenant-apiserver
+{{- end }}

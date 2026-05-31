@@ -17,6 +17,10 @@ images:
     image: ghcr.io/metal-stack/masterdata-api
     imagePullPolicy: IfNotPresent
     tag: latest
+  tenant_apiserver:
+    image: ghcr.io/metal-stack/tenant-apiserver
+    imagePullPolicy: IfNotPresent
+    tag: main
   ipam:
     image: ghcr.io/metal-stack/go-ipam
     imagePullPolicy: IfNotPresent
@@ -39,6 +43,13 @@ resources:
       memory: "256Mi"
       cpu: "200m"
   masterdata_api:
+    requests:
+      memory: "32Mi"
+      cpu: "50m"
+    limits:
+      memory: "64Mi"
+      cpu: "200m"
+  tenant_apiserver:
     requests:
       memory: "32Mi"
       cpu: "50m"
@@ -89,6 +100,9 @@ pod_disruption_budget:
   masterdata_api:
     enabled: true
     min_available: 1
+  tenant_apiserver:
+    enabled: true
+    min_available: 1
   metal_console:
     enabled: false
     min_available: 1
@@ -104,6 +118,8 @@ ports:
   metal_api_metrics: 2112
   masterdata_api: 8443
   masterdata_api_metrics: 2113
+  tenant_apiserver: 8080
+  tenant_apiserver_metrics: 2113
   metal_console: 10001
   ipam: 9090
   ipam_metrics: 2112
@@ -284,6 +300,17 @@ masterdata_api:
   client_cert: ""
   client_key: ""
   hmac: ""
+
+
+tenant_apiserver:
+  replicas: 2
+  provider_tenant: ""
+  db_address: ""
+  db_port: 5432
+  db_name: ""
+  db_user: ""
+  db_password: ""
+  size: 2Gi
 
 metal_console:
   enabled: false
