@@ -305,7 +305,6 @@ masterdata_api:
 
 tenant_apiserver:
   replicas: 2
-  provider_tenant: ""
   db_address: ""
   db_port: 5432
   db_name: ""
