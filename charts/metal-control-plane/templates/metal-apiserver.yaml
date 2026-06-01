@@ -29,7 +29,6 @@ spec:
         app: metal-apiserver
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/metal-apiserver-config.yaml") . | sha256sum }}
-        checksum/masterdata-api-config: {{ include (print $.Template.BasePath "/masterdata-api-config.yaml") . | sha256sum }}
     spec:
 {{- if .Values.metal_registry_auth_enabled }}
       imagePullSecrets:
@@ -76,11 +75,6 @@ spec:
               secretKeyRef:
                 key: oidc_client_secret
                 name: metal-apiserver
-          - name: MASTERDATA_API_HMAC
-            valueFrom:
-              secretKeyRef:
-                key: masterdata_api_hmac
-                name: metal-apiserver
           - name: RETHINKDB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -98,8 +92,7 @@ spec:
           - serve
           - --log-level={{ .Values.metal_apiserver.log_level }}
           - --http-server-endpoint=0.0.0.0:8080
-          - --masterdata-api-hostname=masterdata-api
-          - --masterdata-api-port={{ .Values.ports.masterdata_api }}
+          - --tenant-apiserver-baseurl={{ .Values.metal_apiserver.tenant_apiserver_baseurl }}
           - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
@@ -131,16 +124,11 @@ spec:
 {{ toYaml .Values.resources.metal_apiserver | indent 10 }}
 {{- end }}
         volumeMounts:
-        - name: masterdata-api-tls
-          mountPath: /certs/
 {{ if .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           mountPath: /splunk
 {{- end }}
       volumes:
-        - name: masterdata-api-tls
-          secret:
-            secretName: masterdata-api-tls
 {{ if .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           secret:

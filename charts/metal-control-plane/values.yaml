@@ -208,6 +208,7 @@ metal_apiserver:
   log_level: info
   url:
   provider_tenant:
+  tenant_apiserver_baseurl: http://tenant-apiserver:8080
   db:
     addresses: []
     password:
