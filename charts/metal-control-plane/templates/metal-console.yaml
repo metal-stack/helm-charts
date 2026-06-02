@@ -24,6 +24,17 @@ data:
   client-key.pem: {{ .Values.metal_console.bmc_proxy.tls.client_key_enc }}
   client.pem: {{ .Values.metal_console.bmc_proxy.tls.client_cert_enc }}
   ca.pem: {{ .Values.metal_console.bmc_proxy.tls.ca_cert_enc }}
+{{- if .Values.metal_console.token }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-console
+  name: "{{ .Values.metal_console.token_renewal.secret_name }}"
+data:
+  "{{ .Values.metal_console.token_renewal.secret_key }}": "{{ .Values.metal_console.token }}"
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -53,12 +64,22 @@ spec:
         - name: METAL_CONSOLE_PORT
           value: "10001"
         - name: METAL_CONSOLE_METAL_API_URL
-          value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
-        - name: METAL_CONSOLE_HMAC_KEY
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}{{ .Values.metal_apiserver.base_path }}
+        - name: METAL_CONSOLE_TOKEN
           valueFrom:
             secretKeyRef:
-              name: metal-api
-              key: admin_key
+              name: "{{ .Values.metal_console.token_renewal.secret_name }}"
+              key: "{{ .Values.metal_console.token_renewal.secret_key }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_ENABLED
+          value: "{{ .Values.metal_console.token_renewal.enabled }}"
+{{- if .Values.metal_console.token_renewal.enabled }}
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_NAMESPACE
+          value: "{{ .Release.Namespace }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_SECRET_NAME
+          value: "{{ .Values.metal_console.token_renewal.secret_name }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_SECRET_KEY
+          value: "{{ .Values.metal_console.token_renewal.secret_key }}"
+{{- end }}
         - name: ZAP_ENCODING
           value: {{ .Values.zap_encoding }}
         - name: ZAP_LEVEL
@@ -79,7 +100,6 @@ spec:
       - name: bmc-proxy-certs
         secret:
           secretName: bmc-proxy-certs
-status: {}
 ---
 apiVersion: v1
 kind: Service
@@ -123,5 +143,39 @@ spec:
     - backendRefs:
         - name: metal-console
           port: {{ .Values.ports.metal_console }}
+{{- end }}
+{{- if .Values.metal_console.token_renewal.enabled -}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-console-token-renewal
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["{{ .Values.metal_console.token_renewal.secret_name }}"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-console-token-renewal
+  namespace: "{{ .Release.Namespace }}"
+subjects:
+- kind: ServiceAccount
+  name: metal-console
+  namespace: "{{ .Release.Namespace }}"
+roleRef:
+  kind: Role
+  name: metal-console-token-renewal
+  apiGroup: rbac.authorization.k8s.io
 {{- end }}
 {{- end }}
