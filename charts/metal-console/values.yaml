@@ -1,0 +1,57 @@
+---
+set_resource_limits: true
+
+zap_encoding: json
+zap_level: debug
+
+images:
+  metal_console:
+    image: ghcr.io/metal-stack/metal-console
+    imagePullPolicy: IfNotPresent
+    tag: latest
+
+resources:
+  metal_console:
+    requests:
+      memory: "64Mi"
+      cpu: "40m"
+    limits:
+      memory: "128Mi"
+      cpu: "60m"
+
+pod_disruption_budget:
+  metal_console:
+    enabled: false
+    min_available: 1
+
+ports:
+  metal_apiserver: 8080
+  metal_console: 10001
+
+metal_apiserver:
+  base_path: ""
+
+metal_console:
+  enabled: false
+  replicas: 3
+  tcpRoute:
+    enabled: false
+    annotations: {}
+    parentRefs: []
+    #   - name: metal-gateway
+    #     namespace: gateway-system
+    #     sectionName: metal-console
+  bmc_proxy:
+    tls:
+      server_key_enc: ""
+      server_pub_enc: ""
+      client_key_enc: ""
+      client_cert_enc: ""
+      ca_cert_enc: ""
+  token:
+  token_renewal:
+    enabled: false
+    secret_name: metal-console-token
+    secret_key: token
+
+metal_registry_auth_enabled:
