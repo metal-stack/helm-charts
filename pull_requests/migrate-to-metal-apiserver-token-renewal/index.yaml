@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-06-03T13:14:17.299408677Z"
+    created: "2026-06-05T08:45:57.868245236Z"
     description: local persistend storage for lvm
-    digest: c64efe1bf1de9f5be2896bf2dbb6a7fd0d85422c22956e7a896324f5e0f33de2
+    digest: 8add3706b1a16cd7a9692dc8cc79391d6a438d544d600356e1a3f78675872927
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-console:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-03T13:14:17.299779194Z"
+    created: "2026-06-05T08:45:57.868986297Z"
     description: A Helm chart for deploying the metal console in K8s
-    digest: 3789883d9f4562d98f627abb8edd9a30df3d899f93d985162458cdb8e6af7323
+    digest: 382357ead6baf4b7e2c57e83b9500681f0a2fcbe07092e13326d25c2a61fd6f3
     name: metal-console
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/migrate-to-metal-apiserver-token-renewal/metal-console-0.1.0.tgz
@@ -30,7 +30,7 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-03T13:14:17.302458636Z"
+    created: "2026-06-05T08:45:57.871786564Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 0ef557a4b6f3fd239b1b44fce15a992063782b4fc3a4a886090dbef6bd7240fe
     name: metal-control-plane
@@ -39,9 +39,9 @@ entries:
     version: 0.9.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-03T13:14:17.301060427Z"
+    created: "2026-06-05T08:45:57.870550019Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 61659d0f0f1e53552a204cb41250f0e9744df65c82b23543d65ee9f1ed357892
+    digest: 07ae41e7d01333128eeb50b3067aa2cb51229c3047b851cf4cd0b8f2e03f8aea
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/migrate-to-metal-apiserver-token-renewal/metal-control-plane-0.8.3.tgz
@@ -49,9 +49,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-06-03T13:14:17.304241263Z"
+    created: "2026-06-05T08:45:57.873287421Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 2890d5132736d5109ed673953f5c7319826d69f0c3fa08e322993bb66ec7b8c0
+    digest: 89c8ea03b9417065d1071afa1651ba35b1441d1614bc88a157788254d29cc1c8
     name: postgreslet
     type: application
     urls:
@@ -60,12 +60,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-06-03T13:14:17.304656106Z"
+    created: "2026-06-05T08:45:57.873695111Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: d47824e7fda8d4127dfa199804dd015697a15594ad7eb9017e86c69a4719a7a2
+    digest: ee7f85549c9451c78755f4f08e4c4e2c49cdee1afc223d570c5a59170070e8c2
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/migrate-to-metal-apiserver-token-renewal/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-03T13:14:17.2978588Z"
+generated: "2026-06-05T08:45:57.867351861Z"
