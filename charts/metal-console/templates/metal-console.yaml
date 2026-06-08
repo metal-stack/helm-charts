@@ -57,6 +57,7 @@ spec:
 {{- end }}
       restartPolicy: Always
       enableServiceLinks: False
+      serviceAccountName: metal-console
       containers:
       - name: metal-console
         env:
