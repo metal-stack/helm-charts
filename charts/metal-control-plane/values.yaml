@@ -220,6 +220,7 @@ metal_apiserver:
     unique_user_key: email
     tls_skip_verify: true
   session_secret:
+  secure_cookie: true
   redis:
     addr:
     password:
