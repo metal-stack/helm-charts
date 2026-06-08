@@ -1,0 +1,52 @@
+apiVersion: v1
+entries:
+  csi-driver-lvm:
+  - apiVersion: v1
+    appVersion: v0.9.0
+    created: "2026-06-08T10:28:18.19231537Z"
+    description: local persistend storage for lvm
+    digest: 4ae943edc67a03494e277354f4e33d412f03a53a69573b4698389509e9a7952e
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver-secure-cookie/csi-driver-lvm-0.9.0.tgz
+    version: 0.9.0
+  metal-control-plane:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2026-06-08T10:28:18.193642842Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 310251c8ffdce46bc1844dc54d73c9ac49d362b52b74fd2a02559294aa7e09c6
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver-secure-cookie/metal-control-plane-0.8.3.tgz
+    version: 0.8.3
+  postgreslet:
+  - apiVersion: v2
+    appVersion: v0.27.0
+    created: "2026-06-08T10:28:18.195262656Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: c337f2cb58fd8d3c34cb899a7e9bb3945f0e545fb618b6b06f1dcfccd0ec992f
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver-secure-cookie/postgreslet-0.22.0.tgz
+    version: 0.22.0
+  valkey:
+  - apiVersion: v2
+    appVersion: 8.1.3
+    created: "2026-06-08T10:28:18.195782995Z"
+    description: An opinionated valkey cluster setup for metal-stack
+    digest: c599ab08403e981850bf0a66e7159faeb0c2f3d6c9adf3097b66f68c5f672cdd
+    name: valkey
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/metal-apiserver-secure-cookie/valkey-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-06-08T10:28:18.190689973Z"
