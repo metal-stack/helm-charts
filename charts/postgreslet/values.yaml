@@ -570,7 +570,8 @@ sidecars:
         query: "SELECT COUNT(*) AS blocked_transactions
           FROM pg_stat_activity
           WHERE state = 'active'
-          AND wait_event='SyncRep'"
+          AND wait_event='SyncRep'
+          AND now() - state_change > interval '10 minutes'"
         metrics:
           - blocked_transactions:
               usage: "COUNTER"
