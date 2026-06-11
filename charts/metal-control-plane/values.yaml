@@ -329,11 +329,6 @@ metal_console:
       client_key_enc: ""
       client_cert_enc: ""
       ca_cert_enc: ""
-  token:
-  token_renewal:
-    enabled: false
-    secret_name: metal-console-token
-    secret_key: token
 
 ingress_public_dns:
 v2_ingress_public_dns:
