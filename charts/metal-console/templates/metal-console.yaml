@@ -1,0 +1,180 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-console-registry-credentials
+  name: metal-console-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: bmc-proxy-certs
+  name: bmc-proxy-certs
+data:
+  server-key.pem: {{ .Values.metal_console.bmc_proxy.tls.server_key_enc }}
+  server-key.pub: {{ .Values.metal_console.bmc_proxy.tls.server_pub_enc }}
+  client-key.pem: {{ .Values.metal_console.bmc_proxy.tls.client_key_enc }}
+  client.pem: {{ .Values.metal_console.bmc_proxy.tls.client_cert_enc }}
+  ca.pem: {{ .Values.metal_console.bmc_proxy.tls.ca_cert_enc }}
+{{- if .Values.metal_console.token }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: metal-console
+  name: "{{ .Values.metal_console.token_renewal.secret_name }}"
+data:
+  "{{ .Values.metal_console.token_renewal.secret_key }}": "{{ .Values.metal_console.token | b64enc }}"
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metal-console
+  name: metal-console
+spec:
+  replicas: {{ .Values.metal_console.replicas }}
+  selector:
+    matchLabels:
+      app: metal-console
+  template:
+    metadata:
+      labels:
+        app: metal-console
+    spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-console-registry-credentials
+{{- end }}
+      restartPolicy: Always
+      enableServiceLinks: False
+      serviceAccountName: metal-console
+      containers:
+      - name: metal-console
+        env:
+        - name: METAL_CONSOLE_PORT
+          value: "10001"
+        - name: METAL_CONSOLE_METAL_APISERVER_URL
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}{{ .Values.metal_apiserver.base_path }}
+        - name: METAL_CONSOLE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.metal_console.token_renewal.secret_name }}"
+              key: "{{ .Values.metal_console.token_renewal.secret_key }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_ENABLED
+          value: "{{ .Values.metal_console.token_renewal.enabled }}"
+{{- if .Values.metal_console.token_renewal.enabled }}
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_NAMESPACE
+          value: "{{ .Release.Namespace }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_SECRET_NAME
+          value: "{{ .Values.metal_console.token_renewal.secret_name }}"
+        - name: METAL_CONSOLE_TOKEN_RENEWAL_SECRET_KEY
+          value: "{{ .Values.metal_console.token_renewal.secret_key }}"
+{{- end }}
+        - name: ZAP_ENCODING
+          value: {{ .Values.zap_encoding }}
+        - name: ZAP_LEVEL
+          value: {{ .Values.zap_level }}
+        image: {{ .Values.images.metal_console.image }}:{{ .Values.images.metal_console.tag }}
+        imagePullPolicy: {{ .Values.images.metal_console.imagePullPolicy }}
+        volumeMounts:
+          - name: bmc-proxy-certs
+            mountPath: /certs
+            readOnly: true
+        ports:
+        - containerPort: 10001
+{{- if .Values.set_resource_limits }}
+        resources:
+{{ toYaml .Values.resources.metal_console | indent 10 }}
+{{- end }}
+      volumes:
+      - name: bmc-proxy-certs
+        secret:
+          secretName: bmc-proxy-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metal-console
+  name: metal-console
+spec:
+  ports:
+  - name: "{{ .Values.ports.metal_console }}"
+    port: {{ .Values.ports.metal_console }}
+    targetPort: 10001
+  selector:
+    app: metal-console
+{{- if .Values.pod_disruption_budget.metal_console.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: metal-console
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.metal_console.min_available }}
+  selector:
+    matchLabels:
+      app: metal-console
+{{- end }}
+{{- if .Values.metal_console.tcpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: metal-console
+  {{- with .Values.metal_console.tcpRoute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_console.tcpRoute.parentRefs | indent 4 }}
+  rules:
+    - backendRefs:
+        - name: metal-console
+          port: {{ .Values.ports.metal_console }}
+{{- end }}
+{{- if .Values.metal_console.token_renewal.enabled -}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-console
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-console-token-renewal
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["{{ .Values.metal_console.token_renewal.secret_name }}"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-console-token-renewal
+  namespace: "{{ .Release.Namespace }}"
+subjects:
+- kind: ServiceAccount
+  name: metal-console
+  namespace: "{{ .Release.Namespace }}"
+roleRef:
+  kind: Role
+  name: metal-console-token-renewal
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
