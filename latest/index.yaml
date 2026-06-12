@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-06-09T15:17:43.753250453Z"
+    created: "2026-06-12T12:06:39.124062615Z"
     description: local persistend storage for lvm
-    digest: a6d27c9ae536cb534f09ca276ca15f57880a7e7d455f545eadd147f8288d495d
+    digest: 1ee0328493b62d643732bfd3040f737ef6f02d51d02a4449bac4d29c11236c19
     home: https://metal-stack.io
     keywords:
     - storage
@@ -19,7 +19,7 @@ entries:
     version: 0.9.0
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2026-06-09T15:17:43.75270877Z"
+    created: "2026-06-12T12:06:39.12369527Z"
     description: local persistend storage for lvm
     digest: aa6cdd24b642b6167ed59603894cab7711202ce72fe1564185f502b4ba018b42
     home: https://metal-stack.io
@@ -36,16 +36,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-09T15:17:43.759620014Z"
+    created: "2026-06-12T12:06:39.129229297Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: f934b085e3fa81e1664f1bd7db928cffda958d1ad95d60ef748ad666bd890c3e
+    digest: ae416bc536f8c8f3c922e9cf3d1aed35bc1bf6c1ddcfb27686420104a047790b
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/latest/metal-control-plane-0.8.3.tgz
     version: 0.8.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-09T15:17:43.75841407Z"
+    created: "2026-06-12T12:06:39.128326754Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 911e1930527495f5f0d93341b977aa601a22422b237c48d12ee5e3817248d4bf
     name: metal-control-plane
@@ -54,7 +54,7 @@ entries:
     version: 0.8.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-09T15:17:43.757224267Z"
+    created: "2026-06-12T12:06:39.127410761Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: d49be5fc7bcb552156db2001031224464a99d65bf01dfe2137eb5096e2329614
     name: metal-control-plane
@@ -63,7 +63,7 @@ entries:
     version: 0.8.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-09T15:17:43.755738742Z"
+    created: "2026-06-12T12:06:39.12653637Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 1010cd4c2dfb1e607ceb077fb13e72d89277c11ccffb69c9ce334690a220b205
     name: metal-control-plane
@@ -72,7 +72,7 @@ entries:
     version: 0.8.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-06-09T15:17:43.754454412Z"
+    created: "2026-06-12T12:06:39.125637893Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 73665cc7a5cf70f77c76d6efbd89aff23888f96cb5b866efdd4ae56a5472f6f7
     name: metal-control-plane
@@ -81,8 +81,18 @@ entries:
     version: 0.7.5
   postgreslet:
   - apiVersion: v2
+    appVersion: v0.27.1
+    created: "2026-06-12T12:06:39.132098686Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: cd024ebee2c2547b03219059bec0c247be92d9d67a3f4b1634352acd1f4d8d8c
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/latest/postgreslet-0.22.1.tgz
+    version: 0.22.1
+  - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-06-09T15:17:43.762385108Z"
+    created: "2026-06-12T12:06:39.130647369Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 1731ae186046c2d829f74f57bdf5196c0b5a2255296a3acda72bdd27ef3f48d0
     name: postgreslet
@@ -93,12 +103,12 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-06-09T15:17:43.762876205Z"
+    created: "2026-06-12T12:06:39.132431328Z"
     description: An opinionated valkey cluster setup for metal-stack
-    digest: cd03aa7512907bc600c094f893bd1b90e9a81f1db3d2db10fd51ee687bd2da40
+    digest: 2f127d5008b6082344bf8427d6eaa55ae4afd2a2af56249e5f5b47539efd1e70
     name: valkey
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/latest/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-09T15:17:43.751506514Z"
+generated: "2026-06-12T12:06:39.123228014Z"
