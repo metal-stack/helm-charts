@@ -224,7 +224,6 @@ metal_apiserver:
   redis:
     addr:
     password:
-  admin_subjects: []
   auditing:
     search_backend: timescaledb
     timescaledb:
