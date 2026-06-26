@@ -11,6 +11,69 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
 {{- end }}
+
+---
+# ============================================================
+# ServiceAccount used by the cronjob
+# ============================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-apiserver
+ 
+---
+# ============================================================
+# Role – minimal permissions the cronjob needs:
+#   • leases       → leader election
+#   • secrets      → write command output
+#   • pods/exec    → exec into the main container
+#   • pods         → list/get own pod
+# ============================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-apiserver
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "update", "patch"]
+ 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-apiserver
+subjects:
+  - kind: ServiceAccount
+    name: metal-apiserver
+roleRef:
+  kind: Role
+  name: metal-apiserver
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metal-apiserver-token-create
+data:
+  tokens.yaml: |
+    tokenCreateRequests:
+      admin-editor-token:
+          user: metal-stack
+          tokenCreateRequest:
+              expires: 172800s
+              adminRole: ADMIN_ROLE_EDITOR
+      metal-console:
+          user: metal-console
+          tokenCreateRequest:
+              permissions:
+                  - subject: '*'
+                    methods:
+                      - /metalstack.admin.v2.MachineService/Get
+                      - /metalstack.api.v2.MethodService/TokenScopedList
+                      - /metalstack.api.v2.TokenService/Refresh
+              expires: 172800s
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -183,5 +246,68 @@ spec:
     matchLabels:
       app: metal-apiserver
 {{- end }}
+
+
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-token-create
+  labels:
+    job: metal-apiserver-token-create
+spec:
+  schedule: "0 * * * *" # Change to different schedule
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-apiserver-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          serviceAccountName: metal-apiserver
+          containers:
+          - name: metal-apiserver-token-create
+            image: {{ .Values.images.metal_apiserver.image }}:{{ .Values.images.metal_apiserver.tag }}
+            imagePullPolicy: {{ .Values.images.metal_apiserver.imagePullPolicy }}
+            command:
+            - /server
+            - token
+            env:
+            - name: LOG_LEVEL
+              value: "{{ .Values.metal_apiserver.log_level }}"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis_password
+                  name: metal-apiserver
+            - name: REDIS_ADDR
+              value: "{{ .Values.metal_apiserver.redis.addr }}"
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: oidc_client_id
+                  name: metal-apiserver
+            - name: SERVER_HTTP_URL
+              value: "{{ .Values.metal_apiserver.url }}"
+            - name: TOKENS_CREATE_CONFIG_FILE_PATH
+              value: "/config/tokens.yaml"
+            - name: STORE_TOKENS_IN_SECRET
+              value: true
+            volumeMounts:
+            - name: tokens-create-volume
+              mountPath: /config
+              readOnly: true
+          volumes:
+          - name: tokens-create-volume
+            configMap:
+              name: metal-apiserver-token-create
+              defaultMode: 0644
 
 {{- end }}

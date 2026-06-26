@@ -203,7 +203,7 @@ metal_api:
     #     sectionName: metal-api-grpc
 
 metal_apiserver:
-  enabled: false
+  enabled: true
   replicas: 1
   log_level: info
   url:
@@ -262,6 +262,22 @@ metal_apiserver:
     httpsRedirect:
       enabled: false
       parentRefs: []
+  # tokens:
+  #   admin-editor-token:
+  #       user: metal-stack
+  #       tokenCreateRequest:
+  #           expires: 172800s
+  #           adminRole: ADMIN_ROLE_EDITOR
+  #   metal-console:
+  #       user: metal-console
+  #       tokenCreateRequest:
+  #           permissions:
+  #               - subject: '*'
+  #                 methods:
+  #                   - /metalstack.admin.v2.MachineService/Get
+  #                   - /metalstack.api.v2.MethodService/TokenScopedList
+  #                   - /metalstack.api.v2.TokenService/Refresh
+  #           expires: 172800s
 
 ipam:
   replicas: 2
