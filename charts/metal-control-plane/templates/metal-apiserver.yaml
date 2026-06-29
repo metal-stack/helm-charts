@@ -289,17 +289,12 @@ spec:
                   name: metal-apiserver
             - name: REDIS_ADDR
               value: "{{ .Values.metal_apiserver.redis.addr }}"
-            - name: OIDC_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  key: oidc_client_id
-                  name: metal-apiserver
             - name: SERVER_HTTP_URL
               value: "{{ .Values.metal_apiserver.url }}"
             - name: TOKENS_CREATE_CONFIG_FILE_PATH
               value: "/config/tokens.yaml"
             - name: STORE_TOKENS_IN_SECRET
-              value: true
+              value: "true"
             volumeMounts:
             - name: tokens-create-volume
               mountPath: /config
