@@ -95,7 +95,6 @@ spec:
           - --log-level={{ .Values.metal_apiserver.log_level }}
           - --http-server-endpoint=0.0.0.0:8080
           - --tenant-apiserver-baseurl={{ .Values.metal_apiserver.tenant_apiserver_baseurl }}
-          - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
           - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
@@ -119,7 +118,7 @@ spec:
           - --oidc-unique-user-key={{ .Values.metal_apiserver.oidc.unique_user_key }}
           - --oidc-tls-skip-verify={{ .Values.metal_apiserver.oidc.tls_skip_verify }}
 {{- if .Values.metal_apiserver.provider_tenant }}
-          - --ensure-provider-tenant={{ .Values.metal_apiserver.provider_tenant }}
+          - --provider-tenant={{ .Values.metal_apiserver.provider_tenant }}
 {{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
