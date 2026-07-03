@@ -60,7 +60,7 @@ spec:
                 key: session_secret
                 name: metal-apiserver
           - name: SECURE_COOKIE
-            value: "{{ .Values.metal_apiserver.secure_cookie}}"
+            value: "{{ .Values.metal_apiserver.secure_cookie }}"
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -77,6 +77,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: oidc_client_secret
+                name: metal-apiserver
+          - name: AUDITING_SPLUNK_HEC_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: splunk_hec_token
                 name: metal-apiserver
           - name: RETHINKDB_PASSWORD
             valueFrom:

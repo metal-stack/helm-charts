@@ -92,7 +92,6 @@ jobs:
           - csi-driver-lvm
           - metal-control-plane
           - postgreslet
-          - valkey
 
     steps:
     - name: Checkout
