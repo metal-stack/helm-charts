@@ -13,68 +13,6 @@ data:
 {{- end }}
 
 ---
-# ============================================================
-# ServiceAccount used by the cronjob
-# ============================================================
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: metal-apiserver
- 
----
-# ============================================================
-# Role – minimal permissions the cronjob needs:
-#   • leases       → leader election
-#   • secrets      → write command output
-#   • pods/exec    → exec into the main container
-#   • pods         → list/get own pod
-# ============================================================
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: metal-apiserver
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "create", "update", "patch"]
- 
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: metal-apiserver
-subjects:
-  - kind: ServiceAccount
-    name: metal-apiserver
-roleRef:
-  kind: Role
-  name: metal-apiserver
-  apiGroup: rbac.authorization.k8s.io
-
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: metal-apiserver-token-create
-data:
-  tokens.yaml: |
-    tokenCreateRequests:
-      admin-editor-token:
-          user: metal-stack
-          tokenCreateRequest:
-              expires: 172800s
-              adminRole: ADMIN_ROLE_EDITOR
-      metal-console:
-          user: metal-console
-          tokenCreateRequest:
-              permissions:
-                  - subject: '*'
-                    methods:
-                      - /metalstack.admin.v2.MachineService/Get
-                      - /metalstack.api.v2.MethodService/TokenScopedList
-                      - /metalstack.api.v2.TokenService/Refresh
-              expires: 172800s
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -247,7 +185,53 @@ spec:
       app: metal-apiserver
 {{- end }}
 
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-apiserver
+ 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-apiserver
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "update", "patch"]
+ 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-apiserver
+subjects:
+  - kind: ServiceAccount
+    name: metal-apiserver
+roleRef:
+  kind: Role
+  name: metal-apiserver
+  apiGroup: rbac.authorization.k8s.io
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metal-apiserver-token-create
+data:
+  tokens.yaml: |
+    tokenCreateRequests:
+      admin-editor-token:
+          user: metal-stack
+          tokenCreateRequest:
+              expires: 172800s
+              adminRole: ADMIN_ROLE_EDITOR
+      admin-viewer-token:
+          user: metal-stack
+          tokenCreateRequest:
+              expires: 172800s
+              adminRole: ADMIN_ROLE_VIEWER
 
 ---
 apiVersion: batch/v1
