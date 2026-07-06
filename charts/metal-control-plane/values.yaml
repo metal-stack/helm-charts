@@ -334,6 +334,9 @@ ingress_public_dns:
 v2_ingress_public_dns:
 
 deploy_ingress: true
+deploy_ingress_api_v1_rules: true
+deploy_ingress_api_v2_rules: true
+
 ingress:
   annotations: {}
   tls:
