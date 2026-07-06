@@ -25,12 +25,12 @@ spec:
     - hosts:
       - {{ .Values.ingress_public_dns }}
 {{ if .Values.metal_apiserver.enabled }}
-      - {{ .Values.v2_ingress_public_dns}}
+      - {{ .Values.v2_ingress_public_dns }}
 {{- end }}
       secretName: control-plane-ingress-tls
 {{- end }}
   rules:
-{{ if not .Values.metal_api.httpRoute.enabled }}
+{{ if .Values.deploy_ingress_api_v1_rules }}
   - host: {{ .Values.ingress_public_dns }}
     http:
       paths:
@@ -43,7 +43,7 @@ spec:
               number: {{ .Values.ports.metal_api }}
 {{- end }}
 {{ if .Values.metal_apiserver.enabled }}
-{{ if not .Values.metal_apiserver.httpRoute.enabled }}
+{{ if .Values.deploy_ingress_api_v2_rules }}
   - host: {{ .Values.v2_ingress_public_dns }}
     http:
       paths:
