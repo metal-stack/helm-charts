@@ -30,6 +30,7 @@ spec:
       secretName: control-plane-ingress-tls
 {{- end }}
   rules:
+{{ if not .Values.metal_api.httpRoute.enabled }}
   - host: {{ .Values.ingress_public_dns }}
     http:
       paths:
@@ -40,7 +41,9 @@ spec:
             name: "metal-api"
             port:
               number: {{ .Values.ports.metal_api }}
+{{- end }}
 {{ if .Values.metal_apiserver.enabled }}
+{{ if not .Values.metal_apiserver.httpRoute.enabled }}
   - host: {{ .Values.v2_ingress_public_dns }}
     http:
       paths:
@@ -51,5 +54,6 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
+{{- end }}
 {{- end }}
 {{- end }}
