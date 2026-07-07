@@ -190,6 +190,8 @@ spec:
       app: metal-apiserver
 {{- end }}
 
+
+{{- if .Values.metal_apiserver.tokens }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -225,18 +227,8 @@ kind: ConfigMap
 metadata:
   name: metal-apiserver-token-create
 data:
-  tokens.yaml: |
-    tokenCreateRequests:
-      admin-editor-token:
-          user: metal-stack
-          tokenCreateRequest:
-              expires: 172800s
-              adminRole: ADMIN_ROLE_EDITOR
-      admin-viewer-token:
-          user: metal-stack
-          tokenCreateRequest:
-              expires: 172800s
-              adminRole: ADMIN_ROLE_VIEWER
+  tokens.yaml:
+{{ toYaml .Values.metal_apiserver.tokens  | indent 4 }}
 
 ---
 apiVersion: batch/v1
@@ -246,7 +238,7 @@ metadata:
   labels:
     job: metal-apiserver-token-create
 spec:
-  schedule: "0 * * * *" # Change to different schedule
+  schedule: {{ .Values.metal_apiserver.tokenCreateSchedule }}
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Replace
@@ -293,5 +285,6 @@ spec:
             configMap:
               name: metal-apiserver-token-create
               defaultMode: 0644
+{{- end }}
 
 {{- end }}

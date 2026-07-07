@@ -262,22 +262,23 @@ metal_apiserver:
     httpsRedirect:
       enabled: false
       parentRefs: []
-  # tokens:
-  #   admin-editor-token:
-  #       user: metal-stack
-  #       tokenCreateRequest:
-  #           expires: 172800s
-  #           adminRole: ADMIN_ROLE_EDITOR
-  #   metal-console:
-  #       user: metal-console
-  #       tokenCreateRequest:
-  #           permissions:
-  #               - subject: '*'
-  #                 methods:
-  #                   - /metalstack.admin.v2.MachineService/Get
-  #                   - /metalstack.api.v2.MethodService/TokenScopedList
-  #                   - /metalstack.api.v2.TokenService/Refresh
-  #           expires: 172800s
+  tokenCreateSchedule: "0 */8 * * *" # create a new token every 8 hours
+  tokens: {}
+    # admin-editor-token:
+    #     user: metal-stack
+    #     tokenCreateRequest:
+    #         expires: 172800s
+    #         adminRole: ADMIN_ROLE_EDITOR
+    # metal-console:
+    #     user: metal-console
+    #     tokenCreateRequest:
+    #         permissions:
+    #             - subject: '*'
+    #               methods:
+    #                 - /metalstack.admin.v2.MachineService/Get
+    #                 - /metalstack.api.v2.MethodService/TokenScopedList
+    #                 - /metalstack.api.v2.TokenService/Refresh
+    #         expires: 172800s
 
 ipam:
   replicas: 2
@@ -350,6 +351,9 @@ ingress_public_dns:
 v2_ingress_public_dns:
 
 deploy_ingress: true
+deploy_ingress_api_v1_rules: true
+deploy_ingress_api_v2_rules: true
+
 ingress:
   annotations: {}
   tls:
