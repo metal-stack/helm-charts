@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-07-07T10:58:25.493297981Z"
+    created: "2026-07-07T11:11:31.444583273Z"
     description: local persistend storage for lvm
-    digest: 108b13637d5ca5c4b0f2ef6da09ea54db53a43c589e64c2f393ba30d72bb16ba
+    digest: b202722d4c425ede621bf97790b9c33fca5aa4798d662d2b7918c7cd39e43516
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-07-07T10:58:25.496079807Z"
+    created: "2026-07-07T11:11:31.44790542Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: c14b3d60b086865d147a365f9fcf206c9c914733d6156b704b834ac315c56cc5
+    digest: 9f9f6be300d09543809983f4654d6db014888066c725045d933dfcec212a150a
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/create-apiserver-admintoken/metal-control-plane-0.8.8.tgz
     version: 0.8.8
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-07-07T10:58:25.494600694Z"
+    created: "2026-07-07T11:11:31.446586541Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: b21f3829d647a56f7751c250d8ca5d8b9f7c6ad4506120881276e539b90ca584
     name: metal-control-plane
@@ -39,12 +39,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-07-07T10:58:25.497888427Z"
+    created: "2026-07-07T11:11:31.449308207Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 7235f9ab9aa3ba7743eb4c1fce56b6af3064d514fa01a76d41b9a34eab83b9ab
+    digest: dc9e3f451df7554f7421538dc34150aeb272c076e8d855d125099fa531511af1
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/create-apiserver-admintoken/postgreslet-0.22.1.tgz
     version: 0.22.1
-generated: "2026-07-07T10:58:25.49172887Z"
+generated: "2026-07-07T11:11:31.443573793Z"
