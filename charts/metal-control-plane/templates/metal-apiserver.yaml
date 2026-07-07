@@ -227,7 +227,7 @@ kind: ConfigMap
 metadata:
   name: metal-apiserver-token-create
 data:
-  tokens.yaml:
+  tokens.yaml: |
 {{ toYaml .Values.metal_apiserver.tokens  | indent 4 }}
 
 ---

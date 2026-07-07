@@ -267,7 +267,7 @@ metal_apiserver:
     # admin-editor-token:
     #     user: metal-stack
     #     tokenCreateRequest:
-    #         expires: 172800s
+    #         expires: 23040s
     #         adminRole: ADMIN_ROLE_EDITOR
     # metal-console:
     #     user: metal-console
@@ -278,7 +278,7 @@ metal_apiserver:
     #                 - /metalstack.admin.v2.MachineService/Get
     #                 - /metalstack.api.v2.MethodService/TokenScopedList
     #                 - /metalstack.api.v2.TokenService/Refresh
-    #         expires: 172800s
+    #         expires: 23040s
 
 ipam:
   replicas: 2
