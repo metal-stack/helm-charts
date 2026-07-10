@@ -9,6 +9,10 @@ images:
     image: ghcr.io/metal-stack/metal-console
     imagePullPolicy: IfNotPresent
     tag: latest
+  metal_console_token_refresher:
+    image: ghcr.io/metal-stack/metal-token-refresher
+    imagePullPolicy: IfNotPresent
+    tag: latest
 
 resources:
   metal_console:
@@ -18,6 +22,13 @@ resources:
     limits:
       memory: "128Mi"
       cpu: "60m"
+  metal_console_token_refresher:
+    requests:
+      memory: "32Mi"
+      cpu: "20m"
+    limits:
+      memory: "64Mi"
+      cpu: "40m"
 
 pod_disruption_budget:
   metal_console:
@@ -48,10 +59,12 @@ metal_console:
       client_key_enc: ""
       client_cert_enc: ""
       ca_cert_enc: ""
-  token:
-  token_renewal:
-    enabled: false
-    secret_name: metal-console-token
-    secret_key: token
+  token_file_secret_ref:
+    name: metal-console-token
+    key: token
+
+metal_console_token_refresher:
+  enabled: false
+  schedule: "@hourly"
 
 metal_registry_auth_enabled:

@@ -1,0 +1,60 @@
+{{- if .Values.metal_console_token_refresher.enabled -}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-console-token-refresher
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-console-token-refresher
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["{{ .Values.metal_console.token_file_secret_ref}}"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-console-token-refresher
+  namespace: "{{ .Release.Namespace }}"
+subjects:
+- kind: ServiceAccount
+  name: metal-console
+  namespace: "{{ .Release.Namespace }}"
+roleRef:
+  kind: Role
+  name: metal-console-token-refresher
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-console-token-refresher
+spec:
+  schedule: {{ .Values.metal_console_token_refresher.schedule }}
+  jobTemplate:
+    metadata:
+      name: metal-console-token-refresher
+    spec:
+      template:
+        spec:
+          serviceAccountName: metal-console-token-refresher
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-console-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          containers:
+          - name: metal-console-token-refresher
+            image: "{{ .Values.images.metal_console_token_refresher }}"
+{{- if .Values.set_resource_limits }}
+            resources:
+{{ toYaml .Values.resources.metal_console | indent 10 }}
+{{- end }}
+{{- end }}
