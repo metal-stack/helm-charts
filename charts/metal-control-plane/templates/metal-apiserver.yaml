@@ -228,7 +228,7 @@ metadata:
   name: metal-apiserver-token-create
 data:
   tokens.yaml: |
-{{ toYaml .Values.metal_apiserver.tokens  | indent 6 }}
+{{ toYaml .Values.metal_apiserver.tokens  | indent 4 }}
 
 ---
 apiVersion: batch/v1
