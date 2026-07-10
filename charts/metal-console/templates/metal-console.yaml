@@ -4,8 +4,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   labels:
-    app: metal-console-registry-credentials
-  name: metal-console-registry-credentials
+    app: {{ .Release.Name }}-metal-console-registry-credentials
+  name: {{ .Release.Name }}-metal-console-registry-credentials
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
@@ -15,8 +15,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   labels:
-    app: bmc-proxy-certs
-  name: bmc-proxy-certs
+    app: {{ .Release.Name }}-bmc-proxy-certs
+  name: {{ .Release.Name }}-bmc-proxy-certs
 data:
   server-key.pem: {{ .Values.metal_console.bmc_proxy.tls.server_key_enc }}
   server-key.pub: {{ .Values.metal_console.bmc_proxy.tls.server_pub_enc }}
@@ -28,17 +28,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: metal-console
-  name: metal-console
+    app: {{ .Release.Name }}-metal-console
+  name: {{ .Release.Name }}-metal-console
 spec:
   replicas: {{ .Values.metal_console.replicas }}
   selector:
     matchLabels:
-      app: metal-console
+      app: {{ .Release.Name }}-metal-console
   template:
     metadata:
       labels:
-        app: metal-console
+        app: {{ .Release.Name }}-metal-console
     spec:
 {{- if .Values.metal_registry_auth_enabled }}
       imagePullSecrets:
@@ -94,33 +94,33 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: metal-console
-  name: metal-console
+    app: {{ .Release.Name }}-metal-console
+  name: {{ .Release.Name }}-metal-console
 spec:
   ports:
   - name: "{{ .Values.ports.metal_console }}"
     port: {{ .Values.ports.metal_console }}
     targetPort: 10001
   selector:
-    app: metal-console
+    app: {{ .Release.Name }}-metal-console
 {{- if .Values.pod_disruption_budget.metal_console.enabled }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: metal-console
+  name: {{ .Release.Name }}-metal-console
 spec:
   minAvailable: {{ .Values.pod_disruption_budget.metal_console.min_available }}
   selector:
     matchLabels:
-      app: metal-console
+      app: {{ .Release.Name }}-metal-console
 {{- end }}
 {{- if .Values.metal_console.tcpRoute.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
-  name: metal-console
+  name: {{ .Release.Name }}-metal-console
   {{- with .Values.metal_console.tcpRoute.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -130,6 +130,6 @@ spec:
 {{ toYaml .Values.metal_console.tcpRoute.parentRefs | indent 4 }}
   rules:
     - backendRefs:
-        - name: metal-console
+        - name: {{ .Release.Name }}-metal-console
           port: {{ .Values.ports.metal_console }}
 {{- end }}
