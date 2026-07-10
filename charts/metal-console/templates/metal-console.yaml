@@ -56,8 +56,8 @@ spec:
         - name: METAL_CONSOLE_TOKEN
           valueFrom:
             secretKeyRef:
-              name: "{{ .Values.metal_console.token_renewal.secret_name }}"
-              key: "{{ .Values.metal_console.token_renewal.secret_key }}"
+              name: "{{ .Values.metal_console.token_secret_ref.name }}"
+              key: "{{ .Values.metal_console.token_secret_ref.key }}"
         - name: METAL_CONSOLE_TOKEN_FILE
           value: "/metal/token"
         - name: ZAP_ENCODING
@@ -85,9 +85,9 @@ spec:
           secretName: bmc-proxy-certs
       - name: metal-secrets
         secret:
-          secretName: "{{ metal_console.token_file_secret_ref }}"
+          secretName: "{{ .Values.metal_console.token_secret_ref.name }}"
           items:
-          - key: "{{ metal_console.token_file_secret_ref.key}}"
+          - key: "{{ .Values.metal_console.token_secret_ref.key }}"
             path: token
 ---
 apiVersion: v1

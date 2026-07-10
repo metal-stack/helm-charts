@@ -25,7 +25,7 @@ metadata:
   namespace: "{{ .Release.Namespace }}"
 subjects:
 - kind: ServiceAccount
-  name: metal-console
+  name: metal-console-token-refresher
   namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: Role
@@ -37,7 +37,7 @@ kind: CronJob
 metadata:
   name: metal-console-token-refresher
 spec:
-  schedule: {{ .Values.metal_console_token_refresher.schedule }}
+  schedule: "{{ .Values.metal_console_token_refresher.schedule }}"
   jobTemplate:
     metadata:
       name: metal-console-token-refresher
@@ -52,9 +52,18 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: metal-console-token-refresher
-            image: "{{ .Values.images.metal_console_token_refresher }}"
+            image: "{{ .Values.images.metal_console_token_refresher.image }}:{{ .Values.images.metal_console_token_refresher.tag }}"
 {{- if .Values.set_resource_limits }}
             resources:
 {{ toYaml .Values.resources.metal_console | indent 10 }}
 {{- end }}
+            env:
+            - name: METAL_APISERVER_URL
+              value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}{{ .Values.metal_apiserver.base_path }}
+            - name: TOKEN_SECRET_NAMESPACE
+              value: "{{ .Release.Namespace }}"
+            - name: TOKEN_SECRET_NAME
+              value: "{{ .Values.metal_console.token_secret_ref.name }}"
+            - name: TOKEN_SECRET_KEY
+              value: "{{ .Values.metal_console.token_secret_ref.key }}"
 {{- end }}

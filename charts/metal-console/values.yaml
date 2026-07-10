@@ -59,7 +59,7 @@ metal_console:
       client_key_enc: ""
       client_cert_enc: ""
       ca_cert_enc: ""
-  token_file_secret_ref:
+  token_secret_ref:
     name: metal-console-token
     key: token
 
