@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-07-10T05:46:59.877426144Z"
+    created: "2026-07-13T11:50:01.207421592Z"
     description: local persistend storage for lvm
-    digest: 374c0f70cd5d817538e530ea7a94ed195058759bbb134a2c6c1b42ac454df2c3
+    digest: 911ba131f4bf069adbc5d651ee375804b8ace3b590860825d48620d2bf26bfa8
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-07-10T05:46:59.880344916Z"
+    created: "2026-07-13T11:50:01.210345104Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 3d6ade09b1e42d32633a6ab5aa089fa7e9727e1b8ee586b362c56c5163b8804f
+    digest: 95e15be251fd2068c31e9dba931d9e0d4f8de9f2c6f8f8839d2377719ca1ebcb
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/create-apiserver-admintoken/metal-control-plane-0.8.8.tgz
     version: 0.8.8
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-07-10T05:46:59.878949149Z"
+    created: "2026-07-13T11:50:01.208765042Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: b21f3829d647a56f7751c250d8ca5d8b9f7c6ad4506120881276e539b90ca584
     name: metal-control-plane
@@ -39,12 +39,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-07-10T05:46:59.881881285Z"
+    created: "2026-07-13T11:50:01.212230407Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 698405122e6dc226c2109cd5ca38e25356acea7e1b1cdc675f23ac76730c65bf
+    digest: a9f2425b871a6ccd11a65f06976d69385bee05b800c1609f79681bb52f68f127
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/create-apiserver-admintoken/postgreslet-0.22.1.tgz
     version: 0.22.1
-generated: "2026-07-10T05:46:59.876020984Z"
+generated: "2026-07-13T11:50:01.206785773Z"
