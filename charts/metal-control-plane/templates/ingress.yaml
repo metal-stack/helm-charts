@@ -23,13 +23,18 @@ spec:
 {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
+{{ if .Values.deploy_ingress_api_v1_rules }}
       - {{ .Values.ingress_public_dns }}
+{{- end }}
 {{ if .Values.metal_apiserver.enabled }}
-      - {{ .Values.v2_ingress_public_dns}}
+{{ if .Values.deploy_ingress_api_v2_rules }}
+      - {{ .Values.v2_ingress_public_dns }}
+{{- end }}
 {{- end }}
       secretName: control-plane-ingress-tls
 {{- end }}
   rules:
+{{ if .Values.deploy_ingress_api_v1_rules }}
   - host: {{ .Values.ingress_public_dns }}
     http:
       paths:
@@ -40,7 +45,9 @@ spec:
             name: "metal-api"
             port:
               number: {{ .Values.ports.metal_api }}
+{{- end }}
 {{ if .Values.metal_apiserver.enabled }}
+{{ if .Values.deploy_ingress_api_v2_rules }}
   - host: {{ .Values.v2_ingress_public_dns }}
     http:
       paths:
@@ -51,5 +58,6 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
+{{- end }}
 {{- end }}
 {{- end }}

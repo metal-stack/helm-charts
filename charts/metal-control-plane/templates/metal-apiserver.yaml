@@ -11,6 +11,7 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
 {{- end }}
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,7 +60,7 @@ spec:
                 key: session_secret
                 name: metal-apiserver
           - name: SECURE_COOKIE
-            value: "{{ .Values.metal_apiserver.secure_cookie}}"
+            value: "{{ .Values.metal_apiserver.secure_cookie }}"
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -76,6 +77,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: oidc_client_secret
+                name: metal-apiserver
+          - name: AUDITING_SPLUNK_HEC_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: splunk_hec_token
                 name: metal-apiserver
           - name: RETHINKDB_PASSWORD
             valueFrom:
@@ -95,7 +101,6 @@ spec:
           - --log-level={{ .Values.metal_apiserver.log_level }}
           - --http-server-endpoint=0.0.0.0:8080
           - --tenant-apiserver-baseurl={{ .Values.metal_apiserver.tenant_apiserver_baseurl }}
-          - --admin-subjects={{ join "," .Values.metal_apiserver.admin_subjects }}
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
           - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
@@ -119,7 +124,7 @@ spec:
           - --oidc-unique-user-key={{ .Values.metal_apiserver.oidc.unique_user_key }}
           - --oidc-tls-skip-verify={{ .Values.metal_apiserver.oidc.tls_skip_verify }}
 {{- if .Values.metal_apiserver.provider_tenant }}
-          - --ensure-provider-tenant={{ .Values.metal_apiserver.provider_tenant }}
+          - --provider-tenant={{ .Values.metal_apiserver.provider_tenant }}
 {{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
@@ -183,6 +188,160 @@ spec:
   selector:
     matchLabels:
       app: metal-apiserver
+{{- end }}
+
+
+{{- if .Values.metal_apiserver.tokens }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-apiserver
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-apiserver
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-apiserver
+subjects:
+  - kind: ServiceAccount
+    name: metal-apiserver
+roleRef:
+  kind: Role
+  name: metal-apiserver
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metal-apiserver-token-create
+data:
+  tokens.yaml: |
+{{ toYaml .Values.metal_apiserver.tokens  | indent 4 }}
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-token-create
+  labels:
+    job: metal-apiserver-token-create
+spec:
+  schedule: {{ .Values.metal_apiserver.tokenCreateSchedule }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-apiserver-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          serviceAccountName: metal-apiserver
+          containers:
+          - name: metal-apiserver-token-create
+            image: {{ .Values.images.metal_apiserver.image }}:{{ .Values.images.metal_apiserver.tag }}
+            imagePullPolicy: {{ .Values.images.metal_apiserver.imagePullPolicy }}
+            command:
+            - /server
+            - token
+            env:
+            - name: LOG_LEVEL
+              value: "{{ .Values.metal_apiserver.log_level }}"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis_password
+                  name: metal-apiserver
+            - name: REDIS_ADDR
+              value: "{{ .Values.metal_apiserver.redis.addr }}"
+            - name: SERVER_HTTP_URL
+              value: "{{ .Values.metal_apiserver.url }}"
+            - name: TOKENS_CREATE_CONFIG_FILE_PATH
+              value: "/config/tokens.yaml"
+            - name: STORE_TOKENS_IN_SECRET
+              value: "true"
+            volumeMounts:
+            - name: tokens-create-volume
+              mountPath: /config
+              readOnly: true
+          volumes:
+          - name: tokens-create-volume
+            configMap:
+              name: metal-apiserver-token-create
+              defaultMode: 0644
+
+---
+# the cron job only starts at a specific time at the day, but for initial deployments we need
+# the deployment token directly after applying the helm-chart
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metal-apiserver-initial-token-create
+  labels:
+    job: metal-apiserver-initial-token-create
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-apiserver-registry-credentials
+{{- end }}
+      restartPolicy: OnFailure
+      serviceAccountName: metal-apiserver
+      containers:
+      - name: metal-apiserver-token-create
+        image: {{ .Values.images.metal_apiserver.image }}:{{ .Values.images.metal_apiserver.tag }}
+        imagePullPolicy: {{ .Values.images.metal_apiserver.imagePullPolicy }}
+        command:
+        - /server
+        - token
+        env:
+        - name: LOG_LEVEL
+          value: "{{ .Values.metal_apiserver.log_level }}"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: redis_password
+              name: metal-apiserver
+        - name: REDIS_ADDR
+          value: "{{ .Values.metal_apiserver.redis.addr }}"
+        - name: SERVER_HTTP_URL
+          value: "{{ .Values.metal_apiserver.url }}"
+        - name: TOKENS_CREATE_CONFIG_FILE_PATH
+          value: "/config/tokens.yaml"
+        - name: STORE_TOKENS_IN_SECRET
+          value: "true"
+        volumeMounts:
+        - name: tokens-create-volume
+          mountPath: /config
+          readOnly: true
+      volumes:
+      - name: tokens-create-volume
+        configMap:
+          name: metal-apiserver-token-create
+          defaultMode: 0644
+
 {{- end }}
 
 {{- end }}
