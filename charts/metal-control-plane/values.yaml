@@ -218,7 +218,7 @@ metal_apiserver:
     discovery_url:
     end_session_url:
     unique_user_key: email
-    tls_skip_verify: true
+    tls_skip_verify: false
   session_secret:
   secure_cookie: true
   redis:
