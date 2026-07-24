@@ -591,7 +591,7 @@ sidecars:
                     pg_get_userbyid(userid) as user,
                     pg_database.datname,
                     pg_stat_statements.queryid,
-                    pg_stat_statements.query,
+                    SUBSTRING(pg_stat_statements.query, 1, 2048) as query,
                     pg_stat_statements.calls,
                     pg_stat_statements.total_exec_time as time_milliseconds,
                     pg_stat_statements.rows
