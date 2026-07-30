@@ -243,7 +243,11 @@ metal_apiserver:
       index:
       host:
       ca:
-
+  headscale:
+    enabled: false
+    api_key: ""
+    internal_api_address: ""
+    control_plane_address: ""
   rateLimit:
     maxRequestsPerMinute: 1000
     maxUnauthenticatedRequestsPerMinute: 50

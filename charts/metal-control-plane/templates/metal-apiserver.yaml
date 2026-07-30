@@ -88,7 +88,16 @@ spec:
               secretKeyRef:
                 key: rethinkdb_password
                 name: metal-apiserver
-
+{{- if .Values.metal_apiserver.headscale.enabled }}
+          - name: HEADSCALE_API_KEY
+            value: "{{ .Values.metal_api.headscale.api_key }}"
+          - name: HEADSCALE_ADDRESS
+            value: {{ .Values.metal_apiserver.headscale.internal_api_address }}
+          - name: HEADSCALE_CONTROLPLANE_ADDRESS
+            value: {{ .Values.metal_apiserver.headscale.control_plane_address }}
+          - name: HEADSCALE_ENABLED
+            value: "true"
+{{- end }}
           - name: AUDITING_TIMESCALEDB_PASSWORD
             valueFrom:
               secretKeyRef:
