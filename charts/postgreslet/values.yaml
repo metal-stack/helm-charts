@@ -87,7 +87,7 @@ postgreslet:
   # operatorImageRepository
   operatorImageRepository: "ghcr.io/zalando/postgres-operator"
   # operatorImageTag
-  operatorImageTag: "v1.15.1"
+  operatorImageTag: "v2.0.1"
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-17"
   # postgresImageTag
