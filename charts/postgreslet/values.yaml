@@ -87,7 +87,7 @@ postgreslet:
   # operatorImageRepository
   operatorImageRepository: "ghcr.io/zalando/postgres-operator"
   # operatorImageTag
-  operatorImageTag: "v1.15.1"
+  operatorImageTag: "v2.0.1"
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-17"
   # postgresImageTag
@@ -150,8 +150,18 @@ postgreslet:
   podAntiaffinityPreferredDuringScheduling: false
   # podAntiaffinityTopologyKey when anti affinity is enabled, overrides the topology key for anti affinity
   podAntiaffinityTopologyKey: ""
-  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one
+
+  # Deprecation  warning:  this  variable   will  be  removed  in  the
+  # future. Please switch  to enablePodTopologySpreadConstraint if you
+  # use postgres operator v2, in which case we will not patch postgres
+  # pods via  webhooks but  add the  TopologySpreadConstraint directly
+  # into  the  zalando  postgresqls  resource. In  the  mean  time  we
+  # continue  to support  this flag  and switch  automatically to  the
+  # postgresqls variant when operator version is > v2.
+  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one.
   enablePodTopologySpreadConstraintWebhook: false
+  # enablePodTopologySpreadConstraint when enabled adds custom TopologySpreadConstraints to the zalando postgresqls resource.
+  enablePodTopologySpreadConstraint: false
   # podTopologySpreadConstraintTopologyKey changes the topologyKey to use in our custom podTopologyConstraint
   podTopologySpreadConstraintTopologyKey: "machine.metal-stack.io/rack"
   # ppodTopologySpreadConstraintMaxSkew changes the maxSkew to use in our custom podTopologyConstraint
