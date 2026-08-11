@@ -1,0 +1,134 @@
+{{ if .Values.metal_apiserver.enabled }}
+{{ if .Values.metal_apiserver.static_data.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metal-apiserver-static-data
+  labels:
+    app: metal-apiserver
+data:
+  images.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.images }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  sizes.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.sizes }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  partitions.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.partitions }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  tenants.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.tenants }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  tenant_members.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.tenant_members }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  projects.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.projects }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  project_members.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.project_members }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  networks.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.networks }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+  ips.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.ips }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metal-apiserver-apply-static-data
+  labels:
+    job: metal-apiserver-apply-static-data
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      name: metal-apiserver-apply-static-data
+      labels:
+        job: metal-apiserver-apply-static-data
+    spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-apiserver-registry-credentials
+{{- end }}
+      restartPolicy: Never
+      containers:
+      - name: metalctl
+        image: {{ .Values.images.metalctlv2.image }}:{{ .Values.images.metalctlv2.tag }}
+        imagePullPolicy: {{ .Values.images.metalctlv2.imagePullPolicy }}
+        env:
+        - name: METAL_APIV2_URL
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}
+        - name: METAL_APIV2_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: metal-apiserver-admin-token
+              key: admin_editor_token
+        command:
+          - sh
+          - -c
+          - |
+              set -exu
+              # admin resources
+              /metalctl admin partition apply -f /static-data/partitions.yaml
+              /metalctl admin image apply -f /static-data/images.yaml
+              /metalctl admin size apply -f /static-data/sizes.yaml
+              /metalctl admin network apply -f /static-data/networks.yaml
+              # tenants and projects
+              /metalctl tenant apply -f /static-data/tenants.yaml
+              /metalctl tenant member apply -f /static-data/tenant_members.yaml
+              /metalctl project apply -f /static-data/projects.yaml
+              /metalctl project member apply -f /static-data/project_members.yaml
+              # project scoped resources
+              /metalctl ip apply -f /static-data/ips.yaml
+        volumeMounts:
+        - name: static-data
+          mountPath: /static-data
+      initContainers:
+      - name: wait-for-api
+        image: {{ .Values.images.metalctlv2.image }}:{{ .Values.images.metalctlv2.tag }}
+        imagePullPolicy: {{ .Values.images.metalctlv2.imagePullPolicy }}
+        env:
+        - name: METAL_APIV2_URL
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}
+        - name: METAL_APIV2_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: metal-apiserver-admin-token
+              key: admin_editor_token
+        command:
+          - sh
+          - -c
+          - |
+              set -exu
+              until /metalctl health; do echo "." && sleep 2; done
+      volumes:
+        - name: static-data
+          configMap:
+            name: metal-apiserver-static-data
+{{- end }}
+{{- end }}
