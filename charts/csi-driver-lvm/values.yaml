@@ -23,12 +23,12 @@ evictionEnabled: false
 
 pluginImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm
-  tag: v0.9.0
+  tag: v0.9.1
   pullPolicy: IfNotPresent
 
 evictionControllerImage:
   repository: ghcr.io/metal-stack/csi-driver-lvm-controller
-  tag: v0.9.0
+  tag: v0.9.1
   pullPolicy: IfNotPresent
 
 sidecarImages:
@@ -48,14 +48,17 @@ storageClasses:
     # this might be used to mark one of the StorageClasses as default:
     # storageclass.kubernetes.io/is-default-class: "true"
     reclaimPolicy: Delete
+    mountOptions: []
   striped:
     enabled: true
     additionalAnnotations: []
     reclaimPolicy: Delete
+    mountOptions: []
   mirror:
     enabled: true
     additionalAnnotations: []
     reclaimPolicy: Delete
+    mountOptions: []
   linearEncrypted:
     enabled: false
     additionalAnnotations: []
@@ -63,6 +66,7 @@ storageClasses:
     encryptionSecret:
       name: csi-lvm-encryption-secret
       namespace: default
+    mountOptions: []
   stripedEncrypted:
     enabled: false
     additionalAnnotations: []
@@ -70,6 +74,7 @@ storageClasses:
     encryptionSecret:
       name: csi-lvm-encryption-secret
       namespace: default
+    mountOptions: []
   mirrorEncrypted:
     enabled: false
     additionalAnnotations: []
@@ -77,6 +82,7 @@ storageClasses:
     encryptionSecret:
       name: csi-lvm-encryption-secret
       namespace: default
+    mountOptions: []
 
 nodeSelector:
   # The plugin daemonset will run on all nodes if it has a toleration,
