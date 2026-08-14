@@ -49,7 +49,7 @@ spec:
           imagePullSecrets:
           - name: {{ .Release.Name }}-metal-console-registry-credentials
 {{- end }}
-          restartPolicy: Always
+          restartPolicy: OnFailure
           containers:
           - name: token-refresher
             image: "{{ .Values.images.metal_console_token_refresher.image }}:{{ .Values.images.metal_console_token_refresher.tag }}"
