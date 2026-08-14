@@ -345,7 +345,7 @@ tenant_apiserver:
   size: 2Gi
 
 metal_console:
-  enabled: true
+  enabled: trnnue
   replicas: 3
   tcpRoute:
     enabled: false
