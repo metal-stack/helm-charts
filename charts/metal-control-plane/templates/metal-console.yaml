@@ -59,16 +59,23 @@ spec:
             secretKeyRef:
               name: metal-api
               key: admin_key
-        - name: ZAP_ENCODING
-          value: {{ .Values.zap_encoding }}
-        - name: ZAP_LEVEL
-          value: {{ .Values.zap_level }}
+{{ if .Values.metal_apiserver.enabled }}
+        - name: METAL_CONSOLE_METAL_APISERVER_URL
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}
+        - name: METAL_CONSOLE_TOKEN_FILE
+          value: "/metal/token"
+{{- end }}
         image: {{ .Values.images.metal_console.image }}:{{ .Values.images.metal_console.tag }}
         imagePullPolicy: {{ .Values.images.metal_console.imagePullPolicy }}
         volumeMounts:
           - name: bmc-proxy-certs
             mountPath: /certs
             readOnly: true
+{{ if .Values.metal_apiserver.enabled }}
+          - name: metal-secrets
+            mountPath: /metal
+            readOnly: true
+{{- end }}
         ports:
         - containerPort: 10001
 {{- if .Values.set_resource_limits }}
@@ -79,7 +86,14 @@ spec:
       - name: bmc-proxy-certs
         secret:
           secretName: bmc-proxy-certs
-status: {}
+{{ if .Values.metal_apiserver.enabled }}
+      - name: metal-secrets
+        secret:
+          secretName: "{{ .Values.metal_console.token_secret_ref.name }}"
+          items:
+          - key: "{{ .Values.metal_console.token_secret_ref.key }}"
+            path: token
+{{- end }}
 ---
 apiVersion: v1
 kind: Service

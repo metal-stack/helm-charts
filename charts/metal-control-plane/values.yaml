@@ -33,6 +33,10 @@ images:
     image: ghcr.io/metal-stack/metal-console
     imagePullPolicy: IfNotPresent
     tag: latest
+  metal_console_token_refresher:
+    image: ghcr.io/metal-stack/metal-token-refresher
+    imagePullPolicy: IfNotPresent
+    tag: latest
 
 resources:
   metal_api:
@@ -334,7 +338,7 @@ tenant_apiserver:
   size: 2Gi
 
 metal_console:
-  enabled: false
+  enabled: true
   replicas: 3
   tcpRoute:
     enabled: false
@@ -350,6 +354,12 @@ metal_console:
       client_key_enc: ""
       client_cert_enc: ""
       ca_cert_enc: ""
+  token_secret_ref:
+    name: metal-console-token
+    key: token
+
+  token_refresher:
+    schedule: "@hourly"
 
 ingress_public_dns:
 v2_ingress_public_dns:
