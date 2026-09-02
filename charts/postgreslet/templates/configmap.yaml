@@ -64,6 +64,7 @@ data:
   POD_ANTIAFFINITY_PREFERRED_DURING_SCHEDULING: {{ .Values.postgreslet.podAntiaffinityPreferredDuringScheduling | quote }}
   POD_ANTIAFFINITY_TOPOLOGY_KEY: {{ .Values.postgreslet.podAntiaffinityTopologyKey | quote }}
   ENABLE_POD_TOPOLOGY_SPREAD_CONSTRAINT_WEBHOOK: {{ .Values.postgreslet.enablePodTopologySpreadConstraintWebhook | quote  }}
+  ENABLE_POD_TOPOLOGY_SPREAD_CONSTRAINT: {{ .Values.postgreslet.enablePodTopologySpreadConstraint | quote  }}
   POD_TOPOLOGY_SPREAD_CONSTRAINT_TOPOLOGY_KEY: {{ .Values.postgreslet.podTopologySpreadConstraintTopologyKey | quote }}
   POD_TOPOLOGY_SPREAD_CONSTRAINT_MAX_SKEW: {{ .Values.postgreslet.podTopologySpreadConstraintMaxSkew | quote }}
   POD_TOPOLOGY_SPREAD_CONSTRAINT_MIN_DOMAINS: {{ .Values.postgreslet.podTopologySpreadConstraintMinDomains | quote }}

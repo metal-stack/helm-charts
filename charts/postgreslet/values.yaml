@@ -87,11 +87,11 @@ postgreslet:
   # operatorImageRepository
   operatorImageRepository: "ghcr.io/zalando/postgres-operator"
   # operatorImageTag
-  operatorImageTag: "v1.15.1"
+  operatorImageTag: "v2.0.1"
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-17"
   # postgresImageTag
-  postgresImageTag: "4.0_2026-05-18"
+  postgresImageTag: "4.0_2026-08-31"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -150,8 +150,16 @@ postgreslet:
   podAntiaffinityPreferredDuringScheduling: false
   # podAntiaffinityTopologyKey when anti affinity is enabled, overrides the topology key for anti affinity
   podAntiaffinityTopologyKey: ""
-  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one
+
+  # Deprecation  warning:  this  variable   will  be  removed  in  the
+  # future. Please switch  to enablePodTopologySpreadConstraint if you
+  # use postgres operator v2, in which case we will not patch postgres
+  # pods via  webhooks but  add the  TopologySpreadConstraint directly
+  # into  the  zalando  postgresqls  resource.
+  # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one.
   enablePodTopologySpreadConstraintWebhook: false
+  # enablePodTopologySpreadConstraint when enabled adds custom TopologySpreadConstraints to the zalando postgresqls resource.
+  enablePodTopologySpreadConstraint: false
   # podTopologySpreadConstraintTopologyKey changes the topologyKey to use in our custom podTopologyConstraint
   podTopologySpreadConstraintTopologyKey: "machine.metal-stack.io/rack"
   # ppodTopologySpreadConstraintMaxSkew changes the maxSkew to use in our custom podTopologyConstraint
@@ -172,7 +180,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "4.2.2"
+    imageTag: "5.1.1"
     resources:
       requests:
         cpu: "100m"
@@ -210,7 +218,7 @@ sidecars:
 
   exporter:
     imageRepository: "docker.io/prometheuscommunity/postgres-exporter"
-    imageTag: "v0.17.1"
+    imageTag: "v0.20.1"
     containerPort: 9187
     servicePort: 9187
     resources:
@@ -645,7 +653,7 @@ sidecars:
   walGExporter:
     enabled: true
     imageRepository: "ghcr.io/thedatabaseme/wal-g-exporter"
-    imageTag: "0.3.1"
+    imageTag: "0.3.3"
     containerPort: 9351
     servicePort: 9351
     resources:
