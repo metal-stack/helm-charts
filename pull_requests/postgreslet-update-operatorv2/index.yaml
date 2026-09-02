@@ -3,7 +3,23 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-08-06T08:13:45.787927942Z"
+    created: "2026-09-02T06:29:03.379380197Z"
+    description: local persistend storage for lvm
+    digest: 8da354fa0d3ec138a8e8bfb117cbb986d3c9336f84061fc83c980250ed70a02d
+    home: https://metal-stack.io
+    keywords:
+    - storage
+    - block-storage
+    - volume
+    name: csi-driver-lvm
+    sources:
+    - https://github.com/metal-stack
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-update-operatorv2/csi-driver-lvm-0.10.0.tgz
+    version: 0.10.0
+  - apiVersion: v1
+    appVersion: v0.9.0
+    created: "2026-09-02T06:29:03.379915782Z"
     description: local persistend storage for lvm
     digest: 184ce104cba2cc4e06c21308c347636d04662d30422e100472d25c6935eca93d
     home: https://metal-stack.io
@@ -20,9 +36,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-08-06T08:13:45.789727879Z"
+    created: "2026-09-02T06:29:03.381675633Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 99069e133287f1076a2a5f24c7b72085214b16c229f83dc27d2cd080e588129f
+    digest: cbd8fb246ae43e70437a37f4b55bbbc12fe163bcc1fc34a23109b49bbf47357f
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-update-operatorv2/metal-control-plane-0.8.9.tgz
@@ -30,12 +46,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.28.0
-    created: "2026-08-06T08:13:45.790947219Z"
+    created: "2026-09-02T06:29:03.383122356Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 4559820556f487908df9fba75f594dc840030fffc9cf275acf4b3d10e34a9d43
+    digest: 35dd816951507fa5c5736799eed180a563cfcb6ad4ecb915f421d02df392ecc8
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-update-operatorv2/postgreslet-0.23.0.tgz
     version: 0.23.0
-generated: "2026-08-06T08:13:45.787355657Z"
+generated: "2026-09-02T06:29:03.378700658Z"
