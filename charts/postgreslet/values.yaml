@@ -155,9 +155,7 @@ postgreslet:
   # future. Please switch  to enablePodTopologySpreadConstraint if you
   # use postgres operator v2, in which case we will not patch postgres
   # pods via  webhooks but  add the  TopologySpreadConstraint directly
-  # into  the  zalando  postgresqls  resource. In  the  mean  time  we
-  # continue  to support  this flag  and switch  automatically to  the
-  # postgresqls variant when operator version is > v2.
+  # into  the  zalando  postgresqls  resource.
   # enablePodTopologySpreadConstraintWebhook when enabled, overwrites the podTopologyContstraints with our custom one.
   enablePodTopologySpreadConstraintWebhook: false
   # enablePodTopologySpreadConstraint when enabled adds custom TopologySpreadConstraints to the zalando postgresqls resource.
