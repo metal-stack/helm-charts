@@ -54,11 +54,6 @@ spec:
           value: "10001"
         - name: METAL_CONSOLE_METAL_API_URL
           value: http://metal-api:{{ .Values.ports.metal_api }}{{ .Values.metal_api.base_path }}
-        - name: METAL_CONSOLE_HMAC_KEY
-          valueFrom:
-            secretKeyRef:
-              name: metal-api
-              key: admin_key
 {{ if .Values.metal_apiserver.enabled }}
         - name: METAL_CONSOLE_METAL_APISERVER_URL
           value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}
