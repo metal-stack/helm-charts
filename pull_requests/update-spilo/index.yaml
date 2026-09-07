@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-07T08:48:46.456807806Z"
+    created: "2026-09-07T08:51:22.996329587Z"
     description: local persistend storage for lvm
-    digest: 6763d323a44ceab8d857608e24ab50950f27a8b402b85036a4962ec68d8e0f43
+    digest: 617671b6f822f35c56c78e493ee04300869419244108518a5298496d7948d94c
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T08:48:46.458736309Z"
+    created: "2026-09-07T08:51:22.998739378Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 76c9e6f3fa48f6950d28bad818083371ab2f09329ba843f23b68af88d3c4fb72
+    digest: 3b9335cd5d9facf631aeafebbadd3a0961f4530b875a71d02af3f069e80c6711
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/update-spilo/metal-control-plane-0.8.9.tgz
@@ -30,7 +30,17 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-09-07T08:48:46.460265836Z"
+    created: "2026-09-07T08:51:23.001825482Z"
+    description: A Helm chart for deploying the Postgres Controller aka Postgreslet
+    digest: ad8c0ffcef8bf16099431d48ee3cc356d7b28dabb912bf9080ed33ea3878df8a
+    name: postgreslet
+    type: application
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/update-spilo/postgreslet-0.22.2.tgz
+    version: 0.22.2
+  - apiVersion: v2
+    appVersion: v0.27.1
+    created: "2026-09-07T08:51:23.000297386Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: a75dadf7d23da6e7f523c7026c35a3d684276538719f9379ced1b1ee86d54bb7
     name: postgreslet
@@ -38,4 +48,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/update-spilo/postgreslet-0.22.1.tgz
     version: 0.22.1
-generated: "2026-09-07T08:48:46.45586842Z"
+generated: "2026-09-07T08:51:22.99566426Z"
