@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-07T09:06:43.984303533Z"
+    created: "2026-09-09T12:23:36.592580135Z"
     description: local persistend storage for lvm
-    digest: f4e7966e9731be96231482356ce15ddd4384d9fd0ff09d6cf310fd52e8a51c6e
+    digest: 5be47f9b5af8c814f65a30dab3018189bce07549ca4bfd84500cc7f453d35520
     home: https://metal-stack.io
     keywords:
     - storage
@@ -19,7 +19,7 @@ entries:
     version: 0.10.0
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-07T09:06:43.98497818Z"
+    created: "2026-09-09T12:23:36.593537439Z"
     description: local persistend storage for lvm
     digest: 28ae96a89586e3d400ebc48c725a048be0ddc20d3a560daac795cec4e7739ee0
     home: https://metal-stack.io
@@ -35,7 +35,7 @@ entries:
     version: 0.9.0
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2026-09-07T09:06:43.984629845Z"
+    created: "2026-09-09T12:23:36.5930236Z"
     description: local persistend storage for lvm
     digest: aa6cdd24b642b6167ed59603894cab7711202ce72fe1564185f502b4ba018b42
     home: https://metal-stack.io
@@ -52,7 +52,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.997250215Z"
+    created: "2026-09-09T12:23:36.61048114Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: 457eae42a69c4c186a24b8be96a58e88309a79c61aa21ddcc07ad0415dfc0a83
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/latest/metal-control-plane-0.9.0.tgz
+    version: 0.9.0
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2026-09-09T12:23:36.607931645Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: b1e48c9421ad85b3988b298a532ee32f0acdff2c1872b1bb0c8c75ac09ee39ad
     name: metal-control-plane
@@ -61,7 +70,7 @@ entries:
     version: 0.8.9
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.996271307Z"
+    created: "2026-09-09T12:23:36.606724242Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 52be8010eed9659df2693de1fc3cb9fee3571549748fb56b1056c52ecafce5a9
     name: metal-control-plane
@@ -70,7 +79,7 @@ entries:
     version: 0.8.8
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.995259601Z"
+    created: "2026-09-09T12:23:36.605504972Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: cbf7c80a2fcb29441be86faba055f126c38da031a709cb0f24bb713b025ad8c6
     name: metal-control-plane
@@ -79,7 +88,7 @@ entries:
     version: 0.8.7
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.994299631Z"
+    created: "2026-09-09T12:23:36.604211271Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 4ad2e6f4255ad9cce5bc1025bf91a385240fb8aa04d223f770142ffa072659b3
     name: metal-control-plane
@@ -88,7 +97,7 @@ entries:
     version: 0.8.6
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.993273513Z"
+    created: "2026-09-09T12:23:36.603001725Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 5601c9537a501bdd0a6899729ff96c32b3a5d58c42ade80d833e56c98ebd484a
     name: metal-control-plane
@@ -97,7 +106,7 @@ entries:
     version: 0.8.5
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.991228314Z"
+    created: "2026-09-09T12:23:36.601780912Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 6ccacf688acf371124170ee0ed43ae7949cac9f243a68cae9bac32037205f8c7
     name: metal-control-plane
@@ -106,7 +115,7 @@ entries:
     version: 0.8.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.990311268Z"
+    created: "2026-09-09T12:23:36.600261398Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 603e41169b00a4f5aeb4e80af7c48cca639d7a8568e94a3fcd7fadad862e1121
     name: metal-control-plane
@@ -115,7 +124,7 @@ entries:
     version: 0.8.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.989288365Z"
+    created: "2026-09-09T12:23:36.598620205Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 911e1930527495f5f0d93341b977aa601a22422b237c48d12ee5e3817248d4bf
     name: metal-control-plane
@@ -124,7 +133,7 @@ entries:
     version: 0.8.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.988333813Z"
+    created: "2026-09-09T12:23:36.597419742Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: d49be5fc7bcb552156db2001031224464a99d65bf01dfe2137eb5096e2329614
     name: metal-control-plane
@@ -133,7 +142,7 @@ entries:
     version: 0.8.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.987464618Z"
+    created: "2026-09-09T12:23:36.596117609Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 1010cd4c2dfb1e607ceb077fb13e72d89277c11ccffb69c9ce334690a220b205
     name: metal-control-plane
@@ -142,7 +151,7 @@ entries:
     version: 0.8.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-07T09:06:43.986543506Z"
+    created: "2026-09-09T12:23:36.594608641Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 73665cc7a5cf70f77c76d6efbd89aff23888f96cb5b866efdd4ae56a5472f6f7
     name: metal-control-plane
@@ -152,9 +161,9 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-09-07T09:06:44.001281582Z"
+    created: "2026-09-09T12:23:36.614920316Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 7bb15704286e59580a07c388fb509376eeb65c02d5e170ba96530f098282317b
+    digest: 0080e4f66fbd21d059283877f932327dec500b3abc88e0d78ef4e457fd826a05
     name: postgreslet
     type: application
     urls:
@@ -162,7 +171,7 @@ entries:
     version: 0.22.2
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-09-07T09:06:44.000179983Z"
+    created: "2026-09-09T12:23:36.613457185Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 1ced09ff48dee10628f02c93d60db7cf6a914ec7d8e2e784635c2b00d505ccaa
     name: postgreslet
@@ -172,7 +181,7 @@ entries:
     version: 0.22.1
   - apiVersion: v2
     appVersion: v0.27.0
-    created: "2026-09-07T09:06:43.998688502Z"
+    created: "2026-09-09T12:23:36.612015476Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
     digest: 1731ae186046c2d829f74f57bdf5196c0b5a2255296a3acda72bdd27ef3f48d0
     name: postgreslet
@@ -183,7 +192,7 @@ entries:
   valkey:
   - apiVersion: v2
     appVersion: 8.1.3
-    created: "2026-09-07T09:06:44.001599923Z"
+    created: "2026-09-09T12:23:36.615371432Z"
     description: An opinionated valkey cluster setup for metal-stack
     digest: 2f127d5008b6082344bf8427d6eaa55ae4afd2a2af56249e5f5b47539efd1e70
     name: valkey
@@ -191,4 +200,4 @@ entries:
     urls:
     - https://metal-stack.github.io/helm-charts/latest/valkey-0.1.0.tgz
     version: 0.1.0
-generated: "2026-09-07T09:06:43.983764245Z"
+generated: "2026-09-09T12:23:36.590748636Z"
