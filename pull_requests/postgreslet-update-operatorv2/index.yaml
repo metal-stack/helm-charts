@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-02T07:04:52.503610386Z"
+    created: "2026-09-16T07:38:58.35336363Z"
     description: local persistend storage for lvm
-    digest: 3089a5bf54a0b25b5d7cacf232f0d7c211b11495e5be2722eea270c8607aed68
+    digest: 7e5af73b0f1a9ba4185428a542e4d716e64ed19c2b43aa7022d89d7cb0e70adf
     home: https://metal-stack.io
     keywords:
     - storage
@@ -19,7 +19,7 @@ entries:
     version: 0.10.0
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-02T07:04:52.504179392Z"
+    created: "2026-09-16T07:38:58.353829884Z"
     description: local persistend storage for lvm
     digest: 184ce104cba2cc4e06c21308c347636d04662d30422e100472d25c6935eca93d
     home: https://metal-stack.io
@@ -36,7 +36,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-02T07:04:52.505489009Z"
+    created: "2026-09-16T07:38:58.356927726Z"
+    description: A Helm chart for deploying the metal control plane in K8s
+    digest: d3688456c2eb9477c78a2528cdd1d9f2ee144ce63a155d929393a043765a7ea2
+    name: metal-control-plane
+    urls:
+    - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-update-operatorv2/metal-control-plane-0.9.0.tgz
+    version: 0.9.0
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2026-09-16T07:38:58.355830381Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: c624dbc717f68d2c9d22e4eb0c003ec8d122b3b04ed74621be2ddaba613a9640
     name: metal-control-plane
@@ -46,12 +55,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.28.0
-    created: "2026-09-02T07:04:52.506918889Z"
+    created: "2026-09-16T07:38:58.358144251Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 186812ad6f38b6918cda22f9e00685815cfc40a7d106a5e2bc57ad0f0a1e52d0
+    digest: be9843dbfac824127bf4f5fb8b62285c58fc271b3c3ba7c50e1bc355215ad6b4
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-update-operatorv2/postgreslet-0.23.0.tgz
     version: 0.23.0
-generated: "2026-09-02T07:04:52.50187723Z"
+generated: "2026-09-16T07:38:58.352830406Z"
