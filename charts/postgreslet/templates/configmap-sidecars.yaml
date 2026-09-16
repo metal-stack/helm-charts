@@ -6,11 +6,7 @@ data:
   wal-g-exporter-service-port: {{ .Values.sidecars.walGExporter.servicePort | quote }}
   wal-g-exporter-service-target-port: {{ .Values.sidecars.walGExporter.containerPort | quote }}
 {{- end }}
-{{- if .Values.sidecars.exporter.enableStatementsQuery }}
-  queries.yaml: {{ printf "%s\n%s" .Values.sidecars.exporter.queries .Values.sidecars.exporter.queriesStatements | b64enc  }}
-{{- else }}
   queries.yaml: {{ b64enc .Values.sidecars.exporter.queries }}
-{{- end }}
   fluent-bit.conf: {{ b64enc .Values.sidecars.fluentbit.conf }}
   sidecars: |
     - name: postgres-exporter
