@@ -17,6 +17,19 @@ spec:
   hostnames:
 {{ toYaml .Values.metal_apiserver.httpRoute.hostnames | indent 4 }}
   rules:
+    # exclude long-standing streaming paths from timeouts
+    - timeouts:
+        request: 0s
+      matches:
+        - path:
+            type: PathPrefix
+            value: /metalstack.infra.v2.BMCService/WaitForBMCCommand
+        - path:
+            type: PathPrefix
+            value: /metalstack.infra.v2.BootService/Wait
+      backendRefs:
+        - name: metal-apiserver
+          port: {{ .Values.ports.metal_apiserver }}
     - matches:
         - path:
             type: PathPrefix
