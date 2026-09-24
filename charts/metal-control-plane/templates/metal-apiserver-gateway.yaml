@@ -24,6 +24,9 @@ spec:
       backendRefs:
         - name: metal-apiserver
           port: {{ .Values.ports.metal_apiserver }}
+      # timeouts are managed server-side (especially long-standing streaming paths may not be interrupted by the gateway)
+      timeouts:
+        request: 0s
 {{- if .Values.metal_apiserver.httpRoute.httpsRedirect.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
