@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-09-28T08:31:11.570762966Z"
+    created: "2026-09-28T09:00:21.158014756Z"
     description: local persistend storage for lvm
-    digest: e053dff6ae9b25e7858cc7f9acbd4568190a12531f9100937cce496c6a87af7a
+    digest: 9809878ba038ee6fb9a2a40d1c4a783cdc1c05f1ff0cacf042bdc2a6a67ae7a6
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,16 +20,16 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-28T08:31:11.574285949Z"
+    created: "2026-09-28T09:00:21.161481767Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: ca0eac89de311027b40948a09dd0227e8bad5c3b27d720933c97bed144c80edc
+    digest: 4cf4dcac332169509f672f627d8f6832cac53d481bd3c723ad0e052a6cde24ce
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-remove-default-queries/metal-control-plane-0.9.1.tgz
     version: 0.9.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-09-28T08:31:11.572857758Z"
+    created: "2026-09-28T09:00:21.159699125Z"
     description: A Helm chart for deploying the metal control plane in K8s
     digest: 6faa82740390ceab6296fc00a01b1115805d53dd9e0fb4d7215f5aa1c344dbff
     name: metal-control-plane
@@ -39,12 +39,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.1
-    created: "2026-09-28T08:31:11.575456598Z"
+    created: "2026-09-28T09:00:21.162818957Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: 702d3d760c55532a4c7b76386757e8ffe5f3ce82d7b6026b61790f6588341c48
+    digest: fbfa3935d28da0157b95fe996cef79897ee7fae95448778c54f360764e9ac488
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/postgreslet-remove-default-queries/postgreslet-0.23.0.tgz
     version: 0.23.0
-generated: "2026-09-28T08:31:11.569587147Z"
+generated: "2026-09-28T09:00:21.157218508Z"
