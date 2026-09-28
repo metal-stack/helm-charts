@@ -231,6 +231,48 @@ sidecars:
               usage: "GAUGE"
               description: "Time at which postmaster started"
 
+    queriesStatements: |+
+      pg_stat_statements:
+        # user, datname, query, calls, total_exec_time, rows.
+        query: "SELECT distinct
+                    pg_get_userbyid(userid) as user,
+                    pg_database.datname,
+                    pg_stat_statements.queryid,
+                    SUBSTRING(pg_stat_statements.query, 1, 2048) as query,
+                    pg_stat_statements.calls,
+                    pg_stat_statements.total_exec_time as time_milliseconds,
+                    pg_stat_statements.rows
+                FROM pg_stat_statements
+                JOIN pg_database
+                ON pg_database.oid = pg_stat_statements.dbid
+                LIMIT (CASE WHEN pg_is_in_recovery() THEN 0 END)"
+        metrics:
+            - user:
+                usage: "LABEL"
+                description: "The user who executed the statement"
+            - datname:
+                usage: "LABEL"
+                description: "The database in which the statement was executed"
+            - queryid:
+                usage: "LABEL"
+                description: "Query ID"
+            - query:
+                usage: "LABEL"
+                description: "Processed query"
+            - calls:
+                usage: "COUNTER"
+                description: "Number of times executed"
+            - time_milliseconds:
+                usage: "COUNTER"
+                description: "Total time spent in the statement, in milliseconds"
+            - rows:
+                usage: "COUNTER"
+                description: "Total number of rows retrieved or affected by the statement"
+
+    # If  enabled, the  value of  queriesStatements will  be added  to
+    # queries. This allows to disable those for certain instances.
+    enableStatementsQuery: false
+
   initDBJob: |
     do $$
     declare
