@@ -29,6 +29,10 @@ images:
     image: ghcr.io/metal-stack/metalctl
     imagePullPolicy: IfNotPresent
     tag: latest
+  metalctlv2:
+    image: ghcr.io/metal-stack/cli
+    imagePullPolicy: Always
+    tag: 65-static-data
   metal_console:
     image: ghcr.io/metal-stack/metal-console
     imagePullPolicy: IfNotPresent
@@ -259,6 +263,20 @@ metal_apiserver:
     api_key: ""
     internal_api_address: ""
     control_plane_address: ""
+
+  static_data:
+    enabled: false
+    data:
+      partitions: []
+      sizes: []
+      images: []
+      tenants: []
+      tenant_members: []
+      projects: []
+      project_members: []
+      networks: []
+      ips: []
+
   rateLimit:
     maxRequestsPerMinute: 1000
     maxUnauthenticatedRequestsPerMinute: 50
