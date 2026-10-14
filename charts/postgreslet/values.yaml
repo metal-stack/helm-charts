@@ -87,11 +87,11 @@ postgreslet:
   # operatorImageRepository
   operatorImageRepository: "ghcr.io/zalando/postgres-operator"
   # operatorImageTag
-  operatorImageTag: "v2.0.1"
+  operatorImageTag: "v2.0.3"
   # postgresImageRepository
   postgresImageRepository: "containers.cybertec.at/f-i-ts/spilo-17"
   # postgresImageTag
-  postgresImageTag: "4.0_2026-09-07"
+  postgresImageTag: "4.0_2026-10-12"
   # etcdHost The connection string for Patroni defined as host:port. Not required when native Kubernetes support is used. The default is empty (use Kubernetes-native DCS).
   etcdHost: ""
   # enableCrdValidation  toggles if the operator will create or update CRDs with OpenAPI v3 schema validation
@@ -180,7 +180,7 @@ addRandomLabel: false
 sidecars:
   fluentbit:
     imageRepository: "cr.fluentbit.io/fluent/fluent-bit"
-    imageTag: "5.1.1"
+    imageTag: "5.1.3"
     resources:
       requests:
         cpu: "100m"
