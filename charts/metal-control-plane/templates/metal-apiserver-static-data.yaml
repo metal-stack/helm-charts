@@ -99,10 +99,10 @@ spec:
               /metalctl admin size apply -f /static-data/sizes.yaml
               /metalctl admin network apply -f /static-data/networks.yaml
               # tenants and projects
-              /metalctl tenant apply -f /static-data/tenants.yaml
-              /metalctl tenant member apply -f /static-data/tenant_members.yaml
-              /metalctl project apply -f /static-data/projects.yaml
-              /metalctl project member apply -f /static-data/project_members.yaml
+              /metalctl admin tenant apply -f /static-data/tenants.yaml
+              /metalctl admin tenant member apply -f /static-data/tenant_members.yaml
+              /metalctl admin project apply -f /static-data/projects.yaml
+              /metalctl admin project member apply -f /static-data/project_members.yaml
               # project scoped resources
               /metalctl ip apply -f /static-data/ips.yaml
         volumeMounts:
