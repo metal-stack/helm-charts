@@ -1,0 +1,135 @@
+{{- if .Values.metal_registry_auth_enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: {{ .Release.Name }}-metal-console-registry-credentials
+  name: {{ .Release.Name }}-metal-console-registry-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Values.metal_registry_auth | toJson | b64enc }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: {{ .Release.Name }}-bmc-proxy-certs
+  name: {{ .Release.Name }}-bmc-proxy-certs
+data:
+  server-key.pem: {{ .Values.metal_console.bmc_proxy.tls.server_key_enc }}
+  server-key.pub: {{ .Values.metal_console.bmc_proxy.tls.server_pub_enc }}
+  client-key.pem: {{ .Values.metal_console.bmc_proxy.tls.client_key_enc }}
+  client.pem: {{ .Values.metal_console.bmc_proxy.tls.client_cert_enc }}
+  ca.pem: {{ .Values.metal_console.bmc_proxy.tls.ca_cert_enc }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-metal-console
+  name: {{ .Release.Name }}-metal-console
+spec:
+  replicas: {{ .Values.metal_console.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-metal-console
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-metal-console
+    spec:
+{{- if .Values.metal_registry_auth_enabled }}
+      imagePullSecrets:
+      - name: metal-console-registry-credentials
+{{- end }}
+      restartPolicy: Always
+      enableServiceLinks: False
+      containers:
+      - name: metal-console
+        env:
+        - name: METAL_CONSOLE_PORT
+          value: "10001"
+        - name: METAL_CONSOLE_METAL_APISERVER_URL
+          value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}{{ .Values.metal_apiserver.base_path }}
+        - name: METAL_CONSOLE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Values.metal_console.token_secret_ref.name }}"
+              key: "{{ .Values.metal_console.token_secret_ref.key }}"
+        - name: METAL_CONSOLE_TOKEN_FILE
+          value: "/metal/token"
+        - name: ZAP_ENCODING
+          value: {{ .Values.zap_encoding }}
+        - name: ZAP_LEVEL
+          value: {{ .Values.zap_level }}
+        image: {{ .Values.images.metal_console.image }}:{{ .Values.images.metal_console.tag }}
+        imagePullPolicy: {{ .Values.images.metal_console.imagePullPolicy }}
+        volumeMounts:
+          - name: bmc-proxy-certs
+            mountPath: /certs
+            readOnly: true
+          - name: metal-secrets
+            mountPath: /metal
+            readOnly: true
+        ports:
+        - containerPort: 10001
+{{- if .Values.set_resource_limits }}
+        resources:
+{{ toYaml .Values.resources.metal_console | indent 10 }}
+{{- end }}
+      volumes:
+      - name: bmc-proxy-certs
+        secret:
+          secretName: bmc-proxy-certs
+      - name: metal-secrets
+        secret:
+          secretName: "{{ .Values.metal_console.token_secret_ref.name }}"
+          items:
+          - key: "{{ .Values.metal_console.token_secret_ref.key }}"
+            path: token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Release.Name }}-metal-console
+  name: {{ .Release.Name }}-metal-console
+spec:
+  ports:
+  - name: "{{ .Values.ports.metal_console }}"
+    port: {{ .Values.ports.metal_console }}
+    targetPort: 10001
+  selector:
+    app: {{ .Release.Name }}-metal-console
+{{- if .Values.pod_disruption_budget.metal_console.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Release.Name }}-metal-console
+spec:
+  minAvailable: {{ .Values.pod_disruption_budget.metal_console.min_available }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-metal-console
+{{- end }}
+{{- if .Values.metal_console.tcpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: {{ .Release.Name }}-metal-console
+  {{- with .Values.metal_console.tcpRoute.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+{{ toYaml .Values.metal_console.tcpRoute.parentRefs | indent 4 }}
+  rules:
+    - backendRefs:
+        - name: {{ .Release.Name }}-metal-console
+          port: {{ .Values.ports.metal_console }}
+{{- end }}

@@ -91,6 +91,7 @@ jobs:
         chart:
           - csi-driver-lvm
           - metal-control-plane
+          - metal-console
           - postgreslet
 
     steps:

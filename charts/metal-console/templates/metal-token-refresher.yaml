@@ -1,0 +1,69 @@
+{{- if .Values.metal_console_token_refresher.enabled -}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-token-refresher
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-token-refresher
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["{{ .Values.metal_console.token_file_secret_ref}}"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-token-refresher
+  namespace: "{{ .Release.Namespace }}"
+subjects:
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-token-refresher
+  namespace: "{{ .Release.Namespace }}"
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-token-refresher
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-token-refresher
+spec:
+  schedule: "{{ .Values.metal_console_token_refresher.schedule }}"
+  jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}-token-refresher
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Release.Name }}-token-refresher
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: {{ .Release.Name }}-metal-console-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          containers:
+          - name: token-refresher
+            image: "{{ .Values.images.metal_console_token_refresher.image }}:{{ .Values.images.metal_console_token_refresher.tag }}"
+{{- if .Values.set_resource_limits }}
+            resources:
+{{ toYaml .Values.resources.metal_console | indent 10 }}
+{{- end }}
+            env:
+            - name: METAL_APISERVER_URL
+              value: http://metal-apiserver:{{ .Values.ports.metal_apiserver }}{{ .Values.metal_apiserver.base_path }}
+            - name: TOKEN_SECRET_NAMESPACE
+              value: "{{ .Release.Namespace }}"
+            - name: TOKEN_SECRET_NAME
+              value: "{{ .Values.metal_console.token_secret_ref.name }}"
+            - name: TOKEN_SECRET_KEY
+              value: "{{ .Values.metal_console.token_secret_ref.key }}"
+{{- end }}
