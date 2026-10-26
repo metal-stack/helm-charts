@@ -53,6 +53,11 @@ data:
     ---
     {{ toYaml $data | nindent 4 }}
 {{ end }}
+  filesystemlayouts.yaml: |
+{{ range $data := .Values.metal_apiserver.static_data.data.filesystemlayouts }}
+    ---
+    {{ toYaml $data | nindent 4 }}
+{{ end }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -93,16 +98,20 @@ spec:
           - -c
           - |
               set -exu
+
               # admin resources
               /metalctl admin partition apply -f /static-data/partitions.yaml
               /metalctl admin image apply -f /static-data/images.yaml
               /metalctl admin size apply -f /static-data/sizes.yaml
               /metalctl admin network apply -f /static-data/networks.yaml
+              /metalctl admin fsl apply -f /static-data/filesystemlayouts.yaml
+
               # tenants and projects
               /metalctl admin tenant apply -f /static-data/tenants.yaml
               /metalctl admin tenant member apply -f /static-data/tenant_members.yaml
               /metalctl admin project apply -f /static-data/projects.yaml
               /metalctl admin project member apply -f /static-data/project_members.yaml
+
               # project scoped resources
               /metalctl ip apply -f /static-data/ips.yaml
         volumeMounts:

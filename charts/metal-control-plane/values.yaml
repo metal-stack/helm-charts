@@ -32,7 +32,7 @@ images:
   metalctlv2:
     image: ghcr.io/metal-stack/cli
     imagePullPolicy: Always
-    tag: 65-static-data
+    tag: pr-65-static-data
   metal_console:
     image: ghcr.io/metal-stack/metal-console
     imagePullPolicy: IfNotPresent
@@ -276,6 +276,7 @@ metal_apiserver:
       project_members: []
       networks: []
       ips: []
+      filesystemlayouts: []
 
   rateLimit:
     maxRequestsPerMinute: 1000
