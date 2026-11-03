@@ -32,7 +32,7 @@ images:
   metalctlv2:
     image: ghcr.io/metal-stack/cli
     imagePullPolicy: Always
-    tag: pr-65-static-data
+    tag: latest
   metal_console:
     image: ghcr.io/metal-stack/metal-console
     imagePullPolicy: IfNotPresent
