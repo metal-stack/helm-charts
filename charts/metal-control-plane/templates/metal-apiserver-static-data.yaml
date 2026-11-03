@@ -108,9 +108,9 @@ spec:
 
               # tenants and projects
               /metalctl admin tenant apply -f /static-data/tenants.yaml
-              /metalctl admin tenant member apply -f /static-data/tenant_members.yaml
               /metalctl admin project apply -f /static-data/projects.yaml
-              /metalctl admin project member apply -f /static-data/project_members.yaml
+              /metalctl tenant member apply -f /static-data/tenant_members.yaml
+              /metalctl project member apply -f /static-data/project_members.yaml
 
               # project scoped resources
               /metalctl ip apply -f /static-data/ips.yaml
