@@ -203,7 +203,7 @@ metal_api:
 
     # When enabled, an additional HTTPRoute is created that redirects
     # plain HTTP requests to HTTPS. The redirect route must attach to an
-    # HTTP listener via redirectParentRefs.
+    # HTTP listener via parentRefs.
     httpsRedirect:
       enabled: false
       parentRefs: []
@@ -293,7 +293,7 @@ metal_apiserver:
 
     # When enabled, an additional HTTPRoute is created that redirects
     # plain HTTP requests to HTTPS. The redirect route must attach to a
-    # HTTP listener via redirectParentRefs.
+    # HTTP listener via parentRefs.
     httpsRedirect:
       enabled: false
       parentRefs: []
