@@ -176,9 +176,9 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: metal-apiserver-liveliness
+  name: metal-apiserver-housekeeping-machine-liveliness
   labels:
-    job: metal-apiserver-liveliness
+    job: metal-apiserver-housekeeping-machine-liveliness
 spec:
   schedule: "*/1 * * * *"
   failedJobsHistoryLimit: 1
@@ -214,9 +214,9 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: metal-apiserver-machines-vpn-connected
+  name: metal-apiserver-housekeeping-machine-vpn-connected
   labels:
-    job: metal-apiserver-machines-vpn-connected
+    job: metal-apiserver-housekeeping-machine-vpn-connected
 spec:
   schedule: "*/1 * * * *"
   failedJobsHistoryLimit: 1
@@ -252,9 +252,9 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: metal-apiserver-resurrection
+  name: metal-apiserver-housekeeping-machine-resurrection
   labels:
-    job: metal-apiserver-resurrection
+    job: metal-apiserver-housekeeping-machine-resurrection
 spec:
   schedule: "0 * * * *"
   successfulJobsHistoryLimit: 1
