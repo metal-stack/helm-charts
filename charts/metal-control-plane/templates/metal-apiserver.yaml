@@ -172,6 +172,121 @@ spec:
   selector:
     app: metal-apiserver
 
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-housekeeping-machine-liveliness
+  labels:
+    job: metal-apiserver-housekeeping-machine-liveliness
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-apiserver-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          containers:
+          - name: trigger-machine-liveliness
+            image: {{ .Values.images.metalctlv2.image }}:{{ .Values.images.metalctlv2.tag }}
+            imagePullPolicy: {{ .Values.images.metalctlv2.imagePullPolicy }}
+            args:
+            - admin
+            - housekeeping
+            - machine-liveliness
+            env:
+            - name: METAL_APIV2_URL
+              value: http://metal-apiserver:8080
+            - name: METAL_APIV2_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: metal-apiserver-admin-token
+                  key: housekeeping_cronjobs
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-housekeeping-machine-vpn-connected
+  labels:
+    job: metal-apiserver-housekeeping-machine-vpn-connected
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-apiserver-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          containers:
+          - name: trigger-machine-vpn-connected
+            image: {{ .Values.images.metalctlv2.image }}:{{ .Values.images.metalctlv2.tag }}
+            imagePullPolicy: {{ .Values.images.metalctlv2.imagePullPolicy }}
+            args:
+            - admin
+            - housekeeping
+            - machine-vpn-connected
+            env:
+            - name: METAL_APIV2_URL
+              value: http://metal-apiserver:8080
+            - name: METAL_APIV2_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: metal-apiserver-admin-token
+                  key: housekeeping_cronjobs
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metal-apiserver-housekeeping-machine-resurrection
+  labels:
+    job: metal-apiserver-housekeeping-machine-resurrection
+spec:
+  schedule: "0 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+{{- if .Values.metal_registry_auth_enabled }}
+          imagePullSecrets:
+          - name: metal-apiserver-registry-credentials
+{{- end }}
+          restartPolicy: OnFailure
+          containers:
+          - name: trigger-machine-resurrection
+            image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
+            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            args:
+            - admin
+            - housekeeping
+            - machine-resurrect
+            env:
+            - name: METAL_APIV2_URL
+              value: http://metal-apiserver:8080
+            - name: METAL_APIV2_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: metal-apiserver-admin-token
+                  key: housekeeping_cronjobs
+
 {{- if .Values.hpa.metal_apiserver.enabled }}
 ---
 apiVersion: autoscaling/v1
