@@ -109,6 +109,7 @@ spec:
           - serve
           - --log-level={{ .Values.metal_apiserver.log_level }}
           - --http-server-endpoint=0.0.0.0:8080
+          - --metric-server-endpoint=0.0.0.0:2112
           - --tenant-apiserver-baseurl={{ .Values.metal_apiserver.tenant_apiserver_baseurl }}
           - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
