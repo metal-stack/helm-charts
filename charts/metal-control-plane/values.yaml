@@ -219,6 +219,7 @@ metal_api:
 
 metal_apiserver:
   enabled: true
+  housekeeping_cronjobs_enabled: true
   replicas: 1
   log_level: info
   url:
