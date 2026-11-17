@@ -470,6 +470,8 @@ spec:
           value: {{ .Values.metal_api.db_address }}
         - name: METAL_API_DB_PASSWORD
           value: {{ .Values.metal_api.db_password }}
+
+{{- if not .Values.metal_apiserver.housekeeping_cronjobs_enabled }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -611,6 +613,8 @@ spec:
           - name: {{ .Values.metal_api.nsq.tls.secret_name }}
             secret:
               secretName: {{ .Values.metal_api.nsq.tls.secret_name }}
+{{- end }}
+
 {{- end }}
 
 {{- if .Values.hpa.metal_api.enabled }}
