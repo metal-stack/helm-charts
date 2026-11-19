@@ -21,7 +21,7 @@ spec:
       initContainers:
         - name: prepull-spilo
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          command: ["sh", "-c", "'true'"]
+          command: ["/manager", "--version"]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
