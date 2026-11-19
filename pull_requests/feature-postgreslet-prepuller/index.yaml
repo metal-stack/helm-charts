@@ -3,9 +3,9 @@ entries:
   csi-driver-lvm:
   - apiVersion: v1
     appVersion: v0.9.0
-    created: "2026-11-19T12:06:12.259256425Z"
+    created: "2026-11-19T12:12:47.782473656Z"
     description: local persistend storage for lvm
-    digest: 73e441de1b3ba7fa425b537b54d971f7a2ed867f8496fe7b9411c8b438d440b6
+    digest: 05968276bc7ebe381fdd605391a47570e6da8a9306a4240ee5b36d2499e1eec2
     home: https://metal-stack.io
     keywords:
     - storage
@@ -20,9 +20,9 @@ entries:
   metal-control-plane:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2026-11-19T12:06:12.261472307Z"
+    created: "2026-11-19T12:12:47.784394496Z"
     description: A Helm chart for deploying the metal control plane in K8s
-    digest: 9d3f5c412eca60cc3a82288332d0356aecd4623ca995c257060f41fcd8e4c1a8
+    digest: b49311362d8c44e480329d87f965a8e2185cbf25190716cad97c313221a97f66
     name: metal-control-plane
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/feature-postgreslet-prepuller/metal-control-plane-0.9.6.tgz
@@ -30,12 +30,12 @@ entries:
   postgreslet:
   - apiVersion: v2
     appVersion: v0.27.4
-    created: "2026-11-19T12:06:12.262427516Z"
+    created: "2026-11-19T12:12:47.785536368Z"
     description: A Helm chart for deploying the Postgres Controller aka Postgreslet
-    digest: f73ff2e82e83234e51b83c6a3d1081b63d5b697bc2bce7b2da223f7e37e53a4f
+    digest: d8ae0d9c647d8ac6ab7006a40f1d0445eb7a92c758a1fc2b91c57d048bd9c381
     name: postgreslet
     type: application
     urls:
     - https://metal-stack.github.io/helm-charts/pull_requests/feature-postgreslet-prepuller/postgreslet-0.23.3.tgz
     version: 0.23.3
-generated: "2026-11-19T12:06:12.258731593Z"
+generated: "2026-11-19T12:12:47.781317575Z"
