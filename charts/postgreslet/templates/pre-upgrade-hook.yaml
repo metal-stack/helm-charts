@@ -1,0 +1,108 @@
+#
+# Image pre-puller daemon set.
+#
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prepuller-{{ include "postgreslet.fullname" . }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  selector:
+    matchLabels:
+      name: prepuller-{{ include "postgreslet.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: prepuller-{{ include "postgreslet.fullname" . }}
+    spec:
+      initContainers:
+        - name: prepull-spilo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/manager", "--version"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 103
+            seccompProfile:
+              type: "RuntimeDefault"
+        - name: prepull-fluentbit
+          image: "{{ .Values.sidecars.fluentbit.imageRepository }}:{{ .Values.sidecars.fluentbit.imageTag }}"
+          command: ["/fluent-bit/bin/fluent-bit", "--version"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsUser: 65534
+            runAsNonRoot: true
+            seccompProfile:
+              type: "RuntimeDefault"
+        - name: prepull-postgres-exporter
+          image: "{{ .Values.sidecars.exporter.imageRepository }}:{{ .Values.sidecars.exporter.imageTag }}"
+          command: ["sh", "-c", "'true'"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsUser: 65534
+            runAsNonRoot: true
+            seccompProfile:
+              type: "RuntimeDefault"
+        - name: prepull-operator
+          image: "{{ .Values.postgreslet.operatorImageRepository}}:{{ .Values.postgreslet.operatorImageTag}}"
+          command: ["sh", "-c", "'true'"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: "RuntimeDefault"
+        - name: prepull-walg-exporter
+          image: "{{ .Values.sidecars.walGExporter.imageRepository }}:{{ .Values.sidecars.walGExporter.imageTag }}"
+          command: ["sh", "-c", "'true'"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsUser: 65534
+            runAsNonRoot: true
+            seccompProfile:
+              type: "RuntimeDefault"
+
+      # Use the pause container to ensure the Pod goes into a `Running` phase
+      # but doesn't take up resource on the cluster
+      containers:
+        - name: pause
+          image: "{{ .Values.prepuller.pause.imageRepository }}:{{ .Values.prepuller.pause.imageTag }}"
+          resources:
+            limits:
+              cpu: 1m
+              memory: 8Mi
+            requests:
+              cpu: 1m
+              memory: 8Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: "RuntimeDefault"
