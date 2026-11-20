@@ -347,3 +347,8 @@ sidecars:
       limits:
         cpu: "500m"
         memory: "500M"
+
+prepuller:
+  pause:
+    imageRepository: "gcr.io/google_containers/pause"
+    imageTag: "3.2"
