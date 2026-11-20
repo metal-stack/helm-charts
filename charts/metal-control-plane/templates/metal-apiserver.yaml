@@ -274,8 +274,8 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: trigger-machine-resurrection
-            image: {{ .Values.images.metal_api.image }}:{{ .Values.images.metal_api.tag }}
-            imagePullPolicy: {{ .Values.images.metal_api.imagePullPolicy }}
+            image: {{ .Values.images.metalctlv2.image }}:{{ .Values.images.metalctlv2.tag }}
+            imagePullPolicy: {{ .Values.images.metalctlv2.imagePullPolicy }}
             args:
             - admin
             - housekeeping
