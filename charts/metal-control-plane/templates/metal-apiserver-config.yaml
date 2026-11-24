@@ -14,9 +14,14 @@ stringData:
   redis_password: {{ .Values.metal_apiserver.redis.password }}
   session_secret: {{ .Values.metal_apiserver.session_secret }}
   rethinkdb_password: {{ .Values.metal_apiserver.db.password }}
+{{- if .Values.metal_apiserver.auditing }}
+{{- if and .Values.metal_apiserver.auditing.timescaledb .Values.metal_apiserver.auditing.timescaledb.enabled }}
   timescaledb_password: {{ .Values.metal_apiserver.auditing.timescaledb.password }}
   splunk_hec_token: {{ .Values.metal_apiserver.auditing.splunk.hec }}
+{{- end }}
+{{- end }}
 
+{{- if .Values.metal_apiserver.auditing }}
 {{- if .Values.metal_apiserver.auditing.splunk.enabled }}
 {{- if .Values.metal_apiserver.auditing.splunk.ca }}
 ---
@@ -28,6 +33,7 @@ metadata:
   name: metal-apiserver-auditing
 data:
   ca.pem: {{ .Values.metal_apiserver.auditing.splunk.ca }}
+{{- end }}
 {{- end }}
 {{- end }}
 

@@ -78,11 +78,13 @@ spec:
               secretKeyRef:
                 key: oidc_client_secret
                 name: metal-apiserver
+{{- if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.splunk .Values.metal_apiserver.auditing.splunk.enabled }}
           - name: AUDITING_SPLUNK_HEC_TOKEN
             valueFrom:
               secretKeyRef:
                 key: splunk_hec_token
                 name: metal-apiserver
+{{- end }}
           - name: RETHINKDB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -98,11 +100,13 @@ spec:
           - name: HEADSCALE_ENABLED
             value: "true"
 {{- end }}
+{{- if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.timescaledb .Values.metal_apiserver.auditing.timescaledb.enabled }}
           - name: AUDITING_TIMESCALEDB_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: timescaledb_password
                 name: metal-apiserver
+{{- end }}
           - name: SERVER_HTTP_URL
             value: "{{ .Values.metal_apiserver.url }}"
         args:
@@ -111,20 +115,26 @@ spec:
           - --http-server-endpoint=0.0.0.0:8080
           - --metric-server-endpoint=0.0.0.0:2112
           - --tenant-apiserver-baseurl={{ .Values.metal_apiserver.tenant_apiserver_baseurl }}
-          - --auditing-timescaledb-enabled={{ if .Values.metal_apiserver.auditing.timescaledb.enabled }}true{{ else }}false{{end}}
+{{- if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.timescaledb .Values.metal_apiserver.auditing.timescaledb.enabled }}
+          - --auditing-timescaledb-enabled=true
           - --auditing-timescaledb-host={{ .Values.metal_apiserver.auditing.timescaledb.host }}
           - --auditing-timescaledb-port={{ .Values.metal_apiserver.auditing.timescaledb.port }}
           - --auditing-timescaledb-db={{ .Values.metal_apiserver.auditing.timescaledb.db }}
           - --auditing-timescaledb-user={{ .Values.metal_apiserver.auditing.timescaledb.user }}
           - --auditing-timescaledb-retention={{ .Values.metal_apiserver.auditing.timescaledb.retention }}
-          - --auditing-splunk-enabled={{ if .Values.metal_apiserver.auditing.splunk.enabled }}true{{ else }}false{{end}}
-{{- if .Values.metal_apiserver.auditing.splunk.enabled }}
+{{- else }}
+          - --auditing-timescaledb-enabled=false
+{{- end }}
+{{- if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.splunk.enabled }}
+          - --auditing-splunk-enabled=true
           - --auditing-splunk-endpoint={{ .Values.metal_apiserver.auditing.splunk.endpoint }}
           - --auditing-splunk-host={{ .Values.metal_apiserver.auditing.splunk.host }}
           - --auditing-splunk-source={{ .Values.metal_apiserver.auditing.splunk.source }}
           - --auditing-splunk-source-type={{ .Values.metal_apiserver.auditing.splunk.source_type }}
           - --auditing-splunk-index={{ .Values.metal_apiserver.auditing.splunk.index }}
           - --auditing-splunk-ca=/splunk/ca.pem
+{{- else }}
+          - --auditing-splunk-enabled=false
 {{- end }}
           - --rethinkdb-addresses={{ join "," .Values.metal_apiserver.db.addresses }}
           - --max-requests-per-minute={{ .Values.metal_apiserver.rateLimit.maxRequestsPerMinute }}
@@ -144,12 +154,12 @@ spec:
 {{ toYaml .Values.resources.metal_apiserver | indent 10 }}
 {{- end }}
         volumeMounts:
-{{ if .Values.metal_apiserver.auditing.splunk.ca }}
+{{ if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.splunk.enabled .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           mountPath: /splunk
 {{- end }}
       volumes:
-{{ if .Values.metal_apiserver.auditing.splunk.ca }}
+{{ if and .Values.metal_apiserver.auditing .Values.metal_apiserver.auditing.splunk.ca }}
         - name: metal-apiserver-auditing
           secret:
             secretName: metal-apiserver-auditing
