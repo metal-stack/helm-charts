@@ -173,7 +173,6 @@ spec:
           value: "true"
         - name: METAL_API_AUDITING_SEARCH_BACKEND
           value: {{ .Values.auditing.search_backend }}
-{{- end }}
 {{- if .Values.auditing.timescaledb.enabled }}
         - name: METAL_API_AUDITING_TIMESCALEDB_HOST
           value: "{{ .Values.auditing.timescaledb.host }}"
@@ -205,6 +204,8 @@ spec:
         - name: METAL_API_AUDITING_SPLUNK_CA
           value: "/certs/splunk/ca.pem"
 {{- end }}
+{{- end }}
+
 {{- end }}
 {{- if .Values.set_resource_limits }}
         resources:
